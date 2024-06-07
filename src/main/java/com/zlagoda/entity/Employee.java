@@ -10,13 +10,20 @@ import java.util.Date;
 @NoArgsConstructor
 public class Employee {
 
+    public enum Role {
+        CASHIER,
+        MANAGER
+    }
+
     private Long id;
 
-    private String firstName;
+    private String surname;
 
-    private String lastName;
+    private String name;
 
-    private String position;
+    private String patronymic;
+
+    private Role role;
 
     private Double salary;
 
@@ -28,5 +35,9 @@ public class Employee {
 
     private String phoneNumber;
 
-    private String address;
+    private String city;
+
+    private String street;
+
+    private String zip_code;
 }
