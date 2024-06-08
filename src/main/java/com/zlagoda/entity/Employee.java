@@ -4,7 +4,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
 
-import java.util.Date;
+import java.math.BigDecimal;
+import java.sql.Date;
 
 @Data
 @NoArgsConstructor
@@ -15,7 +16,7 @@ public class Employee {
         MANAGER
     }
 
-    private Long id;
+    private String id;
 
     private String surname;
 
@@ -25,7 +26,7 @@ public class Employee {
 
     private Role role;
 
-    private Double salary;
+    private BigDecimal salary;
 
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date startDate;
@@ -39,5 +40,5 @@ public class Employee {
 
     private String street;
 
-    private String zip_code;
+    private String zipCode;
 }
