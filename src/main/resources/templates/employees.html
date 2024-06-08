@@ -1,10 +1,84 @@
 <!DOCTYPE html>
-<html lang="en">
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Employee List</title>
+    <link rel="stylesheet" href="/static/css/styles.css" />
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+
+        h1 {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        table {
+            width: 80%;
+            margin: 20px auto;
+            border-collapse: collapse;
+            font-size: 16px;
+        }
+
+        table, th, td {
+            border: 1px solid black;
+            padding: 8px;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+
+        td {
+            text-align: center;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+
+        tr:hover {
+            background-color: #f1f1f1;
+        }
+    </style>
 </head>
 <body>
+<h1>Employee List</h1>
 
+<table>
+    <thead>
+    <tr>
+        <th>ID</th>
+        <th>Surname</th>
+        <th>Name</th>
+        <th>Patronymic</th>
+        <th>Role</th>
+        <th>Salary</th>
+        <th>Start Date</th>
+        <th>Birth Date</th>
+        <th>Phone Number</th>
+        <th>City</th>
+        <th>Street</th>
+        <th>Zip Code</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="employee : ${employees}">
+        <td th:text="${employee.id}"></td>
+        <td th:text="${employee.surname}"></td>
+        <td th:text="${employee.name}"></td>
+        <td th:text="${employee.patronymic}"></td>
+        <td th:text="${employee.role}"></td>
+        <td th:text="${employee.salary}"></td>
+        <td th:text="${#dates.format(employee.startDate, 'yyyy-MM-dd')}"></td>
+        <td th:text="${#dates.format(employee.birthDate, 'yyyy-MM-dd')}"></td>
+        <td th:text="${employee.phoneNumber}"></td>
+        <td th:text="${employee.city}"></td>
+        <td th:text="${employee.street}"></td>
+        <td th:text="${employee.zipCode}"></td>
+    </tr>
+    </tbody>
+</table>
 </body>
 </html>

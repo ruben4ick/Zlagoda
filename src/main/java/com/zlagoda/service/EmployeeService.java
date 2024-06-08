@@ -9,11 +9,12 @@ public interface EmployeeService {
 
     List<Employee> getAllEmployees();
 
+    void saveEmployee(Employee employee);
+
     Employee getEmployeeById(final String employeeId);
 
     void updateEmployeeById(Employee employee);
 
-    void registerEmployee(final Employee employee);
 
     void deleteEmployee(final String employeeId);
 

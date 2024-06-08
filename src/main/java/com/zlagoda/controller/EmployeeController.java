@@ -5,7 +5,10 @@ import com.zlagoda.service.EmployeeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
 
 import java.util.List;
 
@@ -13,7 +16,7 @@ import java.util.List;
 public class EmployeeController {
 
 
-    private EmployeeService employeeService;
+    private final EmployeeService employeeService;
 
     @Autowired
     public EmployeeController(EmployeeService employeeService) {
@@ -26,4 +29,20 @@ public class EmployeeController {
         model.addAttribute("employees", employees);
         return "employees";
     }
+
+    @GetMapping("employee/add")
+    public String employeeAdd(Model model) {
+        model.addAttribute("roles", Employee.Role.values());
+        model.addAttribute("employee", new Employee());
+        return "employees-add";
+    }
+
+    @PostMapping("employee/add")
+    public String saveEmployee(@ModelAttribute("employee") Employee employee) {
+        employeeService.saveEmployee(employee);
+        return "redirect:/employees";
+    }
+
+    /*@PostMapping("employee/{employeeId}/edit")
+    public String employeeEdit(@ModelAttribute("employee") Employee employee, BindingResult result, Model model) {*/
 }

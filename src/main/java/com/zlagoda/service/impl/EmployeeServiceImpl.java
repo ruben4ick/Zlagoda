@@ -28,6 +28,11 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
     @Override
+    public void saveEmployee(final Employee employee) {
+        employeeDao.saveEmployee(employee.getId(), employee);
+    }
+
+    @Override
     public Employee getEmployeeById(final String employeeId) {
         return employeeDao.findById(employeeId).orElseThrow();
     }
@@ -37,11 +42,6 @@ public class EmployeeServiceImpl implements EmployeeService {
         Employee oldEmployee = employeeDao.findById(employee.getId()).orElseThrow();
         oldEmployee = setOnlyPresentFields(oldEmployee, employee);
         employeeDao.updateById(oldEmployee.getId(), oldEmployee);
-    }
-
-    @Override
-    public void registerEmployee(final Employee employee) {
-        employeeDao.saveEmployee(employee.getId(), employee);
     }
 
     @Override
