@@ -7,9 +7,8 @@ import com.zlagoda.service.EmployeeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.math.BigDecimal;
-import java.sql.Date;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class EmployeeServiceImpl implements EmployeeService {
@@ -24,32 +23,49 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     @Override
     public List<Employee> getAllEmployees() {
-        return employeeDao.findAllEmployees();
+        return employeeDao.findAll();
     }
 
     @Override
     public void saveEmployee(final Employee employee) {
-        employeeDao.saveEmployee(employee.getId(), employee);
+        employeeDao.create(employee);
     }
 
     @Override
-    public Employee getEmployeeById(final String employeeId) {
-        return employeeDao.findById(employeeId).orElseThrow();
-    }
-
-    @Override
-    public void updateEmployeeById(Employee employee) {
-        Employee oldEmployee = employeeDao.findById(employee.getId()).orElseThrow();
-        oldEmployee = setOnlyPresentFields(oldEmployee, employee);
-        employeeDao.updateById(oldEmployee.getId(), oldEmployee);
-    }
-
-    @Override
-    public void deleteEmployee(final String employeeId) {
+    public void deleteEmployee(String employeeId) {
         employeeDao.deleteEmployee(employeeId);
     }
 
-    private Employee setOnlyPresentFields(final Employee oldEmployee, final Employee newEmployee) {
+    @Override
+    public Optional<Employee> getEmployeeById(String employeeId) {
+        return employeeDao.findById(employeeId);
+    }
+
+  /*  public void updateEmployee(EmployeeDto employeeDto) {
+        Employee employee = mapToEmployee(employeeDto);
+        employeeDao.
+    }*/
+
+    private Employee mapToEmployee(EmployeeDto employeeDto) {
+        return Employee.builder()
+                .id(employeeDto.getId())
+                .surname(employeeDto.getSurname())
+                .name(employeeDto.getName())
+                .patronymic(employeeDto.getPatronymic())
+                .role(employeeDto.getRole())
+                .salary(employeeDto.getSalary())
+                .birthDate(employeeDto.getBirthDate())
+                .startDate(employeeDto.getStartDate())
+                .phoneNumber(employeeDto.getPhoneNumber())
+                .city(employeeDto.getCity())
+                .street(employeeDto.getStreet())
+                .zipCode(employeeDto.getZipCode())
+                .build();
+    }
+
+
+
+    /*private Employee setOnlyPresentFields(final Employee oldEmployee, final Employee newEmployee) {
         String name = newEmployee.getName();
         String surname = newEmployee.getSurname();
         //String password = newEmployee.getPassword();
@@ -69,9 +85,9 @@ public class EmployeeServiceImpl implements EmployeeService {
         if (surname.length() > 0) {
             oldEmployee.setSurname(surname);
         }
-        /*if (password.length() > 0) {
+        *//*if (password.length() > 0) {
             oldEmployee.setPassword(password);
-        }*/
+        }*//*
         if (patronymic.length() > 0) {
             oldEmployee.setPatronymic(patronymic);
         }
@@ -100,7 +116,7 @@ public class EmployeeServiceImpl implements EmployeeService {
             oldEmployee.setZipCode(zipCode);
         }
         return oldEmployee;
-    }
+    }*/
 
     /*@Override
     public Employee getCurrent() {

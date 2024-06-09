@@ -1,5 +1,7 @@
 package com.zlagoda.entity;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -8,6 +10,8 @@ import java.math.BigDecimal;
 import java.sql.Date;
 
 @Data
+@Builder
+@AllArgsConstructor
 @NoArgsConstructor
 public class Employee {
 
@@ -28,10 +32,8 @@ public class Employee {
 
     private BigDecimal salary;
 
-    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date startDate;
 
-    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date birthDate;
 
     private String phoneNumber;

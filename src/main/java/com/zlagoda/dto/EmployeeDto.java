@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
+import java.sql.Date;
 
 @Data
 @Builder
@@ -23,8 +24,8 @@ public class EmployeeDto
     private String patronymic;
     private Employee.Role role;
     private BigDecimal salary;
-    private String birthDate;
-    private String startDate;
+    private Date birthDate;
+    private Date startDate;
     private String phoneNumber;
     private String city;
     private String street;

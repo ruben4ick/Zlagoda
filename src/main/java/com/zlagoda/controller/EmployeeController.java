@@ -8,6 +8,7 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import java.util.List;
@@ -40,6 +41,12 @@ public class EmployeeController {
     @PostMapping("employee/add")
     public String saveEmployee(@ModelAttribute("employee") Employee employee) {
         employeeService.saveEmployee(employee);
+        return "redirect:/employees";
+    }
+
+    @GetMapping("employee/delete/{employeeId}")
+    public String employeeDelete(@PathVariable("employeeId") String employeeId) {
+        employeeService.deleteEmployee(employeeId);
         return "redirect:/employees";
     }
 

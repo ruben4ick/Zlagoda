@@ -6,17 +6,16 @@ import com.zlagoda.entity.Employee;
 import java.util.List;
 import java.util.Optional;
 
-public interface EmployeeDao {
+public interface EmployeeDao  {
 
-    Optional<Employee> findByName(final String name);
 
-    List<Employee> findAllEmployees();
+    List<Employee> findAll();
 
-    Optional<Employee> findById(final String employeeId);
+    Optional<Employee> findById(String employeeId);
 
-    void updateById(final String employeeId, final Employee employee);
+    void update(final String employeeId, final Employee employee);
 
-    void saveEmployee(final String employeeId , final Employee employee);
+    void create(final Employee employee);
 
     void deleteEmployee(final String employeeId);
 

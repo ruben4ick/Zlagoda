@@ -41,10 +41,48 @@
         tr:hover {
             background-color: #f1f1f1;
         }
+
+        .button-container {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .button {
+            padding: 10px 20px;
+            font-size: 16px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            text-decoration: none;
+        }
+
+        .button:hover {
+            background-color: #45a049;
+        }
+
+        .delete-button {
+            background-color: #f44336;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            text-decoration: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .delete-button:hover {
+            background-color: #d32f2f;
+        }
     </style>
 </head>
 <body>
 <h1>Employee List</h1>
+
+<div class="button-container">
+    <a href="/employee/add" class="button">Add Employee</a>
+</div>
 
 <table>
     <thead>
@@ -61,6 +99,7 @@
         <th>City</th>
         <th>Street</th>
         <th>Zip Code</th>
+        <th>Actions</th>
     </tr>
     </thead>
     <tbody>
@@ -77,6 +116,9 @@
         <td th:text="${employee.city}"></td>
         <td th:text="${employee.street}"></td>
         <td th:text="${employee.zipCode}"></td>
+        <td>
+            <a th:href="@{'/employee/delete/' + ${employee.id}}" class="delete-button">Delete</a>
+        </td>
     </tr>
     </tbody>
 </table>

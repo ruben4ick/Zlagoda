@@ -4,6 +4,7 @@ import com.zlagoda.dto.EmployeeDto;
 import com.zlagoda.entity.Employee;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface EmployeeService {
 
@@ -11,12 +12,11 @@ public interface EmployeeService {
 
     void saveEmployee(Employee employee);
 
-    Employee getEmployeeById(final String employeeId);
+    void deleteEmployee(String employeeId);
+    Optional<Employee> getEmployeeById(String employeeId);
 
-    void updateEmployeeById(Employee employee);
 
 
-    void deleteEmployee(final String employeeId);
 
 
 
