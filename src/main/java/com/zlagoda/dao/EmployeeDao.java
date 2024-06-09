@@ -13,10 +13,11 @@ public interface EmployeeDao  {
 
     Optional<Employee> findById(String employeeId);
 
-    void update(final String employeeId, final Employee employee);
+    //void update(final String employeeId, final Employee employee);
 
     void create(final Employee employee);
 
     void deleteEmployee(final String employeeId);
 
+    void updateEmployee(Employee employee);
 }

@@ -33,12 +33,11 @@ public class EmployeeDaoImpl implements EmployeeDao {
                     "WHERE Employee.`role` = \"CASHIER\"\n" +
                     "GROUP BY Employee.id_employee";
 
-    private static final String UPDATE_BY_ID = "UPDATE Employee\n" +
+    private static final String UPDATE = "UPDATE Employee\n" +
             "SET empl_surname = ?,\n" +
             "empl_name = ?,\n" +
-            "password = ?,\n" +
             "empl_patronymic = ?,\n" +
-            "role = ?,\n" +
+            "empl_role = ?,\n" +
             "salary = ?,\n" +
             "date_of_birth = ?,\n" +
             "date_of_start = ?,\n" +
@@ -84,13 +83,18 @@ public class EmployeeDaoImpl implements EmployeeDao {
                 employee.getPhoneNumber(),
                 employee.getCity(),
                 employee.getStreet(),
-                employee.getZipCode()
+                employee.getZipCode(),
         };
         jdbcTemplate.update(INSERT_EMPLOYEE, params);
     }
 
     @Override
-    public void update(String employeeId, Employee employee) {
+    public void deleteEmployee(final String employeeId) {
+        jdbcTemplate.update(DELETE_EMPLOYEE, employeeId);
+    }
+
+    @Override
+    public void updateEmployee(Employee employee) {
         Object[] params = {
                 employee.getSurname(),
                 employee.getName(),
@@ -104,14 +108,10 @@ public class EmployeeDaoImpl implements EmployeeDao {
                 employee.getCity(),
                 employee.getStreet(),
                 employee.getZipCode(),
-                employeeId
+                employee.getId()
         };
-        jdbcTemplate.update(UPDATE_BY_ID, params);
-    }
+        jdbcTemplate.update(UPDATE, params);
 
-    @Override
-    public void deleteEmployee(final String employeeId) {
-        jdbcTemplate.update(DELETE_EMPLOYEE, employeeId);
     }
 }
 

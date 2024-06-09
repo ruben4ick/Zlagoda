@@ -2,7 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Add New Employee</title>
+    <title>Edit Employee</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -60,9 +60,9 @@
     </style>
 </head>
 <body>
-<h1>Add New Employee</h1>
+<h1>Edit Employee</h1>
 
-<form th:action="@{/employee/add}" th:object="${employee}" method="post">
+<form th:action="@{'/employees/edit/' + ${employee.id}}" th:object="${employee}" method="post">
     <div class="form-group">
         <label for="surname">Surname:</label>
         <input type="text" id="surname" th:field="*{surname}" required />
@@ -153,7 +153,7 @@
         </div>
     </div>
 
-    <button type="submit">Add Employee</button>
+    <button type="submit">Update Employee</button>
 </form>
 </body>
 </html>

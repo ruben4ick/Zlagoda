@@ -10,13 +10,12 @@ public interface EmployeeService {
 
     List<Employee> getAllEmployees();
 
-    void saveEmployee(Employee employee);
+    void saveEmployee(EmployeeDto employeeDto);
 
     void deleteEmployee(String employeeId);
+
+    void updateEmployee(EmployeeDto employeeDto);
     Optional<Employee> getEmployeeById(String employeeId);
-
-
-
 
 
 

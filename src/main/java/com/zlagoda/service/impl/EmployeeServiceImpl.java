@@ -27,13 +27,20 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
     @Override
-    public void saveEmployee(final Employee employee) {
+    public void saveEmployee(final EmployeeDto employeeDto) {
+        Employee employee =  mapToEmployee(employeeDto);
         employeeDao.create(employee);
     }
 
     @Override
     public void deleteEmployee(String employeeId) {
         employeeDao.deleteEmployee(employeeId);
+    }
+
+    @Override
+    public void updateEmployee(EmployeeDto employeeDto) {
+        Employee employee = mapToEmployee(employeeDto);
+        employeeDao.updateEmployee(employee);
     }
 
     @Override
@@ -62,6 +69,23 @@ public class EmployeeServiceImpl implements EmployeeService {
                 .zipCode(employeeDto.getZipCode())
                 .build();
     }
+
+    private EmployeeDto mapToEmployeeDto(Employee employee) {
+        return EmployeeDto.builder()
+                .surname(employee.getSurname())
+                .name(employee.getName())
+                .patronymic(employee.getPatronymic())
+                .role(employee.getRole())
+                .salary(employee.getSalary())
+                .birthDate(employee.getBirthDate())
+                .startDate(employee.getStartDate())
+                .phoneNumber(employee.getPhoneNumber())
+                .city(employee.getCity())
+                .street(employee.getStreet())
+                .zipCode(employee.getZipCode())
+                .build();
+    }
+
 
 
 

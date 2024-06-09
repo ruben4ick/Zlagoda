@@ -1,7 +1,9 @@
 package com.zlagoda.controller;
 
+import com.zlagoda.dto.EmployeeDto;
 import com.zlagoda.entity.Employee;
 import com.zlagoda.service.EmployeeService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -12,6 +14,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import java.util.List;
+import java.util.Optional;
 
 @Controller
 public class EmployeeController {
@@ -31,25 +34,52 @@ public class EmployeeController {
         return "employees";
     }
 
-    @GetMapping("employee/add")
+    @GetMapping("employees/add")
     public String employeeAdd(Model model) {
         model.addAttribute("roles", Employee.Role.values());
         model.addAttribute("employee", new Employee());
         return "employees-add";
     }
 
-    @PostMapping("employee/add")
-    public String saveEmployee(@ModelAttribute("employee") Employee employee) {
-        employeeService.saveEmployee(employee);
+    @PostMapping("employees/add")
+    public String saveEmployee(@Valid @ModelAttribute("employee") EmployeeDto employeeDto, BindingResult result, Model model) {
+        if (result.hasErrors()) {
+            model.addAttribute("club", employeeDto);
+            model.addAttribute("roles", Employee.Role.values());
+            return "employees-add";
+        }
+        employeeService.saveEmployee(employeeDto);
         return "redirect:/employees";
     }
 
-    @GetMapping("employee/delete/{employeeId}")
-    public String employeeDelete(@PathVariable("employeeId") String employeeId) {
+    @GetMapping("employees/delete/{employeeId}")
+    public String deleteEmployee(@PathVariable("employeeId") String employeeId) {
         employeeService.deleteEmployee(employeeId);
         return "redirect:/employees";
     }
 
-    /*@PostMapping("employee/{employeeId}/edit")
-    public String employeeEdit(@ModelAttribute("employee") Employee employee, BindingResult result, Model model) {*/
+    @GetMapping("/employees/edit/{employeeId}")
+    public String editEmployee(@PathVariable("employeeId") String employeeId, Model model) {
+        Optional<Employee> employeeOpt = employeeService.getEmployeeById(employeeId);
+
+        if (employeeOpt.isPresent()) {
+            model.addAttribute("employee", employeeOpt.get());
+            model.addAttribute("roles", Employee.Role.values());
+            return "employees-edit";
+        } else {
+            // Redirect or handle the case when the employee does not exist
+            return "redirect:/employees";
+        }
+    }
+    @PostMapping("/employees/edit/{employeeId}")
+    public String editEmployee(@PathVariable("employeeId") String employeeId, @ModelAttribute("employee") EmployeeDto employee, BindingResult result, Model model) {
+        if(result.hasErrors()) {
+            model.addAttribute("employee", employee);
+            model.addAttribute("roles", Employee.Role.values());
+            return "employees-edit";
+        }
+        employee.setId(employeeId);
+        employeeService.updateEmployee(employee);
+        return "redirect:/employees";
+    }
 }
