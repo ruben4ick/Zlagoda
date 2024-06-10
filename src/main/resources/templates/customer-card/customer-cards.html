@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Customer Cards List</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+
+        h1 {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        table {
+            width: 80%;
+            margin: 20px auto;
+            border-collapse: collapse;
+            font-size: 16px;
+        }
+
+        table, th, td {
+            border: 1px solid black;
+            padding: 8px;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+
+        td {
+            text-align: center;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+
+        tr:hover {
+            background-color: #f1f1f1;
+        }
+
+        .button-container {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .button {
+            padding: 10px 20px;
+            font-size: 16px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            text-decoration: none;
+        }
+
+        .button:hover {
+            background-color: #45a049;
+        }
+
+        .delete-button {
+            background-color: #f44336;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            text-decoration: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .delete-button:hover {
+            background-color: #d32f2f;
+        }
+    </style>
+</head>
+<body>
+<h1>Customer Cards List</h1>
+
+<div class="button-container">
+    <a href="/customer-cards/add" class="button">Add Customer Card</a>
+</div>
+
+<table>
+    <thead>
+    <tr>
+        <th>Card Number</th>
+        <th>Surname</th>
+        <th>Name</th>
+        <th>Patronymic</th>
+        <th>Phone Number</th>
+        <th>City</th>
+        <th>Street</th>
+        <th>Zip Code</th>
+        <th>Percent</th>
+        <th>Actions</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="customerCard : ${customerCards}">
+        <td th:text="${customerCard.cardNumber}"></td>
+        <td th:text="${customerCard.surname}"></td>
+        <td th:text="${customerCard.name}"></td>
+        <td th:text="${customerCard.patronymic}"></td>
+        <td th:text="${customerCard.phoneNumber}"></td>
+        <td th:text="${customerCard.city}"></td>
+        <td th:text="${customerCard.street}"></td>
+        <td th:text="${customerCard.zipCode}"></td>
+        <td th:text="${customerCard.percent}"></td>
+        <td>
+            <a th:href="@{'/customer-cards/edit/' + ${customerCard.cardNumber}}" class="button">Edit</a>
+            <a th:href="@{'/customer-cards/delete/' + ${customerCard.cardNumber}}" class="delete-button">Delete</a>
+        </td>
+    </tr>
+    </tbody>
+</table>
+</body>
+</html>
