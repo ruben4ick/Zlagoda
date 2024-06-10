@@ -13,9 +13,10 @@ public class Product {
 
     private Long id;
 
+    private Long categoryNumber;
+
     private String name;
 
     private String characteristics;
 
-    private Long categoryId;
 }

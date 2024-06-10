@@ -2,5 +2,8 @@ package com.zlagoda.dao;
 
 import com.zlagoda.entity.Product;
 
-public interface ProductDao extends GenericDao<Product, Integer>{
+import java.util.Optional;
+
+public interface ProductDao extends GenericDao<Product, Long>{
+
 }
