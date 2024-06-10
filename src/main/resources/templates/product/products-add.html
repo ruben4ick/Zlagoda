@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Add Product</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+
+        h1 {
+            text-align: center;
+        }
+
+        form {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 10px;
+            background: #f9f9f9;
+        }
+
+        label, input, select {
+            display: block;
+            width: 100%;
+            margin-bottom: 10px;
+            padding: 8px;
+            font-size: 16px;
+        }
+
+        input, select {
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .error {
+            color: red;
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+<h1>Add Product</h1>
+
+<form th:action="@{/products/add}" th:object="${product}" method="post">
+    <div class="form-group">
+        <label for="categoryNumber">Category:</label>
+        <select id="categoryNumber" th:field="*{categoryNumber}" required>
+            <option value="" disabled selected>Select a category</option>
+            <option th:each="category : ${categories}"
+                    th:value="${category.number}"
+                    th:text="${category.name}"></option>
+        </select>
+    </div>
+
+    <div class="form-group">
+        <label for="name">Product Name:</label>
+        <input type="text" id="name" th:field="*{name}" required />
+    </div>
+
+    <div class="form-group">
+        <label for="characteristics">Characteristics:</label>
+        <input type="text" id="characteristics" th:field="*{characteristics}" required />
+    </div>
+
+    <button type="submit">Add Product</button>
+</form>
+</body>
+</html>
