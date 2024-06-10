@@ -22,36 +22,39 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
     @Override
-    public List<Employee> getAllEmployees() {
-        return employeeDao.findAll();
+    public List<EmployeeDto> getAll() {
+        return employeeDao.getAll().stream()
+                .map(this::mapToEmployeeDto)
+                .toList();
     }
 
     @Override
-    public void saveEmployee(final EmployeeDto employeeDto) {
+    public List<Employee> getAllCashiers() {
+        return employeeDao.getAllCashiers();
+    }
+
+    @Override
+    public void create(final EmployeeDto employeeDto) {
         Employee employee =  mapToEmployee(employeeDto);
         employeeDao.create(employee);
     }
 
     @Override
-    public void deleteEmployee(String employeeId) {
-        employeeDao.deleteEmployee(employeeId);
+    public void delete(String employeeId) {
+        employeeDao.delete(employeeId);
     }
 
     @Override
-    public void updateEmployee(EmployeeDto employeeDto) {
+    public void update(EmployeeDto employeeDto) {
         Employee employee = mapToEmployee(employeeDto);
-        employeeDao.updateEmployee(employee);
+        employeeDao.update(employee);
     }
 
     @Override
-    public Optional<Employee> getEmployeeById(String employeeId) {
-        return employeeDao.findById(employeeId);
+    public Optional<EmployeeDto> getById(String employeeId) {
+        return employeeDao.getById(employeeId)
+                .map(this::mapToEmployeeDto);
     }
-
-  /*  public void updateEmployee(EmployeeDto employeeDto) {
-        Employee employee = mapToEmployee(employeeDto);
-        employeeDao.
-    }*/
 
     private Employee mapToEmployee(EmployeeDto employeeDto) {
         return Employee.builder()
@@ -72,6 +75,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     private EmployeeDto mapToEmployeeDto(Employee employee) {
         return EmployeeDto.builder()
+                .id(employee.getId())
                 .surname(employee.getSurname())
                 .name(employee.getName())
                 .patronymic(employee.getPatronymic())

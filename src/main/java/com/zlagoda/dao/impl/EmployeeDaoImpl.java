@@ -21,6 +21,9 @@ public class EmployeeDaoImpl implements EmployeeDao {
     private static final String FIND_BY_NAME = "SELECT * FROM `Employee` WHERE empl_name = ?";
     private static final String FIND_BY_ID = "SELECT * FROM `Employee` WHERE id_employee = ?";
     private static final String FIND_ALL_EMPLOYEES = "SELECT * FROM `Employee` ORDER BY empl_surname";
+
+    private static final String FIND_ALL_CASHIERS = "SELECT * FROM Employee WHERE empl_role = 'CASHIER' ORDER BY empl_surname";
+
     private static final String EMPLOYEE_CREATED_CHECK_AMOUNT_AND_SUM =
             "SELECT Employee.id_employee,\n" +
                     "Employee.empl_name,\n" +
@@ -56,12 +59,17 @@ public class EmployeeDaoImpl implements EmployeeDao {
 
 
     @Override
-    public List<Employee> findAll() {
+    public List<Employee> getAll() {
         return jdbcTemplate.query(FIND_ALL_EMPLOYEES, new EmployeeRowMapper());
     }
 
     @Override
-    public Optional<Employee> findById(String employeeId) {
+    public List<Employee> getAllCashiers() {
+        return jdbcTemplate.query(FIND_ALL_CASHIERS, new EmployeeRowMapper());
+    }
+
+    @Override
+    public Optional<Employee> getById(String employeeId) {
         List<Employee> employees = jdbcTemplate.query(FIND_BY_ID, new Object[]{employeeId}, new EmployeeRowMapper());
         return employees.stream().findFirst();
     }
@@ -89,12 +97,12 @@ public class EmployeeDaoImpl implements EmployeeDao {
     }
 
     @Override
-    public void deleteEmployee(final String employeeId) {
+    public void delete(final String employeeId) {
         jdbcTemplate.update(DELETE_EMPLOYEE, employeeId);
     }
 
     @Override
-    public void updateEmployee(Employee employee) {
+    public void update(Employee employee) {
         Object[] params = {
                 employee.getSurname(),
                 employee.getName(),

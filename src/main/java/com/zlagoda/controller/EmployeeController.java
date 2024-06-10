@@ -29,9 +29,16 @@ public class EmployeeController {
 
     @GetMapping("/employees")
     public String employees(Model model) {
-        List<Employee> employees = employeeService.getAllEmployees();
+        List<EmployeeDto> employees = employeeService.getAll();
         model.addAttribute("employees", employees);
         return "employees";
+    }
+
+    @GetMapping("/cashiers")
+    public String cashiers(Model model) {
+        List<Employee> cashiers = employeeService.getAllCashiers();
+        model.addAttribute("employees", cashiers);
+        return "cashiers";
     }
 
     @GetMapping("employees/add")
@@ -48,19 +55,19 @@ public class EmployeeController {
             model.addAttribute("roles", Employee.Role.values());
             return "employees-add";
         }
-        employeeService.saveEmployee(employeeDto);
+        employeeService.create(employeeDto);
         return "redirect:/employees";
     }
 
     @GetMapping("employees/delete/{employeeId}")
     public String deleteEmployee(@PathVariable("employeeId") String employeeId) {
-        employeeService.deleteEmployee(employeeId);
+        employeeService.delete(employeeId);
         return "redirect:/employees";
     }
 
     @GetMapping("/employees/edit/{employeeId}")
     public String editEmployee(@PathVariable("employeeId") String employeeId, Model model) {
-        Optional<Employee> employeeOpt = employeeService.getEmployeeById(employeeId);
+        Optional<EmployeeDto> employeeOpt = employeeService.getById(employeeId);
 
         if (employeeOpt.isPresent()) {
             model.addAttribute("employee", employeeOpt.get());
@@ -79,7 +86,7 @@ public class EmployeeController {
             return "employees-edit";
         }
         employee.setId(employeeId);
-        employeeService.updateEmployee(employee);
+        employeeService.update(employee);
         return "redirect:/employees";
     }
 }

@@ -62,7 +62,7 @@
 <body>
 <h1>Add New Employee</h1>
 
-<form th:action="@{/employee/add}" th:object="${employee}" method="post">
+<form th:action="@{/employees/add}" th:object="${employee}" method="post">
     <div class="form-group">
         <label for="surname">Surname:</label>
         <input type="text" id="surname" th:field="*{surname}" required />
