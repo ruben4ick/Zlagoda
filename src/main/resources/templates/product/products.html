@@ -87,7 +87,7 @@
     <thead>
     <tr>
         <th>ID</th>
-        <th>Category Number</th>
+        <th>Category Name</th>
         <th>Product Name</th>
         <th>Characteristics</th>
         <th>Actions</th>
@@ -96,7 +96,8 @@
     <tbody>
     <tr th:each="product : ${products}">
         <td th:text="${product.id}"></td>
-        <td th:text="${product.categoryNumber}"></td>
+        <!-- Відображаємо назву категорії з використанням словника -->
+        <td th:text="${categoryMap[product.categoryNumber]}"></td>
         <td th:text="${product.name}"></td>
         <td th:text="${product.characteristics}"></td>
         <td>
