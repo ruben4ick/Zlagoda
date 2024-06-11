@@ -27,11 +27,7 @@ public class ProductController {
     @GetMapping
     public String products(Model model) {
         List<ProductDto> products = productService.getAll();
-        List<CategoryDto> categories = categoryService.getAll();
-        Map<Long, String> categoryMap = categories.stream()
-                .collect(Collectors.toMap(CategoryDto::getNumber, CategoryDto::getName));
         model.addAttribute("products", products);
-        model.addAttribute("categoryMap", categoryMap);
         return "product/products";
     }
 

@@ -167,6 +167,17 @@ INSERT INTO `product` VALUES (3,4,'DSAD','hz'),(4,3,'віфвіфв','івфв')
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
+CREATE TABLE IF NOT EXISTS Store_Product (
+                                             upc VARCHAR(12) PRIMARY KEY,
+                                             upc_prom VARCHAR(12),
+                                             id_product INT NOT NULL,
+                                             selling_price DECIMAL(13, 4) NOT NULL,
+                                             products_number INT NOT NULL,
+                                             promotional_product BOOLEAN NOT NULL,
+                                             FOREIGN KEY (upc_prom) REFERENCES Store_Product(upc) ON UPDATE CASCADE ON DELETE SET NULL,
+                                             FOREIGN KEY (id_product) REFERENCES Product(id_product) ON UPDATE CASCADE ON DELETE NO ACTION
+);
+
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
 /*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
 /*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;

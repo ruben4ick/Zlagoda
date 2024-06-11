@@ -3,6 +3,7 @@ package com.zlagoda.service.impl;
 import com.zlagoda.dao.ProductDao;
 import com.zlagoda.dto.CategoryDto;
 import com.zlagoda.dto.ProductDto;
+import com.zlagoda.entity.Category;
 import com.zlagoda.entity.Product;
 import com.zlagoda.service.ProductService;
 import com.zlagoda.service.CategoryService;
@@ -55,7 +56,7 @@ public class ProductServiceImpl implements ProductService {
     private Product mapToProduct(ProductDto productDto) {
         return Product.builder()
                 .id(productDto.getId())
-                .categoryNumber(productDto.getCategoryNumber())
+                .category(mapToCategory(productDto.getCategory())) // Перетворюємо CategoryDto на Category
                 .name(productDto.getName())
                 .characteristics(productDto.getCharacteristics())
                 .build();
@@ -64,9 +65,24 @@ public class ProductServiceImpl implements ProductService {
     private ProductDto mapToProductDto(Product product) {
         return ProductDto.builder()
                 .id(product.getId())
-                .categoryNumber(product.getCategoryNumber())
+                .category(mapToCategoryDto(product.getCategory())) // Перетворюємо Category на CategoryDto
                 .name(product.getName())
                 .characteristics(product.getCharacteristics())
+                .build();
+    }
+
+
+    private Category mapToCategory(CategoryDto categoryDto) {
+        return Category.builder()
+                .number(categoryDto.getNumber())
+                .name(categoryDto.getName())
+                .build();
+    }
+
+    private CategoryDto mapToCategoryDto(Category category) {
+        return CategoryDto.builder()
+                .number(category.getNumber())
+                .name(category.getName())
                 .build();
     }
 }

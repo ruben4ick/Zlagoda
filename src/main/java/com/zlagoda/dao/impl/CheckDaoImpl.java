@@ -16,10 +16,25 @@ public class CheckDaoImpl implements CheckDao {
     @Autowired
     private JdbcTemplate jdbcTemplate;
 
-    private static final String FIND_ALL_CHECKS = "SELECT * FROM `Check` ORDER BY print_date DESC";
-    private static final String FIND_BY_ID = "SELECT * FROM `Check` WHERE check_number = ?";
-    private static final String INSERT_CHECK = "INSERT INTO `Check` (check_number, id_employee, card_number, print_date, sum_total, vat) VALUES (?, ?, ?, ?, ?, ?)";
-    private static final String DELETE_CHECK = "DELETE FROM `Check` WHERE check_number = ?";
+    // SQL Queries
+    private static final String FIND_ALL_CHECKS =
+            "SELECT * " +
+                    "FROM Check c " +
+                    "INNER JOIN Employee e ON c.id_employee = e.id_employee " +
+                    "LEFT JOIN Customer_Card cc ON c.card_number = cc.card_number";
+
+    private static final String FIND_BY_ID =
+            "SELECT * " +
+                    "FROM Check c " +
+                    "INNER JOIN Employee e ON c.id_employee = e.id_employee " +
+                    "LEFT JOIN Customer_Card cc ON c.card_number = cc.card_number " +
+                    "WHERE c.check_number = ?";
+
+    private static final String INSERT_CHECK =
+            "INSERT INTO Check (check_number, id_employee, card_number, print_date, total_sum, vat) VALUES (?, ?, ?, ?, ?, ?)";
+
+    private static final String DELETE_CHECK =
+            "DELETE FROM Check WHERE check_number = ?";
 
     @Override
     public List<Check> getAll() {
@@ -34,13 +49,18 @@ public class CheckDaoImpl implements CheckDao {
 
     @Override
     public void create(Check check) {
-        jdbcTemplate.update(INSERT_CHECK, check.getCheckNumber(), check.getIdEmployee(), check.getCardNumber(),
-                check.getPrintDate(), check.getTotalSum(), check.getVat());
+        jdbcTemplate.update(INSERT_CHECK,
+                check.getCheckNumber(),
+                check.getEmployee().getId(),
+                check.getCustomerCard() != null ? check.getCustomerCard().getCardNumber() : null,
+                check.getPrintDate(),
+                check.getTotalSum(),
+                check.getVat());
     }
 
     @Override
     public void update(Check check) {
-        throw new UnsupportedOperationException("Update operation is not supported for Check.");
+        // Update method is not required
     }
 
     @Override

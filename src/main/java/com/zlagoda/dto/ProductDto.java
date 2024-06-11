@@ -15,15 +15,14 @@ import lombok.NoArgsConstructor;
 public class ProductDto {
     private Long id;
 
-    @NotNull(message = "product category can not be null")
-    private Long categoryNumber;
+    @NotNull(message = "Product category cannot be null")
+    private CategoryDto category;
 
-    @NotNull(message = "product name can not be null")
-    @Size(min = 1, max = 50, message = "product name length must be between 1 and 50 characters")
+    @NotNull(message = "Product name cannot be null")
+    @Size(min = 1, max = 50, message = "Product name length must be between 1 and 50 characters")
     private String name;
 
-    @NotNull(message = "product characteristics can not be null")
-    @Size(min = 1, max = 50, message = "product characteristics length must be between 1 and 50 characters")
+    @NotNull(message = "Product characteristics cannot be null")
+    @Size(min = 1, max = 100, message = "Product characteristics length must be between 1 and 100 characters")
     private String characteristics;
-
 }

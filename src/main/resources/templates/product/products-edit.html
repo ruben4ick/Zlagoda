@@ -64,13 +64,13 @@
 
 <form th:action="@{/products/edit/{productId}(productId=${product.id})}" th:object="${product}" method="post">
     <div class="form-group">
-        <label for="categoryNumber">Category Number:</label>
-        <select id="categoryNumber" th:field="*{categoryNumber}" required>
+        <label for="category">Category:</label>
+        <select id="category" th:field="*{category.number}" required>
             <option value="" disabled>Select a category</option>
             <option th:each="category : ${categories}"
                     th:value="${category.number}"
                     th:text="${category.name}"
-                    th:selected="${category.number} == ${product.categoryNumber}"></option>
+                    th:selected="${category.number} == ${product.category.number}"></option>
         </select>
     </div>
 

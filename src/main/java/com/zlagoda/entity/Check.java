@@ -17,9 +17,9 @@ public class Check {
 
     private String checkNumber;
 
-    private String idEmployee;
+    private Employee employee;
 
-    private String cardNumber;
+    private CustomerCard customerCard;
 
     private Date printDate;
 

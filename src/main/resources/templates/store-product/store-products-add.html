@@ -2,7 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Add Product</title>
+    <title>Add Store Product</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -60,30 +60,40 @@
     </style>
 </head>
 <body>
-<h1>Add Product</h1>
+<h1>Add Store Product</h1>
 
-<form th:action="@{/products/add}" th:object="${product}" method="post">
+<form th:action="@{/store-products/add}" th:object="${storeProduct}" method="post">
     <div class="form-group">
-        <label for="category">Category:</label>
-        <select id="category" th:field="*{category.number}" required>
-            <option value="" disabled selected>Select a category</option>
-            <option th:each="category : ${categories}"
-                    th:value="${category.number}"
-                    th:text="${category.name}"></option>
+        <label for="upc">UPC:</label>
+        <input type="text" id="upc" th:field="*{upc}" required />
+    </div>
+
+    <div class="form-group">
+        <label for="product">Product:</label>
+        <select id="product" th:field="*{product.id}" required>
+            <option value="" disabled selected>Select a product</option>
+            <option th:each="product : ${products}"
+                    th:value="${product.id}"
+                    th:text="${product.name}"></option>
         </select>
     </div>
 
     <div class="form-group">
-        <label for="name">Product Name:</label>
-        <input type="text" id="name" th:field="*{name}" required />
+        <label for="price">Price:</label>
+        <input type="text" id="price" th:field="*{price}" required />
     </div>
 
     <div class="form-group">
-        <label for="characteristics">Characteristics:</label>
-        <input type="text" id="characteristics" th:field="*{characteristics}" required />
+        <label for="quantity">Quantity:</label>
+        <input type="text" id="quantity" th:field="*{quantity}" required />
     </div>
 
-    <button type="submit">Add Product</button>
+    <div class="form-group">
+        <label for="isPromotional">Is Promotional:</label>
+        <input type="checkbox" id="isPromotional" th:field="*{isPromotional}" value="true" />
+    </div>
+
+    <button type="submit">Add Store Product</button>
 </form>
 </body>
 </html>

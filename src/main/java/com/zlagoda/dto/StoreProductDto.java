@@ -1,5 +1,6 @@
-package com.zlagoda.entity;
+package com.zlagoda.dto;
 
+import jakarta.annotation.Nullable;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -9,17 +10,19 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class StoreProduct {
+public class StoreProductDto {
 
     private String upc;
 
-    StoreProduct upcProm;
+    @Nullable
+    private StoreProductDto upcProm;
 
-    Product product;
+    private ProductDto product;
 
     private Double price;
 
     private Integer quantity;
 
+    @Nullable
     private Boolean isPromotional;
 }

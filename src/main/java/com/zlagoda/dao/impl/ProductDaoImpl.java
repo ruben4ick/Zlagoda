@@ -16,9 +16,17 @@ public class ProductDaoImpl implements ProductDao {
     @Autowired
     private JdbcTemplate jdbcTemplate;
 
-    private static final String FIND_ALL_PRODUCTS = "SELECT * FROM Product ORDER BY product_name";
-    private static final String FIND_BY_ID = "SELECT * FROM Product WHERE id_product = ?";
-    private static final String INSERT_PRODUCT = "INSERT INTO Product (id_product, category_number, product_name, characteristics) VALUES (?, ?, ?, ?)";
+    private static final String FIND_ALL_PRODUCTS = "SELECT * " +
+            "FROM Product p " +
+            "INNER JOIN Category c ON p.category_number = c.category_number " +
+            "ORDER BY p.product_name";
+
+    private static final String FIND_BY_ID = "SELECT * " +
+            "FROM Product p " +
+            "INNER JOIN Category c ON p.category_number = c.category_number " +
+            "WHERE p.id_product = ?";
+
+    private static final String INSERT_PRODUCT = "INSERT INTO Product (category_number, product_name, characteristics) VALUES (?, ?, ?)";
     private static final String UPDATE_PRODUCT = "UPDATE Product SET category_number = ?, product_name = ?, characteristics = ? WHERE id_product = ?";
     private static final String DELETE_PRODUCT = "DELETE FROM Product WHERE id_product = ?";
 
@@ -36,8 +44,7 @@ public class ProductDaoImpl implements ProductDao {
     @Override
     public void create(Product product) {
         jdbcTemplate.update(INSERT_PRODUCT,
-                product.getId(),
-                product.getCategoryNumber(),
+                product.getCategory().getNumber(),
                 product.getName(),
                 product.getCharacteristics());
     }
@@ -45,7 +52,7 @@ public class ProductDaoImpl implements ProductDao {
     @Override
     public void update(Product product) {
         jdbcTemplate.update(UPDATE_PRODUCT,
-                product.getCategoryNumber(),
+                product.getCategory().getNumber(),
                 product.getName(),
                 product.getCharacteristics(),
                 product.getId());
