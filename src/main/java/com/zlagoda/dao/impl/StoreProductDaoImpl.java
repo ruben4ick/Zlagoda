@@ -22,7 +22,7 @@ public class StoreProductDaoImpl implements StoreProductDao {
                     "FROM Store_Product sp " +
                     "INNER JOIN Product p ON sp.id_product = p.id_product " +
                     "LEFT JOIN Store_Product sp_upc ON sp.upc_prom = sp_upc.upc " +
-                    "ORDER BY sp.upc";
+                    "ORDER BY sp.products_number";
 
     private static final String FIND_BY_ID =
             "SELECT sp.*, p.id_product, p.product_name, p.characteristics, " +

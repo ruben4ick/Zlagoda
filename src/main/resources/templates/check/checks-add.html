@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Add Check</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+
+        h1 {
+            text-align: center;
+        }
+
+        form {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 10px;
+            background: #f9f9f9;
+        }
+
+        label, input, select {
+            display: block;
+            width: 100%;
+            margin-bottom: 10px;
+            padding: 8px;
+            font-size: 16px;
+        }
+
+        input, select {
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .error {
+            color: red;
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+<h1>Add Check</h1>
+
+<form th:action="@{/checks/add}" th:object="${check}" method="post">
+    <div class="form-group">
+        <label for="employee">Employee:</label>
+        <select id="employee" th:field="*{employee.id}" required>
+            <option value="" disabled selected>Select an employee</option>
+            <option th:each="employee : ${employees}"
+                    th:value="${employee.id}"
+                    th:text="${employee.surname + ' ' + employee.name}"></option>
+        </select>
+    </div>
+
+    <div class="form-group">
+        <label for="customerCard">Customer Card:</label>
+        <select id="customerCard" th:field="*{customerCard.cardNumber}">
+            <option value="" disabled selected>Select a customer card</option>
+            <option th:each="customerCard : ${customerCards}"
+                    th:value="${customerCard.cardNumber}"
+                    th:text="${customerCard.surname}"></option>
+        </select>
+    </div>
+
+    <div class="form-group">
+        <label for="printDate">Print Date:</label>
+        <input type="datetime-local" id="printDate" th:field="*{printDate}" required />
+    </div>
+
+    <div class="form-group">
+        <label for="totalSum">Total Sum:</label>
+        <input type="number" id="totalSum" th:field="*{totalSum}" required />
+    </div>
+
+    <div class="form-group">
+        <label for="vat">VAT:</label>
+        <input type="number" id="vat" th:field="*{vat}" required />
+    </div>
+
+    <button type="submit">Add Check</button>
+</form>
+</body>
+</html>
