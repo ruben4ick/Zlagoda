@@ -1,21 +1,29 @@
 package com.zlagoda.entity;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
 
+import java.math.BigDecimal;
 import java.util.Date;
 
 @Data
+@Builder
 @NoArgsConstructor
+@AllArgsConstructor
 public class Check {
 
-    private Long id;
+    private String checkNumber;
 
-    @DateTimeFormat(pattern = "yyyy-MM-dd")
-    private Date date;
+    private String idEmployee;
 
-    private Double totalAmount;
+    private String cardNumber;
 
-    private Double vat;
+    private Date printDate;
+
+    private BigDecimal totalSum;
+
+    private BigDecimal vat;
 }

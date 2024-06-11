@@ -54,7 +54,6 @@ public class CategoryController {
             model.addAttribute("category", categoryOpt.get());
             return "categories-edit";
         } else {
-            // Redirect or handle the case when the category does not exist
             return "redirect:/categories";
         }
     }
