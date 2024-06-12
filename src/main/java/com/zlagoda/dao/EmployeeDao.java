@@ -9,5 +9,6 @@ import java.util.Optional;
 public interface EmployeeDao extends GenericDao<Employee, String> {
 
     List<Employee> getAllCashiers();
+    Optional<Employee> findContactDetailsBySurname(String surname);
 
 }

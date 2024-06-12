@@ -80,7 +80,7 @@
 <h1>Customer Cards List</h1>
 
 <div class="button-container">
-    <a href="/customer-cards/add" class="button">Add Customer Card</a>
+    <a href="/customers/add" class="button">Add Customer Card</a>
 </div>
 
 <table>
@@ -110,8 +110,8 @@
         <td th:text="${customerCard.zipCode}"></td>
         <td th:text="${customerCard.percent}"></td>
         <td>
-            <a th:href="@{'/customer-cards/edit/' + ${customerCard.cardNumber}}" class="button">Edit</a>
-            <a th:href="@{'/customer-cards/delete/' + ${customerCard.cardNumber}}" class="delete-button">Delete</a>
+            <a th:href="@{'/customers/edit/' + ${customerCard.cardNumber}}" class="button">Edit</a>
+            <a th:href="@{'/customers/delete/' + ${customerCard.cardNumber}}" class="delete-button">Delete</a>
         </td>
     </tr>
     </tbody>

@@ -3,6 +3,7 @@ package com.zlagoda.dto;
 import com.zlagoda.entity.Employee;
 import jakarta.annotation.Nullable;
 import jakarta.validation.constraints.*;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -12,6 +13,8 @@ import java.sql.Date;
 
 @Data
 @Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class EmployeeDto {
 
     public enum Role {

@@ -1,10 +1,11 @@
 package com.zlagoda.service.impl;
 
+import com.zlagoda.converter.CustomerCardConverter;
 import com.zlagoda.dao.CustomerCardDao;
 import com.zlagoda.dto.CustomerCardDto;
 import com.zlagoda.entity.CustomerCard;
 import com.zlagoda.service.CustomerCardService;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -12,37 +13,33 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
+@AllArgsConstructor
 public class CustomerCardServiceImpl implements CustomerCardService {
 
     private final CustomerCardDao customerCardDao;
-
-    @Autowired
-    public CustomerCardServiceImpl(CustomerCardDao customerCardDao) {
-        this.customerCardDao = customerCardDao;
-    }
-
+    private final CustomerCardConverter customerCardConverter;
     @Override
     public List<CustomerCardDto> getAll() {
         return customerCardDao.getAll().stream()
-                .map(this::mapToCustomerCardDto)
+                .map(customerCardConverter::convertToDto)
                 .collect(Collectors.toList());
     }
 
     @Override
     public Optional<CustomerCardDto> getById(String cardNumber) {
         return customerCardDao.getById(cardNumber)
-                .map(this::mapToCustomerCardDto);
+                .map(customerCardConverter::convertToDto);
     }
 
     @Override
     public void create(CustomerCardDto customerCardDto) {
-        CustomerCard customerCard = mapToCustomerCard(customerCardDto);
+        CustomerCard customerCard = customerCardConverter.convertToEntity(customerCardDto);
         customerCardDao.create(customerCard);
     }
 
     @Override
     public void update(CustomerCardDto customerCardDto) {
-        CustomerCard customerCard = mapToCustomerCard(customerCardDto);
+        CustomerCard customerCard = customerCardConverter.convertToEntity(customerCardDto);
         customerCardDao.update(customerCard);
     }
 
@@ -51,7 +48,15 @@ public class CustomerCardServiceImpl implements CustomerCardService {
         customerCardDao.delete(cardNumber);
     }
 
-    private CustomerCard mapToCustomerCard(CustomerCardDto customerCardDto) {
+    @Override
+    public List<CustomerCardDto> findByPercent(int percent) {
+        List<CustomerCard> customerCards = customerCardDao.findByPercent(percent);
+        return customerCards.stream()
+                .map(customerCardConverter::convertToDto)
+                .collect(Collectors.toList());
+    }
+
+   /* private CustomerCard mapToCustomerCard(CustomerCardDto customerCardDto) {
         return CustomerCard.builder()
                 .cardNumber(customerCardDto.getCardNumber())
                 .surname(customerCardDto.getSurname())
@@ -77,5 +82,5 @@ public class CustomerCardServiceImpl implements CustomerCardService {
                 .zipCode(customerCard.getZipCode())
                 .percent(customerCard.getPercent())
                 .build();
-    }
+    }*/
 }

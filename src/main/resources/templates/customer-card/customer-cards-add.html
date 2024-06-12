@@ -62,7 +62,7 @@
 <body>
 <h1>Add Customer Card</h1>
 
-<form th:action="@{/customer-cards/add}" th:object="${customerCard}" method="post">
+<form th:action="@{/customers/add}" th:object="${customerCard}" method="post">
     <div class="form-group">
         <label for="surname">Surname:</label>
         <input type="text" id="surname" th:field="*{surname}" required />

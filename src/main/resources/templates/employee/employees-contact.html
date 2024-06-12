@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Employee Contact Details</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+
+        h1 {
+            text-align: center;
+        }
+
+        .details-container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 10px;
+            background: #f9f9f9;
+            text-align: center;
+        }
+
+        .details-container h2 {
+            margin-bottom: 20px;
+        }
+
+        .details-container p {
+            font-size: 18px;
+            margin: 10px 0;
+        }
+
+        .back-button {
+            display: block;
+            margin: 20px auto;
+            padding: 10px 20px;
+            font-size: 16px;
+            background-color: #4CAF50;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            text-align: center;
+            width: fit-content;
+        }
+
+        .back-button:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body>
+<h1>Employee Contact Details</h1>
+
+<div class="details-container">
+    <h2>Contact Details for: <span th:text="${employee.surname}"></span></h2>
+    <p><strong>Phone Number:</strong> <span th:text="${employee.phoneNumber}"></span></p>
+    <p><strong>City:</strong> <span th:text="${employee.city}"></span></p>
+    <p><strong>Street:</strong> <span th:text="${employee.street}"></span></p>
+    <p><strong>Zip Code:</strong> <span th:text="${employee.zipCode}"></span></p>
+</div>
+
+<a href="/employees" class="back-button">Back to Employee List</a>
+</body>
+</html>

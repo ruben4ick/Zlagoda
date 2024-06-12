@@ -1,5 +1,6 @@
 package com.zlagoda.service.impl;
 
+import com.zlagoda.converter.EmployeeConverter;
 import com.zlagoda.dao.EmployeeDao;
 import com.zlagoda.dto.EmployeeDto;
 import com.zlagoda.entity.Employee;
@@ -14,17 +15,17 @@ import java.util.Optional;
 public class EmployeeServiceImpl implements EmployeeService {
 
     private final EmployeeDao employeeDao;
+    private final EmployeeConverter employeeConverter;
 
-
-    @Autowired
-    public EmployeeServiceImpl(EmployeeDao employeeDao) {
+    public EmployeeServiceImpl(EmployeeDao employeeDao, EmployeeConverter employeeConverter) {
         this.employeeDao = employeeDao;
+        this.employeeConverter = employeeConverter;
     }
 
     @Override
     public List<EmployeeDto> getAll() {
         return employeeDao.getAll().stream()
-                .map(this::mapToEmployeeDto)
+                .map(employeeConverter::mapToEmployeeDto)
                 .toList();
     }
 
@@ -35,7 +36,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     @Override
     public void create(final EmployeeDto employeeDto) {
-        Employee employee =  mapToEmployee(employeeDto);
+        Employee employee = employeeConverter.mapToEmployee(employeeDto);
         employeeDao.create(employee);
     }
 
@@ -46,51 +47,21 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     @Override
     public void update(EmployeeDto employeeDto) {
-        Employee employee = mapToEmployee(employeeDto);
+        Employee employee = employeeConverter.mapToEmployee(employeeDto);
         employeeDao.update(employee);
     }
 
     @Override
     public Optional<EmployeeDto> getById(String employeeId) {
         return employeeDao.getById(employeeId)
-                .map(this::mapToEmployeeDto);
+                .map(employeeConverter::mapToEmployeeDto);
     }
 
-    private Employee mapToEmployee(EmployeeDto employeeDto) {
-        return Employee.builder()
-                .id(employeeDto.getId())
-                .surname(employeeDto.getSurname())
-                .name(employeeDto.getName())
-                .patronymic(employeeDto.getPatronymic())
-                .role(employeeDto.getRole())
-                .salary(employeeDto.getSalary())
-                .birthDate(employeeDto.getBirthDate())
-                .startDate(employeeDto.getStartDate())
-                .phoneNumber(employeeDto.getPhoneNumber())
-                .city(employeeDto.getCity())
-                .street(employeeDto.getStreet())
-                .zipCode(employeeDto.getZipCode())
-                .build();
+    @Override
+    public Optional<EmployeeDto> findContactDetailsBySurname(String surname) {
+        return employeeDao.findContactDetailsBySurname(surname)
+                .map(employeeConverter::mapToEmployeeDto);
     }
-
-    private EmployeeDto mapToEmployeeDto(Employee employee) {
-        return EmployeeDto.builder()
-                .id(employee.getId())
-                .surname(employee.getSurname())
-                .name(employee.getName())
-                .patronymic(employee.getPatronymic())
-                .role(employee.getRole())
-                .salary(employee.getSalary())
-                .birthDate(employee.getBirthDate())
-                .startDate(employee.getStartDate())
-                .phoneNumber(employee.getPhoneNumber())
-                .city(employee.getCity())
-                .street(employee.getStreet())
-                .zipCode(employee.getZipCode())
-                .build();
-    }
-
-
 
 
     /*private Employee setOnlyPresentFields(final Employee oldEmployee, final Employee newEmployee) {

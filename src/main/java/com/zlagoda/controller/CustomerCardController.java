@@ -14,7 +14,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Controller
-@RequestMapping("/customer-cards")
+@RequestMapping("/customers")
 public class CustomerCardController {
 
     private final CustomerCardService customerCardService;
@@ -44,7 +44,7 @@ public class CustomerCardController {
             return "customer-card/customer-cards-add";
         }
         customerCardService.create(customerCardDto);
-        return "redirect:/customer-cards";
+        return "redirect:/customers";
     }
 
     @GetMapping("/edit/{cardNumber}")
@@ -55,7 +55,7 @@ public class CustomerCardController {
             model.addAttribute("customerCard", customerCardOpt.get());
             return "customer-card/customer-cards-edit";
         } else {
-            return "redirect:/customer-cards";
+            return "redirect:/customers";
         }
     }
 
@@ -67,12 +67,21 @@ public class CustomerCardController {
         }
         customerCard.setCardNumber(cardNumber);
         customerCardService.update(customerCard);
-        return "redirect:/customer-cards";
+        return "redirect:/customers";
     }
 
     @GetMapping("/delete/{cardNumber}")
     public String deleteCustomerCard(@PathVariable("cardNumber") String cardNumber) {
         customerCardService.delete(cardNumber);
-        return "redirect:/customer-cards";
+        return "redirect:/customers";
     }
+
+    /*@GetMapping("/percent-search")
+    public String customerCards(@RequestParam(value = "percent", required = false, defaultValue = "-1") int percent,
+                                    Model model) {
+        if (percent == -1)
+            return "customer-card/percent-search";
+        model.addAttribute("cards", customerCardService.findByPercent(percent));
+        return "customer-card/customer-cards";
+    }*/ //ось це доробити
 }

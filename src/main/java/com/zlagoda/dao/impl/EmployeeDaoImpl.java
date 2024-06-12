@@ -1,6 +1,7 @@
 package com.zlagoda.dao.impl;
 
 import com.zlagoda.dao.EmployeeDao;
+import com.zlagoda.dao.mapper.EmployeeContactRowMapper;
 import com.zlagoda.dao.mapper.EmployeeRowMapper;
 import com.zlagoda.entity.Employee;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,11 +18,9 @@ public class EmployeeDaoImpl implements EmployeeDao {
     @Autowired
     private JdbcTemplate jdbcTemplate;
 
-
     private static final String FIND_BY_NAME = "SELECT * FROM `Employee` WHERE empl_name = ?";
     private static final String FIND_BY_ID = "SELECT * FROM `Employee` WHERE id_employee = ?";
     private static final String FIND_ALL_EMPLOYEES = "SELECT * FROM `Employee` ORDER BY empl_surname";
-
     private static final String FIND_ALL_CASHIERS = "SELECT * FROM Employee WHERE empl_role = 'CASHIER' ORDER BY empl_surname";
 
     private static final String EMPLOYEE_CREATED_CHECK_AMOUNT_AND_SUM =
@@ -54,9 +53,9 @@ public class EmployeeDaoImpl implements EmployeeDao {
             "date_of_start, phone_number, city, street, zip_code) " +
             "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
-
     private static final String DELETE_EMPLOYEE = "DELETE FROM Employee WHERE id_employee = ?";
 
+    private static final String FIND_CONTACT_DETAILS_BY_SURNAME = "SELECT empl_surname, phone_number, city, street, zip_code FROM Employee WHERE empl_surname = ?";
 
     @Override
     public List<Employee> getAll() {
@@ -82,7 +81,7 @@ public class EmployeeDaoImpl implements EmployeeDao {
                 employee.getId(),
                 employee.getSurname(),
                 employee.getName(),
-                //passwordEncoder.encode(employee.getPassword()),
+                // passwordEncoder.encode(employee.getPassword()),
                 employee.getPatronymic(),
                 employee.getRole().name(),
                 employee.getSalary(),
@@ -106,7 +105,7 @@ public class EmployeeDaoImpl implements EmployeeDao {
         Object[] params = {
                 employee.getSurname(),
                 employee.getName(),
-                //employee.getPassword().charAt(0) == '$' ? employee.getPassword() : passwordEncoder.encode(employee.getPassword()),
+                // employee.getPassword().charAt(0) == '$' ? employee.getPassword() : passwordEncoder.encode(employee.getPassword()),
                 employee.getPatronymic(),
                 employee.getRole().name(),
                 employee.getSalary(),
@@ -119,7 +118,11 @@ public class EmployeeDaoImpl implements EmployeeDao {
                 employee.getId()
         };
         jdbcTemplate.update(UPDATE, params);
+    }
 
+    @Override
+    public Optional<Employee> findContactDetailsBySurname(String surname) {
+        List<Employee> employees = jdbcTemplate.query(FIND_CONTACT_DETAILS_BY_SURNAME, new Object[]{surname}, new EmployeeContactRowMapper());
+        return employees.stream().findFirst();
     }
 }
-

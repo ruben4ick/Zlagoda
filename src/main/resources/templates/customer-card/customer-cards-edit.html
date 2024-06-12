@@ -62,7 +62,7 @@
 <body>
 <h1>Edit Customer Card</h1>
 
-<form th:action="@{/customer-cards/edit/{cardNumber}(cardNumber=${customerCard.cardNumber})}" th:object="${customerCard}" method="post">
+<form th:action="@{/customers/edit/{cardNumber}(cardNumber=${customerCard.cardNumber})}" th:object="${customerCard}" method="post">
     <div class="form-group">
         <label for="surname">Surname:</label>
         <input type="text" id="surname" th:field="*{surname}" required />
