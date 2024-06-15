@@ -100,7 +100,7 @@
         <td th:text="${check.checkNumber}"></td>
         <td th:text="${check.employee.surname + ' ' + check.employee.name}"></td>
         <td th:text="${check.customerCard != null ? check.customerCard.surname : 'N/A'}"></td>
-        <td th:text="${#dates.format(check.printDate, 'yyyy-MM-dd HH:mm:ss')}"></td>
+        <td th:text="${#temporals.format(check.printDate, 'dd-MM-yyyy HH:mm:ss')}"></td>
         <td th:text="${check.totalSum}"></td>
         <td th:text="${check.vat}"></td>
         <td>

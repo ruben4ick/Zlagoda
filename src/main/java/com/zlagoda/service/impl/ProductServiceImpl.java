@@ -1,5 +1,6 @@
 package com.zlagoda.service.impl;
 
+import com.zlagoda.converter.ProductConverter;
 import com.zlagoda.dao.ProductDao;
 import com.zlagoda.dto.CategoryDto;
 import com.zlagoda.dto.ProductDto;
@@ -7,44 +8,43 @@ import com.zlagoda.entity.Category;
 import com.zlagoda.entity.Product;
 import com.zlagoda.service.ProductService;
 import com.zlagoda.service.CategoryService;
+import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
+@AllArgsConstructor
 public class ProductServiceImpl implements ProductService {
 
     private final ProductDao productDao;
-
-    @Autowired
-    public ProductServiceImpl(ProductDao productDao) {
-        this.productDao = productDao;
-    }
+    private final ProductConverter productConverter;
 
     @Override
     public List<ProductDto> getAll() {
         return productDao.getAll().stream()
-                .map(this::mapToProductDto)
+                .map(productConverter::convertToDto)
                 .toList();
     }
 
     @Override
     public Optional<ProductDto> getById(Long productId) {
         return productDao.getById(productId)
-                .map(this::mapToProductDto);
+                .map(productConverter::convertToDto);
     }
 
     @Override
     public void create(ProductDto productDto) {
-        Product product = mapToProduct(productDto);
+        Product product = productConverter.convertToEntity(productDto);
         productDao.create(product);
     }
 
     @Override
     public void update(ProductDto productDto) {
-        Product product = mapToProduct(productDto);
+        Product product = productConverter.convertToEntity(productDto);
         productDao.update(product);
     }
 
@@ -53,7 +53,12 @@ public class ProductServiceImpl implements ProductService {
         productDao.delete(productId);
     }
 
-    private Product mapToProduct(ProductDto productDto) {
+    public List<ProductDto> findByCategory(Long categoryId) {
+        return productDao.findByCategory(categoryId).stream()
+                .map(productConverter::convertToDto)
+                .toList();
+    }
+    /*private Product mapToProduct(ProductDto productDto) {
         return Product.builder()
                 .id(productDto.getId())
                 .category(mapToCategory(productDto.getCategory())) // Перетворюємо CategoryDto на Category
@@ -84,5 +89,5 @@ public class ProductServiceImpl implements ProductService {
                 .number(category.getNumber())
                 .name(category.getName())
                 .build();
-    }
+    }*/
 }

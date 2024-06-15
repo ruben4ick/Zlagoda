@@ -29,6 +29,8 @@ public class ProductDaoImpl implements ProductDao {
     private static final String INSERT_PRODUCT = "INSERT INTO Product (category_number, product_name, characteristics) VALUES (?, ?, ?)";
     private static final String UPDATE_PRODUCT = "UPDATE Product SET category_number = ?, product_name = ?, characteristics = ? WHERE id_product = ?";
     private static final String DELETE_PRODUCT = "DELETE FROM Product WHERE id_product = ?";
+    private static final String FIND_PRODUCTS_BY_CATEGORY =
+            "SELECT * FROM Product WHERE category_number = ? ORDER BY product_name";
 
     @Override
     public List<Product> getAll() {
@@ -61,5 +63,9 @@ public class ProductDaoImpl implements ProductDao {
     @Override
     public void delete(Long productId) {
         jdbcTemplate.update(DELETE_PRODUCT, productId);
+    }
+
+    public List<Product> findByCategory(Long categoryId) {
+        return jdbcTemplate.query(FIND_PRODUCTS_BY_CATEGORY, new Object[]{categoryId}, new ProductRowMapper());
     }
 }

@@ -3,12 +3,14 @@ package com.zlagoda.dao.impl;
 import com.zlagoda.dao.CheckDao;
 import com.zlagoda.dao.mapper.CheckRowMapper;
 import com.zlagoda.entity.Check;
+import com.zlagoda.entity.Sale;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @Repository
 public class CheckDaoImpl implements CheckDao {
@@ -19,22 +21,22 @@ public class CheckDaoImpl implements CheckDao {
     private static final String FIND_ALL_CHECKS =
             "SELECT c.*, e.id_employee, e.empl_name, e.empl_surname, cc.card_number, cc.cust_name, cc.cust_surname " +
                     "FROM `Check` c " +
-                    "JOIN Employee e ON c.id_employee = e.id_employee " +
+                    "INNER JOIN Employee e ON c.id_employee = e.id_employee " +
                     "LEFT JOIN Customer_Card cc ON c.card_number = cc.card_number " +
                     "ORDER BY c.print_date DESC";
 
     private static final String FIND_BY_ID =
             "SELECT c.*, e.id_employee, e.empl_name, e.empl_surname, cc.card_number, cc.cust_name, cc.cust_surname " +
                     "FROM `Check` c " +
-                    "JOIN Employee e ON c.id_employee = e.id_employee " +
+                    "INNER JOIN Employee e ON c.id_employee = e.id_employee " +
                     "LEFT JOIN Customer_Card cc ON c.card_number = cc.card_number " +
                     "WHERE c.check_number = ?";
 
     private static final String INSERT_CHECK =
             "INSERT INTO `Check` (check_number, id_employee, card_number, print_date, sum_total, vat) VALUES (?, ?, ?, ?, ?, ?)";
 
-    private static final String UPDATE_CHECK =
-            "UPDATE `Check` SET id_employee = ?, card_number = ?, print_date = ?, sum_total = ?, vat = ? WHERE check_number = ?";
+    private static final String INSERT_SALE =
+            "INSERT INTO Sale (UPC, check_number, product_number, selling_price) VALUES (?, ?, ?, ?)";
 
     private static final String DELETE_CHECK =
             "DELETE FROM `Check` WHERE check_number = ?";
@@ -52,6 +54,10 @@ public class CheckDaoImpl implements CheckDao {
 
     @Override
     public void create(Check check) {
+        String generatedId = UUID.randomUUID().toString().replaceAll("\\D", "").substring(0, 10); // Генеруємо тільки цифри
+        check.setCheckNumber(generatedId);
+
+        // Вставка чека
         jdbcTemplate.update(INSERT_CHECK,
                 check.getCheckNumber(),
                 check.getEmployee().getId(),
@@ -59,6 +65,15 @@ public class CheckDaoImpl implements CheckDao {
                 check.getPrintDate(),
                 check.getTotalSum(),
                 check.getVat());
+
+        // Вставка продажів
+        for (Sale sale : check.getSales()) {
+            jdbcTemplate.update(INSERT_SALE,
+                    sale.getStoreProduct().getUpc(),
+                    check.getCheckNumber(),
+                    sale.getProductNumber(),
+                    sale.getSellingPrice());
+        }
     }
 
     @Override

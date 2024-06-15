@@ -27,5 +27,5 @@ public class CustomerCard {
 
     private String zipCode;
 
-    private Integer percent;
+    private int percent;
 }

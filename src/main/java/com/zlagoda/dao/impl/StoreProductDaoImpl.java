@@ -47,6 +47,12 @@ public class StoreProductDaoImpl implements StoreProductDao {
                     "INNER JOIN Product p ON sp.id_product = p.id_product " +
                     "WHERE sp.promotional_product = true";
 
+    private static final String SUBTRACT_AMOUNT = """
+                UPDATE store_product
+                SET products_number = products_number - ?
+                WHERE upc = ?
+                """;
+
     @Override
     public List<StoreProduct> getAll() {
         return jdbcTemplate.query(FIND_ALL_STORE_PRODUCTS, new StoreProductRowMapper());
@@ -92,5 +98,11 @@ public class StoreProductDaoImpl implements StoreProductDao {
     @Override
     public List<StoreProduct> getPromotionalProducts() {
         return jdbcTemplate.query(FIND_PROMOTIONAL_PRODUCTS, new StoreProductRowMapper());
+    }
+
+    @Override
+    public void subtractAmountByUpc(String upc, int delta) {
+
+        jdbcTemplate.update(SUBTRACT_AMOUNT, delta, upc);
     }
 }

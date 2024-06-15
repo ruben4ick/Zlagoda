@@ -31,6 +31,13 @@ public class ProductController {
         return "product/products";
     }
 
+    /*@GetMapping("/category-search")
+    public String products(@RequestParam("categoryId") Long categoryId, Model model) {
+        List<ProductDto> products = productService.findByCategory(categoryId);
+        model.addAttribute("products", products);
+        return "product/products-by-category";
+    }*/ //і це зробити, можливо як і CardController
+
     @GetMapping("/add")
     public String productAdd(Model model) {
         List<CategoryDto> categories = categoryService.getAll();

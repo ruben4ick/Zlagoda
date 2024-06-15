@@ -1,11 +1,7 @@
 package com.zlagoda.controller;
 
-import com.zlagoda.dto.CheckDto;
-import com.zlagoda.dto.CustomerCardDto;
-import com.zlagoda.dto.EmployeeDto;
-import com.zlagoda.service.CheckService;
-import com.zlagoda.service.CustomerCardService;
-import com.zlagoda.service.EmployeeService;
+import com.zlagoda.dto.*;
+import com.zlagoda.service.*;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
@@ -17,6 +13,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Controller
@@ -27,6 +24,8 @@ public class CheckController {
     private final CheckService checkService;
     private final EmployeeService employeeService;
     private final CustomerCardService customerCardService;
+    private final StoreProductService storeProductService;
+    private final ProductService productService;
 
     @GetMapping
     public String listChecks(Model model) {
@@ -39,8 +38,11 @@ public class CheckController {
     public String addCheck(Model model) {
         List<EmployeeDto> employees = employeeService.getAll();
         List<CustomerCardDto> customerCards = customerCardService.getAll();
+        List<StoreProductDto> storeProducts = storeProductService.getAll();
+
         model.addAttribute("employees", employees);
         model.addAttribute("customerCards", customerCards);
+        model.addAttribute("storeProducts", storeProducts);
         model.addAttribute("check", new CheckDto());
         return "check/checks-add";
     }
@@ -50,7 +52,9 @@ public class CheckController {
         if (result.hasErrors()) {
             List<EmployeeDto> employees = employeeService.getAll();
             List<CustomerCardDto> customerCards = customerCardService.getAll();
+            List<StoreProductDto> storeProducts = storeProductService.getAll();
             model.addAttribute("employees", employees);
+            model.addAttribute("storeProducts", storeProducts);
             model.addAttribute("customerCards", customerCards);
             return "check/checks-add";
         }

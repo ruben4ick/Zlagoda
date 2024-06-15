@@ -76,12 +76,12 @@ public class CustomerCardController {
         return "redirect:/customers";
     }
 
-    /*@GetMapping("/percent-search")
-    public String customerCards(@RequestParam(value = "percent", required = false, defaultValue = "-1") int percent,
+    @GetMapping("/percent-search")
+    public String customerCardsByPercent(@RequestParam(value = "percent", required = false, defaultValue = "-1") int percent,
                                     Model model) {
         if (percent == -1)
             return "customer-card/percent-search";
-        model.addAttribute("cards", customerCardService.findByPercent(percent));
+        model.addAttribute("customerCards", customerCardService.findByPercent(percent));
         return "customer-card/customer-cards";
-    }*/ //ось це доробити
+    }
 }

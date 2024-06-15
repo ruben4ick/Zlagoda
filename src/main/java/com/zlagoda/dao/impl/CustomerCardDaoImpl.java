@@ -23,7 +23,7 @@ public class CustomerCardDaoImpl implements CustomerCardDao {
     private static final String UPDATE = "UPDATE Customer_Card SET cust_surname = ?, cust_name = ?, cust_patronymic = ?, phone_number = ?, city = ?, street = ?, zip_code = ?, percent = ? WHERE card_number = ?";
     private static final String DELETE = "DELETE FROM Customer_Card WHERE card_number = ?";
 
-    private static final String FIND_BY_PERCENT = "SELECT * FROM Customer_Card WHERE percent = ? ORDER BY surname";
+    private static final String FIND_BY_PERCENT = "SELECT * FROM Customer_Card WHERE percent = ? ORDER BY cust_surname";
 
     @Override
     public List<CustomerCard> getAll() {
@@ -77,6 +77,7 @@ public class CustomerCardDaoImpl implements CustomerCardDao {
 
     @Override
     public List<CustomerCard> findByPercent(int percent) {
-        return jdbcTemplate.query(FIND_BY_PERCENT, new Object[]{percent}, new CustomerCardRowMapper());
+        return jdbcTemplate.query(FIND_BY_PERCENT, new CustomerCardRowMapper(), percent);
+
     }
 }

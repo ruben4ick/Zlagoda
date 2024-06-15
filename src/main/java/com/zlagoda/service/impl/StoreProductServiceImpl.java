@@ -13,6 +13,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -61,6 +62,11 @@ public class StoreProductServiceImpl implements StoreProductService {
                 .map(this::mapToStoreProductDto)
                 .collect(Collectors.toList());
     }
+
+   /* @Override
+    public BigDecimal getPriceByUpc(String upc) {
+        return storeProductDao.findPriceById(upc);
+    }*/
 
     private StoreProduct mapToStoreProduct(StoreProductDto storeProductDto) {
         return StoreProduct.builder()

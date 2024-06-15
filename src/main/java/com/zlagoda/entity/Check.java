@@ -7,7 +7,9 @@ import lombok.NoArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.Date;
+import java.util.List;
 
 @Data
 @Builder
@@ -21,9 +23,11 @@ public class Check {
 
     private CustomerCard customerCard;
 
-    private Date printDate;
+    private LocalDateTime printDate;
 
     private BigDecimal totalSum;
 
     private BigDecimal vat;
+
+    private List<Sale> sales;
 }

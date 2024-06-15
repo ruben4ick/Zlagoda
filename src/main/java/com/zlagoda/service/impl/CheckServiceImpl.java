@@ -2,31 +2,40 @@ package com.zlagoda.service.impl;
 
 import com.zlagoda.converter.CheckConverter;
 import com.zlagoda.dao.CheckDao;
+import com.zlagoda.dao.SaleDao;
 import com.zlagoda.dto.CheckDto;
 import com.zlagoda.dto.CustomerCardDto;
 import com.zlagoda.dto.EmployeeDto;
 import com.zlagoda.entity.Check;
 import com.zlagoda.entity.CustomerCard;
 import com.zlagoda.entity.Employee;
+import com.zlagoda.entity.Sale;
 import com.zlagoda.service.CheckService;
+import com.zlagoda.service.CustomerCardService;
+import com.zlagoda.service.SaleService;
+import com.zlagoda.service.StoreProductService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
+@RequiredArgsConstructor
 public class CheckServiceImpl implements CheckService {
 
     private final CheckDao checkDao;
+    private final SaleDao saleDao;
     private final CheckConverter checkConverter;
 
-    @Autowired
-    public CheckServiceImpl(CheckDao checkDao, CheckConverter checkConverter) {
-        this.checkDao = checkDao;
-        this.checkConverter = checkConverter;
-    }
+    private final CustomerCardService customerCardService;
+    private final StoreProductService storeProductService;
+    private final SaleService saleService;
 
     @Override
     public List<CheckDto> getAll() {
@@ -43,8 +52,22 @@ public class CheckServiceImpl implements CheckService {
 
     @Override
     public void create(CheckDto checkDto) {
+        checkDto.setPrintDate(LocalDateTime.now());
+        BigDecimal totalSum = checkDto.getSales().stream()
+                .map(sale -> sale.getSellingPrice().multiply(BigDecimal.valueOf(sale.getProductNumber())))
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
+        BigDecimal vat = totalSum.multiply(BigDecimal.valueOf(0.2));
+        checkDto.setTotalSum(totalSum);
+        checkDto.setVat(vat);
+
         Check check = checkConverter.convertToEntity(checkDto);
         checkDao.create(check);
+
+        // Зберігаємо всі продажі
+        for (Sale sale : checkDto.getSales()) {
+            sale.setCheckNumber(check.getCheckNumber()); // Встановлюємо номер чека для кожного продажу
+            saleDao.create(sale);
+        }
     }
 
     @Override
@@ -56,6 +79,13 @@ public class CheckServiceImpl implements CheckService {
     public void delete(String checkNumber) {
         checkDao.delete(checkNumber);
     }
+
+    /*public BigDecimal countSum(CheckDto checkDto) {
+        return checkDto.getSales().stream()
+                .map(sale -> storeProductService.getPriceByUpc(sale.getStoreProductUpc())
+                        .multiply(BigDecimal.valueOf(sale.getProductNumber()))
+                ).reduce(BigDecimal.ZERO, BigDecimal::add).setScale(4, RoundingMode.HALF_UP);
+    }*/
 
     /*private Check mapToCheck(CheckDto checkDto) {
         return Check.builder()

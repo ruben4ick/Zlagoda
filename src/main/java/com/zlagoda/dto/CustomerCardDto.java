@@ -45,5 +45,5 @@ public class CustomerCardDto {
     private String zipCode;
 
     @NotNull(message = "percent can not be null")
-    private Integer percent;
+    private int percent;
 }

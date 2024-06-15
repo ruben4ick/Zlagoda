@@ -31,7 +31,7 @@ public class CheckRowMapper implements RowMapper<Check> {
                 .checkNumber(rs.getString("check_number"))
                 .employee(employee)
                 .customerCard(customerCard)
-                .printDate(rs.getTimestamp("print_date"))
+                .printDate(rs.getTimestamp("print_date").toLocalDateTime())
                 .totalSum(rs.getBigDecimal("sum_total"))
                 .vat(rs.getBigDecimal("vat"))
                 .build();

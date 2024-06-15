@@ -2,7 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Add Check</title>
+    <title>Create Check</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -11,10 +11,11 @@
 
         h1 {
             text-align: center;
+            margin-bottom: 20px;
         }
 
         form {
-            max-width: 600px;
+            max-width: 800px;
             margin: 0 auto;
             padding: 20px;
             border: 1px solid #ccc;
@@ -22,7 +23,7 @@
             background: #f9f9f9;
         }
 
-        label, input, select {
+        label, input, select, button {
             display: block;
             width: 100%;
             margin-bottom: 10px;
@@ -43,6 +44,8 @@
             border: none;
             border-radius: 5px;
             cursor: pointer;
+            width: 100%;
+            margin-top: 20px;
         }
 
         button:hover {
@@ -57,10 +60,26 @@
             color: red;
             margin-bottom: 10px;
         }
+
+        .sales-table {
+            width: 100%;
+            margin-bottom: 20px;
+            border-collapse: collapse;
+        }
+
+        .sales-table th, .sales-table td {
+            padding: 10px;
+            text-align: left;
+            border: 1px solid #ccc;
+        }
+
+        .sales-table th {
+            background-color: #f2f2f2;
+        }
     </style>
 </head>
 <body>
-<h1>Add Check</h1>
+<h1>Create Check</h1>
 
 <form th:action="@{/checks/add}" th:object="${check}" method="post">
     <div class="form-group">
@@ -83,22 +102,57 @@
         </select>
     </div>
 
-    <div class="form-group">
-        <label for="printDate">Print Date:</label>
-        <input type="datetime-local" id="printDate" th:field="*{printDate}" required />
-    </div>
-
-    <div class="form-group">
-        <label for="totalSum">Total Sum:</label>
-        <input type="number" id="totalSum" th:field="*{totalSum}" required />
-    </div>
-
-    <div class="form-group">
-        <label for="vat">VAT:</label>
-        <input type="number" id="vat" th:field="*{vat}" required />
+    <div class="sales-section">
+        <h2>Sales</h2>
+        <table class="sales-table">
+            <thead>
+            <tr>
+                <th>Product</th>
+                <th>Quantity</th>
+                <th>Price</th>
+                <th>Actions</th>
+            </tr>
+            </thead>
+            <tbody id="sales-container">
+            <tr th:each="sale, iterStat : ${check.sales}">
+                <td>
+                    <label>
+                        <select th:field="*{sales[__${iterStat.index}__].storeProduct.upc}">
+                            <option value="" disabled selected>Select a product</option>
+                            <option th:each="product : ${storeProducts}"
+                                    th:value="${product.upc}"></option>
+                        </select>
+                    </label>
+                </td>
+                <td>
+                    <label>
+                        <input type="number" th:field="*{sales[__${iterStat.index}__].productNumber}" placeholder="Quantity" required/>
+                    </label>
+                </td>
+                <td>
+                    <label>
+                        <input type="text" th:field="*{sales[__${iterStat.index}__].sellingPrice}" placeholder="Price" readonly/>
+                    </label>
+                </td>
+                <td>
+                    <button type="button" onclick="removeSale(this)">Remove</button>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+        <button type="button" >Add Sale</button>
     </div>
 
     <button type="submit">Add Check</button>
 </form>
+
+<script>
+
+
+    function removeSale(button) {
+        const row = button.closest('tr');
+        row.remove();
+    }
+</script>
 </body>
 </html>
