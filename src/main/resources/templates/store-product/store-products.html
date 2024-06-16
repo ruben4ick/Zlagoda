@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Store Products List</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+
+        h1 {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        table {
+            width: 80%;
+            margin: 20px auto;
+            border-collapse: collapse;
+            font-size: 16px;
+        }
+
+        table, th, td {
+            border: 1px solid black;
+            padding: 8px;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+
+        td {
+            text-align: center;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+
+        tr:hover {
+            background-color: #f1f1f1;
+        }
+
+        .button-container {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .button {
+            padding: 10px 20px;
+            font-size: 16px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            text-decoration: none;
+        }
+
+        .button:hover {
+            background-color: #45a049;
+        }
+
+        .delete-button {
+            background-color: #f44336;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            text-decoration: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .delete-button:hover {
+            background-color: #d32f2f;
+        }
+    </style>
+</head>
+<body>
+<h1>Store Products List</h1>
+
+<div class="button-container">
+    <a href="/store-products/add" class="button">Add Store Product</a>
+</div>
+
+<table>
+    <thead>
+    <tr>
+        <th>UPC</th>
+        <th>Promotional UPC</th>
+        <th>Product</th>
+        <th>Price</th>
+        <th>Quantity</th>
+        <th>Is Promotional</th>
+        <th>Actions</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="storeProduct : ${storeProducts}">
+        <td th:text="${storeProduct.upc}"></td>
+        <td th:text="${storeProduct.upcProm != null ? storeProduct.upcProm.upc : 'N/A'}"></td>
+        <td th:text="${storeProduct.product.name}"></td>
+        <td th:text="${storeProduct.price}"></td>
+        <td th:text="${storeProduct.quantity}"></td>
+        <td th:text="${storeProduct.isPromotional ? 'Yes' : 'No'}"></td>
+        <td>
+            <a th:href="@{'/store-products/edit/' + ${storeProduct.upc}}" class="button">Edit</a>
+            <a th:href="@{'/store-products/delete/' + ${storeProduct.upc}}" class="delete-button">Delete</a>
+        </td>
+    </tr>
+    </tbody>
+</table>
+</body>
+</html>
