@@ -12,9 +12,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Controller
 @RequiredArgsConstructor
@@ -31,12 +29,15 @@ public class ProductController {
         return "product/products";
     }
 
-    /*@GetMapping("/category-search")
-    public String products(@RequestParam("categoryId") Long categoryId, Model model) {
-        List<ProductDto> products = productService.findByCategory(categoryId);
-        model.addAttribute("products", products);
-        return "product/products-by-category";
-    }*/ //і це зробити, можливо як і CardController
+    @GetMapping("/category-search")
+    public String productsByCategory(@RequestParam(value = "category_number", required = false, defaultValue = "-1" ) Long categoryNumber, Model model) {
+        if (categoryNumber == -1) {
+            model.addAttribute("categories", categoryService.getAll());
+            return "product/category-search";
+        }
+        model.addAttribute("products", productService.findByCategory(categoryNumber));
+        return "product/products";
+    }
 
     @GetMapping("/add")
     public String productAdd(Model model) {
