@@ -56,6 +56,14 @@ public class CustomerCardServiceImpl implements CustomerCardService {
                 .collect(Collectors.toList());
     }
 
+    @Override
+    public List<CustomerCardDto> findBySurname(String surname) {
+        List<CustomerCard> customerCards = customerCardDao.findBySurname(surname);
+        return customerCards.stream()
+                .map(customerCardConverter::convertToDto)
+                .collect(Collectors.toList());
+    }
+
    /* private CustomerCard mapToCustomerCard(CustomerCardDto customerCardDto) {
         return CustomerCard.builder()
                 .cardNumber(customerCardDto.getCardNumber())

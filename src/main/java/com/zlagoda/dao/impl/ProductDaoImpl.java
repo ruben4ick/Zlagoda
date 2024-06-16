@@ -21,6 +21,12 @@ public class ProductDaoImpl implements ProductDao {
             "INNER JOIN Category c ON p.category_number = c.category_number " +
             "ORDER BY p.product_name";
 
+    private static final String FIND_PRODUCTS_BY_NAME = "SELECT * " +
+            "FROM Product p " +
+            "INNER JOIN Category c ON p.category_number = c.category_number " +
+            "WHERE product_name LIKE ?" +
+            "ORDER BY p.product_name";
+
     private static final String FIND_BY_ID = "SELECT * " +
             "FROM Product p " +
             "INNER JOIN Category c ON p.category_number = c.category_number " +
@@ -71,5 +77,11 @@ public class ProductDaoImpl implements ProductDao {
 
     public List<Product> findByCategory(Long categoryId) {
         return jdbcTemplate.query(FIND_PRODUCTS_BY_CATEGORY, new ProductRowMapper(), categoryId);
+    }
+
+    @Override
+    public List<Product> findByName(String name) {
+        String query = name + "%"; // Пошук часткового збігу
+        return jdbcTemplate.query(FIND_PRODUCTS_BY_NAME, new Object[]{query}, new ProductRowMapper());
     }
 }

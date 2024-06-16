@@ -7,4 +7,6 @@ import java.util.List;
 public interface CustomerCardService extends GenericService<CustomerCardDto, String>{
 
     List<CustomerCardDto> findByPercent(int percent);
+
+    List<CustomerCardDto> findBySurname(String surname);
 }

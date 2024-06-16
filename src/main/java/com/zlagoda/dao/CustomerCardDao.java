@@ -7,4 +7,6 @@ import java.util.List;
 
 public interface CustomerCardDao extends GenericDao<CustomerCard, String>{
     List<CustomerCard> findByPercent(int percent);
+
+    List<CustomerCard> findBySurname(String surname);
 }
