@@ -41,7 +41,7 @@ public class StoreProductServiceImpl implements StoreProductService {
     @Override
     public void create(StoreProductDto storeProductDto) {
         StoreProduct storeProduct = converter.convertToEntity(storeProductDto);
-        storeProduct.setIsPromotional(false);
+//        storeProduct.setIsPromotional(false);
         storeProductDao.create(storeProduct);
     }
 

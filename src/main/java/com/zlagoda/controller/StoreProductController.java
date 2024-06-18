@@ -73,6 +73,7 @@ public class StoreProductController {
         return "redirect:/store-products";
     }
 
+
     @GetMapping("/delete/{upc}")
     public String deleteStoreProduct(@PathVariable("upc") String upc) {
         storeProductService.delete(upc);

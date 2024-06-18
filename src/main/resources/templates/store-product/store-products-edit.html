@@ -64,18 +64,8 @@
 
 <form th:action="@{/store-products/edit/{upc}(upc=${storeProduct.upc})}" th:object="${storeProduct}" method="post">
     <div class="form-group">
-        <label for="upc">UPC:</label>
-        <input type="text" id="upc" th:field="*{upc}" required readonly />
-    </div>
-
-    <div class="form-group">
-        <label for="upcProm">Promotional UPC:</label>
-        <input type="text" id="upcProm" th:field="*{upcProm.upc}" />
-    </div>
-
-    <div class="form-group">
-        <label for="product">Product:</label>
-        <input type="text" id="product" th:field="*{product.name}" required />
+        <label>UPC: <th:block th:text="${upc}"></th:block></label>
+        <label>Product: <th:block th:text="${storeProduct.product.name}"></th:block> </label>
     </div>
 
     <div class="form-group">
@@ -91,6 +81,7 @@
     <div class="form-group">
         <label for="isPromotional">Is Promotional:</label>
         <input type="checkbox" id="isPromotional" th:field="*{isPromotional}" />
+        <input type="hidden" name="product.id" th:field="*{product.id}" th:value="${storeProduct.product.id}">
     </div>
 
     <button type="submit">Save Changes</button>
