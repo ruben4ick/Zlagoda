@@ -107,4 +107,9 @@ public class EmployeeController {
     public String loginPage() {
         return "login";
     }
+
+    @PostMapping("/login")
+    public String loggedIn() {
+        return "redirect:/home";
+    }
 }

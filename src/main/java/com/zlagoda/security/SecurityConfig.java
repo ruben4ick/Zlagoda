@@ -40,10 +40,16 @@ public class SecurityConfig {
                 )
                 .formLogin((form) -> form
                         .loginPage("/login")
-                        .permitAll())
-                .logout((logout) -> logout.permitAll());
+                        .permitAll()
+                        .defaultSuccessUrl("/home", true)
+                        .failureUrl("/login?error=true"))
+                .logout((logout) -> logout
+                        .logoutSuccessUrl("/login?logout=true")
+                        .permitAll());
         return http.build();
     }
+
+    @Autowired
     public void configure(AuthenticationManagerBuilder builder) throws Exception {
         builder.userDetailsService(employeeDetailsService).passwordEncoder(passwordEncoder());
     }
