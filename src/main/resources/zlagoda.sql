@@ -1,5 +1,3 @@
-CREATE DATABASE  IF NOT EXISTS `zlagoda` /*!40100 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci */ /*!80016 DEFAULT ENCRYPTION='N' */;
-USE `zlagoda`;
 -- MySQL dump 10.13  Distrib 8.0.36, for Win64 (x86_64)
 --
 -- Host: 127.0.0.1    Database: zlagoda
@@ -70,6 +68,7 @@ CREATE TABLE `check` (
 
 LOCK TABLES `check` WRITE;
 /*!40000 ALTER TABLE `check` DISABLE KEYS */;
+INSERT INTO `check` VALUES ('0315052443','1c36d91d66','9d4744b273494','2024-06-07 23:11:00',213123.0000,121.0000),('2350bb4433','1c36d91d66','9d4744b273494','2024-06-01 22:41:00',12321.0000,2.0000),('9b5233a76f','1c36d91d66','9d4744b273494','2024-06-12 22:53:00',213.0000,1.0000);
 /*!40000 ALTER TABLE `check` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -100,7 +99,7 @@ CREATE TABLE `customer_card` (
 
 LOCK TABLES `customer_card` WRITE;
 /*!40000 ALTER TABLE `customer_card` DISABLE KEYS */;
-INSERT INTO `customer_card` VALUES ('4296f95be6ad4','gfdgfdg','FFFF','aaaa','321312321','dsadas','gfgfsdgsdf1','123123',5);
+INSERT INTO `customer_card` VALUES ('4296f95be6ad4','gfdgfdg','FFFF','aaaa','321312321','dsadas','gfgfsdgsdf1','123123',5),('9d4744b273494','FSADASD','AAASD','tffsd','0501114212','Суми','ввфівіф','40000',8);
 /*!40000 ALTER TABLE `customer_card` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -162,21 +161,70 @@ CREATE TABLE `product` (
 
 LOCK TABLES `product` WRITE;
 /*!40000 ALTER TABLE `product` DISABLE KEYS */;
-INSERT INTO `product` VALUES (3,4,'DSAD','hz'),(4,3,'віфвіфв','івфв'),(5,3,'dsadsa','dss'),(6,3,'sadsadasd','ffffff'),(7,4,'ddddd','jjjjjj');
+INSERT INTO `product` VALUES (3,4,'DSAD','hz'),(4,3,'FDASS','івфв'),(5,3,'dsadsa','dss'),(6,4,'AAA','ffffff'),(7,4,'ddddd','jjjjjj');
 /*!40000 ALTER TABLE `product` ENABLE KEYS */;
 UNLOCK TABLES;
-/*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
-CREATE TABLE IF NOT EXISTS Store_Product (
-                                             upc VARCHAR(12) PRIMARY KEY,
-                                             upc_prom VARCHAR(12),
-                                             id_product INT NOT NULL,
-                                             selling_price DECIMAL(13, 4) NOT NULL,
-                                             products_number INT NOT NULL,
-                                             promotional_product BOOLEAN NOT NULL,
-                                             FOREIGN KEY (upc_prom) REFERENCES Store_Product(upc) ON UPDATE CASCADE ON DELETE SET NULL,
-                                             FOREIGN KEY (id_product) REFERENCES Product(id_product) ON UPDATE CASCADE ON DELETE NO ACTION
-);
+--
+-- Table structure for table `sale`
+--
+
+DROP TABLE IF EXISTS `sale`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `sale` (
+  `UPC` varchar(12) NOT NULL,
+  `check_number` varchar(10) NOT NULL,
+  `product_number` int NOT NULL,
+  `selling_price` decimal(13,4) NOT NULL,
+  PRIMARY KEY (`UPC`,`check_number`),
+  KEY `FK2_check_number` (`check_number`),
+  CONSTRAINT `FK1_UPC` FOREIGN KEY (`UPC`) REFERENCES `store_product` (`UPC`) ON UPDATE CASCADE,
+  CONSTRAINT `FK2_check_number` FOREIGN KEY (`check_number`) REFERENCES `check` (`check_number`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `sale`
+--
+
+LOCK TABLES `sale` WRITE;
+/*!40000 ALTER TABLE `sale` DISABLE KEYS */;
+/*!40000 ALTER TABLE `sale` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `store_product`
+--
+
+DROP TABLE IF EXISTS `store_product`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `store_product` (
+  `UPC` varchar(12) NOT NULL,
+  `UPC_prom` varchar(12) DEFAULT NULL,
+  `id_product` int NOT NULL,
+  `selling_price` decimal(13,4) NOT NULL,
+  `products_number` int NOT NULL,
+  `promotional_product` tinyint(1) NOT NULL,
+  PRIMARY KEY (`UPC`),
+  KEY `UPC_prom` (`UPC_prom`),
+  KEY `id_product` (`id_product`),
+  CONSTRAINT `store_product_ibfk_1` FOREIGN KEY (`UPC_prom`) REFERENCES `store_product` (`UPC`) ON DELETE SET NULL ON UPDATE CASCADE,
+  CONSTRAINT `store_product_ibfk_2` FOREIGN KEY (`id_product`) REFERENCES `product` (`id_product`) ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `store_product`
+--
+
+LOCK TABLES `store_product` WRITE;
+/*!40000 ALTER TABLE `store_product` DISABLE KEYS */;
+INSERT INTO `store_product` VALUES ('123123312',NULL,6,12.0000,1,0),('321312312',NULL,6,1.0000,12,0);
+/*!40000 ALTER TABLE `store_product` ENABLE KEYS */;
+UNLOCK TABLES;
+/*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
 /*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
@@ -186,4 +234,4 @@ CREATE TABLE IF NOT EXISTS Store_Product (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2024-06-11 16:22:16
+-- Dump completed on 2024-06-18  2:07:58
