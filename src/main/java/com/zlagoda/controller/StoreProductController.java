@@ -78,4 +78,16 @@ public class StoreProductController {
         storeProductService.delete(upc);
         return "redirect:/store-products";
     }
+
+    @GetMapping("/add/prom/{upc}")
+    public String makeProm(@PathVariable String upc) {
+        storeProductService.addPromotionStoreProduct(upc);
+        return "redirect:/store-products";
+    }
+
+    @GetMapping("/remove/prom/{upc}")
+    public String unmakeProm(@PathVariable String upc) {
+        storeProductService.removePromotionStoreProduct(upc);
+        return "redirect:/store-products";
+    }
 }

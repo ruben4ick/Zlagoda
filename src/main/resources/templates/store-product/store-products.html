@@ -81,22 +81,30 @@
     <thead class="table-dark">
     <tr>
         <th>UPC</th>
-        <th>Promotional UPC</th>
         <th>Product</th>
         <th>Price</th>
         <th>Quantity</th>
-        <th>Is Promotional</th>
+        <th>Promotion</th>
         <th>Actions</th>
     </tr>
     </thead>
     <tbody>
     <tr th:each="storeProduct : ${storeProducts}">
         <th scope="row" th:text="${storeProduct.upc}"></th>
-        <td th:text="${storeProduct.upcProm != null ? storeProduct.upcProm.upc : 'N/A'}"></td>
         <td th:text="${storeProduct.product.name}"></td>
         <td th:text="${storeProduct.price}"></td>
         <td th:text="${storeProduct.quantity}"></td>
-        <td th:text="${storeProduct.isPromotional ? 'Yes' : 'No'}"></td>
+        <td class="not-printable">
+            <a class="btn btn-success disabled"
+               disabled
+               href="#" th:if="${storeProduct.isPromotional}">Make prom</a>
+            <a class="btn btn-success"
+               th:href="@{/store-products/add/prom/{upc}(upc=${storeProduct.upc})}"
+               th:if="${storeProduct.upcProm == null && !storeProduct.isPromotional}">Add</a>
+            <a class="btn btn-warning"
+               th:href="@{/store-products/remove/prom/{upc}(upc=${storeProduct.upc})}"
+               th:if="${storeProduct.upcProm != null && !storeProduct.isPromotional}">Remove</a>
+        </td>
         <td>
             <a th:href="@{'/store-products/edit/' + ${storeProduct.upc}}" class="button">Edit</a>
             <a th:href="@{'/store-products/delete/' + ${storeProduct.upc}}" class="delete-button">Delete</a>
