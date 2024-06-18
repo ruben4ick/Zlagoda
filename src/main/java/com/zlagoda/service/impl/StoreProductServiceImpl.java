@@ -137,7 +137,7 @@ public class StoreProductServiceImpl implements StoreProductService {
                 newUPS,
                 null,
                 storeProductOriginal.getProduct(),
-                storeProductOriginal.getPrice(),
+                storeProductOriginal.getPrice() * 0.8,
                 storeProductOriginal.getQuantity(),
                 true
         );
