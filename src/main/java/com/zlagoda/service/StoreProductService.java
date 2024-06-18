@@ -7,6 +7,7 @@ import java.util.List;
 
 public interface StoreProductService extends GenericService<StoreProductDto, String>{
     List<StoreProductDto> getPromotionalProducts();
+    List<StoreProductDto> getNotPromotionalProducts();
 
   /*  BigDecimal getPriceByUpc(String upc);*/
 }

@@ -79,4 +79,28 @@ public class StoreProductController {
         storeProductService.delete(upc);
         return "redirect:/store-products";
     }
+
+    // 14
+    @GetMapping("/{upc}")
+    public String findStoreProductByUpc(@PathVariable("upc") String upc, Model model) {
+        Optional<StoreProductDto> storeProduct = storeProductService.getById(upc);
+        if (storeProduct.isPresent()) {
+            model.addAttribute("storeProduct", storeProduct.get());
+        }
+        return "store-product/store-products-edit";
+    }
+
+    @GetMapping("/promotional")
+    public String findPromotionalStoreProducts(Model model) {
+        List<StoreProductDto> storeProducts = storeProductService.getPromotionalProducts();
+        model.addAttribute("storeProducts", storeProducts);
+        return "store-product/store-products";
+    }
+
+    @GetMapping("/not-promotional")
+    public String findNotPromotionalStoreProducts(Model model) {
+        List<StoreProductDto> storeProducts = storeProductService.getNotPromotionalProducts();
+        model.addAttribute("storeProducts", storeProducts);
+        return "store-product/store-products";
+    }
 }
