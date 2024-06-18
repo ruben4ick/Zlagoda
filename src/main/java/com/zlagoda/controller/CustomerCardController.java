@@ -84,4 +84,12 @@ public class CustomerCardController {
         model.addAttribute("customerCards", customerCardService.findByPercent(percent));
         return "customer-card/customer-cards";
     }
+
+    @GetMapping("/surname-search")
+    public String searchCustomerBySurname(@RequestParam(value = "surname", required = false, defaultValue = "null") String surname, Model model) {
+        if (surname.equals("null"))
+            return "customer-card/surname-search";
+        model.addAttribute("customerCards", customerCardService.findBySurname(surname));
+        return "customer-card/customer-cards";
+    }
 }
