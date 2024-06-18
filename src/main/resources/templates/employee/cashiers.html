@@ -3,24 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <title>Cashiers List</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <link rel="stylesheet" th:href="@{/webjars/bootstrap/5.3.3/css/bootstrap.min.css}">
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 20px;
-        }
-
-        h1 {
-            text-align: center;
-            margin-top: 20px;
-        }
-
         table {
             width: 80%;
             margin: 20px auto;
             border-collapse: collapse;
             font-size: 16px;
         }
-
         table, th, td {
             border: 1px solid black;
             padding: 8px;
@@ -41,10 +32,98 @@
         tr:hover {
             background-color: #f1f1f1;
         }
+
+        .button-container {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .button {
+            padding: 10px 20px;
+            font-size: 16px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            text-decoration: none;
+        }
+
+        .button:hover {
+            background-color: #45a049;
+        }
+
+        .edit-button {
+            background-color: #008CBA;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            text-decoration: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .edit-button:hover {
+            background-color: #007BB5;
+        }
+
+        .delete-button {
+            background-color: #f44336;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            text-decoration: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .delete-button:hover {
+            background-color: #d32f2f;
+        }
     </style>
 </head>
 <body>
-<h1>Cashiers List</h1>
+<header class="p-3 bg-dark text-white">
+    <div class="container">
+        <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
+            <a href="/" class="d-flex align-items-center mb-2 mb-lg-0 text-white text-decoration-none">
+                <svg class="bi me-2" width="40" height="32" role="img" aria-label="Bootstrap"><use xlink:href="#bootstrap"/></svg>
+            </a>
+
+            <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0 align-items-center">
+                <li><a href="/" class="nav-link px-3 text-white">Home</a></li>
+                <li><a href="/employees" class="nav-link px-3 text-secondary">Employees</a></li>
+                <li><a href="/checks" class="nav-link px-3 text-white">Checks</a></li>
+                <li><a href="/customers" class="nav-link px-3 text-white">Customers</a></li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link px-3 text-white dropdown-toggle" id="productsDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        Products
+                    </a>
+                    <ul class="dropdown-menu gap-1 p-2 rounded-3 mx-0 border-0 shadow w-220px" aria-labelledby="productsDropdown" data-bs-theme="dark">
+                        <li><a class="dropdown-item rounded-2" href="/products">Products</a></li>
+                        <li><a class="dropdown-item rounded-2" href="/store-products">Store products</a></li>
+                        <li><a class="dropdown-item rounded-2" href="/categories">Categories</a></li>
+                    </ul>
+                </li>
+            </ul>
+            <div class="text-end">
+                <button type="button" class="btn btn-outline-light me-2">Sign-out</button>
+            </div>
+        </div>
+    </div>
+</header>
+<div class="dropdown">
+    <button class="btn btn-dark dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+        Cashiers
+    </button>
+    <ul class="dropdown-menu dropdown-menu-dark">
+        <li><a class="dropdown-item" href="/employees">All employees</a></li>
+        <li><a class="dropdown-item" href="/cashiers">Cashiers</a></li>
+    </ul>
+</div>
+<div class="button-container">
+    <a href="/employees/add" class="button">Add Employee</a>
+</div>
 
 <table>
     <thead>
@@ -61,6 +140,7 @@
         <th>City</th>
         <th>Street</th>
         <th>Zip Code</th>
+        <th>Actions</th>
     </tr>
     </thead>
     <tbody>
@@ -77,8 +157,13 @@
         <td th:text="${employee.city}"></td>
         <td th:text="${employee.street}"></td>
         <td th:text="${employee.zipCode}"></td>
+        <td>
+            <a th:href="@{'/employees/edit/' + ${employee.id}}" class="edit-button">Edit</a>
+            <a th:href="@{'/employees/delete/' + ${employee.id}}" class="delete-button">Delete</a>
+        </td>
     </tr>
     </tbody>
 </table>
+<script th:src="@{/webjars/bootstrap/5.3.3/js/bootstrap.bundle.min.js}"></script>
 </body>
 </html>
