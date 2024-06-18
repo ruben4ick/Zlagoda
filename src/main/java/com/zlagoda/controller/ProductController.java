@@ -39,6 +39,14 @@ public class ProductController {
         return "product/products";
     }
 
+    @GetMapping("/name-search")
+    public String searchProductsByName(@RequestParam(value = "name", required = false, defaultValue = "null") String name, Model model) {
+        if (name.equals("null"))
+            return "product/name-search";
+        model.addAttribute("products", productService.findByName(name));
+        return "product/products";
+    }
+
     @GetMapping("/add")
     public String productAdd(Model model) {
         List<CategoryDto> categories = categoryService.getAll();
