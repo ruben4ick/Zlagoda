@@ -5,7 +5,7 @@ import com.zlagoda.dao.EmployeeDao;
 import com.zlagoda.dto.EmployeeDto;
 import com.zlagoda.entity.Employee;
 import com.zlagoda.service.EmployeeService;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -16,10 +16,12 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     private final EmployeeDao employeeDao;
     private final EmployeeConverter employeeConverter;
+    private final PasswordEncoder passwordEncoder;
 
-    public EmployeeServiceImpl(EmployeeDao employeeDao, EmployeeConverter employeeConverter) {
+    public EmployeeServiceImpl(EmployeeDao employeeDao, EmployeeConverter employeeConverter, PasswordEncoder passwordEncoder) {
         this.employeeDao = employeeDao;
         this.employeeConverter = employeeConverter;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @Override
@@ -37,6 +39,7 @@ public class EmployeeServiceImpl implements EmployeeService {
     @Override
     public void create(final EmployeeDto employeeDto) {
         Employee employee = employeeConverter.mapToEmployee(employeeDto);
+        employee.setPassword(passwordEncoder.encode(employeeDto.getPassword()));
         employeeDao.create(employee);
     }
 

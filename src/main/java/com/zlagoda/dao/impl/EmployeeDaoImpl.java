@@ -50,12 +50,13 @@ public class EmployeeDaoImpl implements EmployeeDao {
             "WHERE id_employee = ?";
 
     private static final String INSERT_EMPLOYEE = "INSERT INTO Employee (id_employee, empl_surname, empl_name, empl_patronymic, empl_role, salary, date_of_birth, " +
-            "date_of_start, phone_number, city, street, zip_code) " +
-            "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+            "date_of_start, phone_number, city, street, zip_code, username, password) " +
+            "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
     private static final String DELETE_EMPLOYEE = "DELETE FROM Employee WHERE id_employee = ?";
 
     private static final String FIND_CONTACT_DETAILS_BY_SURNAME = "SELECT empl_surname, phone_number, city, street, zip_code FROM Employee WHERE empl_surname = ?";
+    private static final String FIND_BY_USERNAME = "SELECT * FROM Employee WHERE username = ?";
 
     @Override
     public List<Employee> getAll() {
@@ -91,6 +92,8 @@ public class EmployeeDaoImpl implements EmployeeDao {
                 employee.getCity(),
                 employee.getStreet(),
                 employee.getZipCode(),
+                employee.getUsername(),
+                employee.getPassword()
         };
         jdbcTemplate.update(INSERT_EMPLOYEE, params);
     }
@@ -115,7 +118,9 @@ public class EmployeeDaoImpl implements EmployeeDao {
                 employee.getCity(),
                 employee.getStreet(),
                 employee.getZipCode(),
-                employee.getId()
+                employee.getId(),
+                employee.getUsername(),
+                employee.getPassword()
         };
         jdbcTemplate.update(UPDATE, params);
     }
@@ -124,5 +129,11 @@ public class EmployeeDaoImpl implements EmployeeDao {
     public Optional<Employee> findContactDetailsBySurname(String surname) {
         List<Employee> employees = jdbcTemplate.query(FIND_CONTACT_DETAILS_BY_SURNAME, new Object[]{surname}, new EmployeeContactRowMapper());
         return employees.stream().findFirst();
+    }
+
+    @Override
+    public Optional<Employee> findByUsername(String username) {
+        List<Employee> employee = jdbcTemplate.query(FIND_BY_USERNAME, new Object[] {username}, new EmployeeRowMapper());
+        return employee.stream().findFirst();
     }
 }

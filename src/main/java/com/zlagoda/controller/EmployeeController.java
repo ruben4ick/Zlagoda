@@ -102,4 +102,9 @@ public class EmployeeController {
         }
         return "employee/employees-contact";
     }
+
+    @GetMapping("/login")
+    public String loginPage() {
+        return "login";
+    }
 }

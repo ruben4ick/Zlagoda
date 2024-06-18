@@ -71,4 +71,10 @@ public class EmployeeDto {
     @NotNull(message = "Zip code cannot be null")
     @Size(min = 1, max = 9, message = "Zip code must be between 1 and 9 characters")
     private String zipCode;
+
+    @NotNull(message = "Username cannot be null")
+    private String username;
+
+    @NotNull(message = "Password cannot be null")
+    private String password;
 }

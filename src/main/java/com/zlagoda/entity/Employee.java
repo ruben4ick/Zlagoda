@@ -43,4 +43,8 @@ public class Employee {
     private String street;
 
     private String zipCode;
+
+    private String username;
+
+    private String password;
 }
