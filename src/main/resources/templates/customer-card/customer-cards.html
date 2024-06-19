@@ -1,40 +1,11 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
 <head>
     <meta charset="UTF-8">
     <title>Customer Cards List</title>
     <link rel="stylesheet" th:href="@{/css/style.css}">
     <link rel="stylesheet" th:href="@{/webjars/bootstrap/5.3.3/css/bootstrap.min.css}">
     <style>
-
-        table {
-            width: 80%;
-            margin: 20px auto;
-            border-collapse: collapse;
-            font-size: 16px;
-        }
-
-        table, th, td {
-            border: 1px solid black;
-            padding: 8px;
-        }
-
-        th {
-            background-color: #f2f2f2;
-        }
-
-        td {
-            text-align: center;
-        }
-
-        tr:nth-child(even) {
-            background-color: #f9f9f9;
-        }
-
-        tr:hover {
-            background-color: #f1f1f1;
-        }
-
         .button-container {
             text-align: center;
             margin-bottom: 20px;
@@ -104,9 +75,9 @@
 <div class="button-container">
     <a href="/customers/add" class="button">Add Customer Card</a>
 </div>
-
-<table>
-    <thead>
+<div class="container">
+<table class="table table-hover">
+    <thead class="table-dark">
     <tr>
         <th>Card Number</th>
         <th>Surname</th>
@@ -122,7 +93,7 @@
     </thead>
     <tbody>
     <tr th:each="customerCard : ${customerCards}">
-        <td th:text="${customerCard.cardNumber}"></td>
+        <th scope="row" th:text="${customerCard.cardNumber}"></th>
         <td th:text="${customerCard.surname}"></td>
         <td th:text="${customerCard.name}"></td>
         <td th:text="${customerCard.patronymic}"></td>
@@ -138,6 +109,7 @@
     </tr>
     </tbody>
 </table>
+</div>
 <script th:src="@{/webjars/bootstrap/5.3.3/js/bootstrap.bundle.min.js}"></script>
 </body>
 </html>

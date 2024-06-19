@@ -1,40 +1,11 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
 <head>
     <meta charset="UTF-8">
     <title>Checks List</title>
     <link rel="stylesheet" th:href="@{/css/style.css}">
     <link rel="stylesheet" th:href="@{/webjars/bootstrap/5.3.3/css/bootstrap.min.css}">
     <style>
-
-        table {
-            width: 80%;
-            margin: 20px auto;
-            border-collapse: collapse;
-            font-size: 16px;
-        }
-
-        table, th, td {
-            border: 1px solid black;
-            padding: 8px;
-        }
-
-        th {
-            background-color: #f2f2f2;
-        }
-
-        td {
-            text-align: center;
-        }
-
-        tr:nth-child(even) {
-            background-color: #f9f9f9;
-        }
-
-        tr:hover {
-            background-color: #f1f1f1;
-        }
-
         .button-container {
             text-align: center;
             margin-bottom: 20px;
@@ -103,9 +74,9 @@
 <div class="button-container">
     <a href="/checks/add" class="button">Add Check</a>
 </div>
-
-<table>
-    <thead>
+<div class="container">
+<table class="table table-hover">
+    <thead class="table-dark">
     <tr>
         <th>Check Number</th>
         <th>Employee</th>
@@ -118,7 +89,7 @@
     </thead>
     <tbody>
     <tr th:each="check : ${checks}">
-        <td th:text="${check.checkNumber}"></td>
+        <th scope="row" th:text="${check.checkNumber}"></th>
         <td th:text="${check.employee.surname + ' ' + check.employee.name}"></td>
         <td th:text="${check.customerCard != null ? check.customerCard.surname : 'N/A'}"></td>
         <td th:text="${#temporals.format(check.printDate, 'dd-MM-yyyy HH:mm:ss')}"></td>
@@ -130,6 +101,7 @@
     </tr>
     </tbody>
 </table>
+</div>
 <script th:src="@{/webjars/bootstrap/5.3.3/js/bootstrap.bundle.min.js}"></script>
 </body>
 </html>

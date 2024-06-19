@@ -3,16 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <title>Add New Employee</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <link rel="stylesheet" th:href="@{/webjars/bootstrap/5.3.3/css/bootstrap.min.css}">
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 20px;
-        }
-
-        h1 {
-            text-align: center;
-        }
-
         form {
             max-width: 600px;
             margin: 0 auto;
@@ -35,20 +28,6 @@
             border-radius: 5px;
         }
 
-        button {
-            padding: 10px 20px;
-            font-size: 16px;
-            background-color: #4CAF50;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-        }
-
-        button:hover {
-            background-color: #45a049;
-        }
-
         .form-group {
             margin-bottom: 15px;
         }
@@ -60,7 +39,9 @@
     </style>
 </head>
 <body>
+<div class="container text-center">
 <h1>Add New Employee</h1>
+</div>
 
 <form th:action="@{/employees/add}" th:object="${employee}" method="post">
     <div class="form-group">
@@ -169,7 +150,17 @@
         </div>
     </div>
 
-    <button type="submit">Add Employee</button>
+    <div class="container text-center">
+        <div class="row">
+        <div class="col text-start">
+            <a href="/employees" class="btn btn-secondary">Cansel</a>
+        </div>
+        <div class="col text-end">
+            <button  type="submit" class="btn btn-success">Submit</button>
+        </div>
+        </div>
+    </div>
 </form>
+<script th:src="@{/webjars/bootstrap/5.3.3/js/bootstrap.bundle.min.js}"></script>
 </body>
 </html>
