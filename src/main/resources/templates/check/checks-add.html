@@ -3,17 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <title>Create Check</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <link rel="stylesheet" th:href="@{/webjars/bootstrap/5.3.3/css/bootstrap.min.css}">
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 20px;
-        }
-
-        h1 {
-            text-align: center;
-            margin-bottom: 20px;
-        }
-
         form {
             max-width: 800px;
             margin: 0 auto;
@@ -23,7 +15,7 @@
             background: #f9f9f9;
         }
 
-        label, input, select, button {
+        label, input, select{
             display: block;
             width: 100%;
             margin-bottom: 10px;
@@ -34,22 +26,6 @@
         input, select {
             border: 1px solid #ccc;
             border-radius: 5px;
-        }
-
-        button {
-            padding: 10px 20px;
-            font-size: 16px;
-            background-color: #4CAF50;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            width: 100%;
-            margin-top: 20px;
-        }
-
-        button:hover {
-            background-color: #45a049;
         }
 
         .form-group {
@@ -79,7 +55,9 @@
     </style>
 </head>
 <body>
+<div class="container text-center">
 <h1>Create Check</h1>
+</div>
 
 <form th:action="@{/checks/add}" th:object="${check}" method="post">
     <div class="form-group">
@@ -140,19 +118,19 @@
             </tr>
             </tbody>
         </table>
-        <button type="button" >Add Sale</button>
     </div>
-
-    <button type="submit">Add Check</button>
+    <div class="d-grid gap-2">
+    <button type="button" class="btn btn-success">Add Sale</button>
+    <button type="submit" class="btn btn-success">Add Check</button>
+    <a href="/checks" class="btn btn-secondary">Cansel</a>
+    </div>
 </form>
-
 <script>
-
-
     function removeSale(button) {
         const row = button.closest('tr');
         row.remove();
     }
 </script>
+<script th:src="@{/webjars/bootstrap/5.3.3/js/bootstrap.bundle.min.js}"></script>
 </body>
 </html>
