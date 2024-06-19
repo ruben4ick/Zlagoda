@@ -78,16 +78,17 @@ public class StoreProductDaoImpl implements StoreProductDao {
         jdbcTemplate.update(INSERT_STORE_PRODUCT, params);
     }
 
-
+    // need some attention
     @Override
     public void update(StoreProduct storeProduct) {
+        StoreProduct currentStoreProduct = getById(storeProduct.getUpc()).get();
         jdbcTemplate.update(UPDATE_STORE_PRODUCT,
                 storeProduct.getUpcProm() != null ? storeProduct.getUpcProm().getUpc() : null,
-                storeProduct.getProduct().getId(),
-                storeProduct.getPrice(),
-                storeProduct.getQuantity(),
-                storeProduct.getIsPromotional(),
-                storeProduct.getUpc());
+                storeProduct.getProduct() != null ? storeProduct.getProduct().getId() : currentStoreProduct.getProduct().getId(),
+                storeProduct.getPrice() != null ? storeProduct.getPrice() : currentStoreProduct.getPrice(),
+                storeProduct.getQuantity() != null ? storeProduct.getQuantity() : currentStoreProduct.getQuantity(),
+                storeProduct.getIsPromotional() != null ? storeProduct.getIsPromotional() : currentStoreProduct.getIsPromotional(),
+                storeProduct.getUpc() != null ? storeProduct.getUpc() : currentStoreProduct.getUpc());
     }
 
     @Override

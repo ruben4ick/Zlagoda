@@ -5,41 +5,6 @@
     <title>Store Products List</title>
     <link rel="stylesheet" th:href="@{/css/style.css}">
     <link rel="stylesheet" th:href="@{/webjars/bootstrap/5.3.3/css/bootstrap.min.css}">
-    <style>
-        .button-container {
-            text-align: center;
-            margin-bottom: 20px;
-        }
-
-        .button {
-            padding: 10px 20px;
-            font-size: 16px;
-            background-color: #4CAF50;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            text-decoration: none;
-        }
-
-        .button:hover {
-            background-color: #45a049;
-        }
-
-        .delete-button {
-            background-color: #f44336;
-            color: white;
-            border: none;
-            padding: 5px 10px;
-            text-decoration: none;
-            border-radius: 5px;
-            cursor: pointer;
-        }
-
-        .delete-button:hover {
-            background-color: #d32f2f;
-        }
-    </style>
 </head>
 <body>
 <header class="p-3 bg-dark text-white">
@@ -71,35 +36,49 @@
         </div>
     </div>
 </header>
+<div class="cotainer text-center">
 <h1>Store Products List</h1>
+</div>
 
-<div class="button-container">
-    <a href="/store-products/add" class="button">Add Store Product</a>
+<div class="container text-end">
+    <a href="/store-products/add" class="btn btn-success">Add Product</a>
 </div>
 <div class="container">
 <table class="table table-hover">
     <thead class="table-dark">
     <tr>
         <th>UPC</th>
-        <th>Promotional UPC</th>
         <th>Product</th>
         <th>Price</th>
         <th>Quantity</th>
-        <th>Is Promotional</th>
+        <th>Promotion</th>
         <th>Actions</th>
     </tr>
     </thead>
     <tbody>
     <tr th:each="storeProduct : ${storeProducts}">
         <th scope="row" th:text="${storeProduct.upc}"></th>
-        <td th:text="${storeProduct.upcProm != null ? storeProduct.upcProm.upc : 'N/A'}"></td>
         <td th:text="${storeProduct.product.name}"></td>
         <td th:text="${storeProduct.price}"></td>
         <td th:text="${storeProduct.quantity}"></td>
-        <td th:text="${storeProduct.isPromotional ? 'Yes' : 'No'}"></td>
+        <td class="not-printable">
+            <a class="btn btn-success disabled"
+               disabled
+               href="#" th:if="${storeProduct.isPromotional}">Add</a>
+            <a class="btn btn-success"
+               th:href="@{/store-products/add/prom/{upc}(upc=${storeProduct.upc})}"
+               th:if="${storeProduct.upcProm == null && !storeProduct.isPromotional}">Add</a>
+            <a class="btn btn-warning"
+               th:href="@{/store-products/remove/prom/{upc}(upc=${storeProduct.upc})}"
+               th:if="${storeProduct.upcProm != null && !storeProduct.isPromotional}">Remove</a>
+        </td>
         <td>
-            <a th:href="@{'/store-products/edit/' + ${storeProduct.upc}}" class="button">Edit</a>
-            <a th:href="@{'/store-products/delete/' + ${storeProduct.upc}}" class="delete-button">Delete</a>
+            <a th:href="@{'/store-products/edit/' + ${storeProduct.upc}}"
+               class="btn btn-info" th:classappend="${((storeProduct.upcProm != null && !storeProduct.isPromotional) || storeProduct.isPromotional) ? 'disabled' : ''}"
+               th:attr="disabled=${((storeProduct.upcProm != null && !storeProduct.isPromotional) || storeProduct.isPromotional)}">Edit</a>
+            <a th:href="@{'/store-products/delete/' + ${storeProduct.upc}}"
+               class="btn btn-danger" th:classappend="${((storeProduct.upcProm != null && !storeProduct.isPromotional) || storeProduct.isPromotional) ? 'disabled' : ''}"
+               th:attr="disabled=${((storeProduct.upcProm != null && !storeProduct.isPromotional) || storeProduct.isPromotional)}">Delete</a>
         </td>
     </tr>
     </tbody>

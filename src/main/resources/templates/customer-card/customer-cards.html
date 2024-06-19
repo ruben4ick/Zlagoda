@@ -5,41 +5,6 @@
     <title>Customer Cards List</title>
     <link rel="stylesheet" th:href="@{/css/style.css}">
     <link rel="stylesheet" th:href="@{/webjars/bootstrap/5.3.3/css/bootstrap.min.css}">
-    <style>
-        .button-container {
-            text-align: center;
-            margin-bottom: 20px;
-        }
-
-        .button {
-            padding: 10px 20px;
-            font-size: 16px;
-            background-color: #4CAF50;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            text-decoration: none;
-        }
-
-        .button:hover {
-            background-color: #45a049;
-        }
-
-        .delete-button {
-            background-color: #f44336;
-            color: white;
-            border: none;
-            padding: 5px 10px;
-            text-decoration: none;
-            border-radius: 5px;
-            cursor: pointer;
-        }
-
-        .delete-button:hover {
-            background-color: #d32f2f;
-        }
-    </style>
 </head>
 <body>
 <header class="p-3 bg-dark text-white">
@@ -71,9 +36,31 @@
         </div>
     </div>
 </header>
-
-<div class="button-container">
-    <a href="/customers/add" class="button">Add Customer Card</a>
+<div class="container text-center">
+    <div class="row">
+        <div class="col-8 text-start">
+            <div class="row">
+                <div class="col text-start">
+                <form class="input-group mb-3" th:action="@{customers/percent-search}" method="get">
+                    <input class="form-control" type="number" name="percent" min="0" max="100" placeholder="% discount" required>
+                    <button type="submit" class="btn btn-outline-dark">Search</button>
+                </form>
+                </div>
+                <div class="col text-start">
+                <form class="input-group mb-3" th:action="@{customers/surname-search}" method="get">
+                    <input class="form-control" type="text" name="surname" placeholder="Surname" required>
+                    <button type="submit" class="btn btn-outline-dark">Search</button>
+                </form>
+                </div>
+                <div class="col text-start">
+                <a href="/customers" class="btn btn-dark">Reset</a>
+                </div>
+            </div>
+        </div>
+        <div class="col text-end">
+            <a href="/customers/add" class="btn btn-success">Add Customer Card</a>
+        </div>
+    </div>
 </div>
 <div class="container">
 <table class="table table-hover">
@@ -87,7 +74,7 @@
         <th>City</th>
         <th>Street</th>
         <th>Zip Code</th>
-        <th>Percent</th>
+        <th>Discount</th>
         <th>Actions</th>
     </tr>
     </thead>
@@ -101,10 +88,10 @@
         <td th:text="${customerCard.city}"></td>
         <td th:text="${customerCard.street}"></td>
         <td th:text="${customerCard.zipCode}"></td>
-        <td th:text="${customerCard.percent}"></td>
+        <td th:text="${customerCard.percent}">%</td>
         <td>
-            <a th:href="@{'/customers/edit/' + ${customerCard.cardNumber}}" class="button">Edit</a>
-            <a th:href="@{'/customers/delete/' + ${customerCard.cardNumber}}" class="delete-button">Delete</a>
+            <a th:href="@{'/customers/edit/' + ${customerCard.cardNumber}}" class="btn btn-info">Edit</a>
+            <a th:href="@{'/customers/delete/' + ${customerCard.cardNumber}}" class="btn btn-danger">Delete</a>
         </td>
     </tr>
     </tbody>

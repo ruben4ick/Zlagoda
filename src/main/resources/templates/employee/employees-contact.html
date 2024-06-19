@@ -3,16 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <title>Employee Contact Details</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <link rel="stylesheet" th:href="@{/webjars/bootstrap/5.3.3/css/bootstrap.min.css}">
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 20px;
-        }
-
-        h1 {
-            text-align: center;
-        }
-
         .details-container {
             max-width: 600px;
             margin: 0 auto;
@@ -51,7 +44,9 @@
     </style>
 </head>
 <body>
+<div class="container">
 <h1>Employee Contact Details</h1>
+</div>
 
 <div class="details-container">
     <h2>Contact Details for: <span th:text="${employee.surname}"></span></h2>
@@ -62,5 +57,7 @@
 </div>
 
 <a href="/employees" class="back-button">Back to Employee List</a>
+
+<script th:src="@{/webjars/bootstrap/5.3.3/js/bootstrap.bundle.min.js}"></script>
 </body>
 </html>
