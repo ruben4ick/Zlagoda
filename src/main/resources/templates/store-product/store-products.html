@@ -74,11 +74,11 @@
         </td>
         <td>
             <a th:href="@{'/store-products/edit/' + ${storeProduct.upc}}"
-               class="btn btn-info" th:classappend="${(storeProduct.upcProm != null && !storeProduct.isPromotional) ? 'disabled' : ''}"
-               th:attr="disabled=${(storeProduct.upcProm != null && !storeProduct.isPromotional)}">Edit</a>
+               class="btn btn-info" th:classappend="${((storeProduct.upcProm != null && !storeProduct.isPromotional) || storeProduct.isPromotional) ? 'disabled' : ''}"
+               th:attr="disabled=${((storeProduct.upcProm != null && !storeProduct.isPromotional) || storeProduct.isPromotional)}">Edit</a>
             <a th:href="@{'/store-products/delete/' + ${storeProduct.upc}}"
-               class="btn btn-danger" th:classappend="${(storeProduct.upcProm != null && !storeProduct.isPromotional) ? 'disabled' : ''}"
-               th:attr="disabled=${(storeProduct.upcProm != null && !storeProduct.isPromotional)}">Delete</a>
+               class="btn btn-danger" th:classappend="${((storeProduct.upcProm != null && !storeProduct.isPromotional) || storeProduct.isPromotional) ? 'disabled' : ''}"
+               th:attr="disabled=${((storeProduct.upcProm != null && !storeProduct.isPromotional) || storeProduct.isPromotional)}">Delete</a>
         </td>
     </tr>
     </tbody>
