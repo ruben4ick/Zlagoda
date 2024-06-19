@@ -3,9 +3,18 @@
 <head>
     <meta charset="UTF-8">
     <title>Create Check</title>
-    <link rel="stylesheet" th:href="@{/css/style.css}">
-    <link rel="stylesheet" th:href="@{/webjars/bootstrap/5.3.3/css/bootstrap.min.css}">
     <style>
+        /* Стили формы и модального окна */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
         form {
             max-width: 800px;
             margin: 0 auto;
@@ -15,7 +24,7 @@
             background: #f9f9f9;
         }
 
-        label, input, select{
+        label, input, select, button {
             display: block;
             width: 100%;
             margin-bottom: 10px;
@@ -26,6 +35,22 @@
         input, select {
             border: 1px solid #ccc;
             border-radius: 5px;
+        }
+
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            width: 100%;
+            margin-top: 20px;
+        }
+
+        button:hover {
+            background-color: #45a049;
         }
 
         .form-group {
@@ -52,12 +77,69 @@
         .sales-table th {
             background-color: #f2f2f2;
         }
+
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgb(0, 0, 0);
+            background-color: rgba(0, 0, 0, 0.4);
+            padding-top: 60px;
+        }
+
+        .modal-content {
+            background-color: #fefefe;
+            margin: 5% auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 80%;
+        }
+
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+        }
+
+        .close:hover,
+        .close:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        .products-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .products-table th, .products-table td {
+            padding: 10px;
+            border: 1px solid #ccc;
+            text-align: left;
+        }
+
+        .products-table th {
+            background-color: #f2f2f2;
+        }
+
+        .products-table tr:hover {
+            background-color: #f1f1f1;
+        }
+
+        .promo {
+            color: red;
+        }
     </style>
 </head>
 <body>
-<div class="container text-center">
 <h1>Create Check</h1>
-</div>
 
 <form th:action="@{/checks/add}" th:object="${check}" method="post">
     <div class="form-group">
@@ -92,45 +174,126 @@
             </tr>
             </thead>
             <tbody id="sales-container">
-            <tr th:each="sale, iterStat : ${check.sales}">
-                <td>
-                    <label>
-                        <select th:field="*{sales[__${iterStat.index}__].storeProduct.upc}">
-                            <option value="" disabled selected>Select a product</option>
-                            <option th:each="product : ${storeProducts}"
-                                    th:value="${product.upc}"></option>
-                        </select>
-                    </label>
-                </td>
-                <td>
-                    <label>
-                        <input type="number" th:field="*{sales[__${iterStat.index}__].productNumber}" placeholder="Quantity" required/>
-                    </label>
-                </td>
-                <td>
-                    <label>
-                        <input type="text" th:field="*{sales[__${iterStat.index}__].sellingPrice}" placeholder="Price" readonly/>
-                    </label>
-                </td>
-                <td>
-                    <button type="button" onclick="removeSale(this)">Remove</button>
-                </td>
+            <!-- Цей блок буде заповнюватися динамічно через JavaScript -->
+            </tbody>
+        </table>
+        <button type="button" id="addSaleButton">Add Sale</button>
+    </div>
+
+    <button type="submit">Add Check</button>
+</form>
+
+<!-- Модальне вікно для додавання покупки -->
+<div id="saleModal" class="modal">
+    <div class="modal-content">
+        <span class="close" id="closeModal">&times;</span>
+        <h2>Add Sale</h2>
+        <table class="products-table">
+            <thead>
+            <tr>
+                <th>UPC</th>
+                <th>Name</th>
+                <th>Description</th>
+                <th>Amount</th>
+                <th>Action</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="storeProduct : ${storeProducts}">
+                <td th:text="${storeProduct.upc}"></td>
+                <td th:text="${storeProduct.product.name}"></td>
+                <td th:text="${storeProduct.product.characteristics}"></td>
+                <td th:text="${storeProduct.quantity}"></td>
+                <td><button type="button" onclick="selectProduct(this)" data-upc="[[${storeProduct.upc}]]" data-price="[[${storeProduct.price}]]" data-name="[[${storeProduct.product.name}]]">Select</button></td>
             </tr>
             </tbody>
         </table>
+        <form id="saleForm">
+            <div class="form-group">
+                <label for="selectedProduct">Selected Product:</label>
+                <input type="text" id="selectedProduct" readonly/>
+            </div>
+            <div class="form-group">
+                <label for="quantity">Quantity:</label>
+                <input type="number" id="quantity" required min="1" />
+            </div>
+            <button type="button" id="addProductButton">Add Product</button>
+        </form>
     </div>
-    <div class="d-grid gap-2">
-    <button type="button" class="btn btn-success">Add Sale</button>
-    <button type="submit" class="btn btn-success">Add Check</button>
-    <a href="/checks" class="btn btn-secondary">Cansel</a>
-    </div>
-</form>
+</div>
+
 <script>
-    function removeSale(button) {
-        const row = button.closest('tr');
-        row.remove();
+    const saleModal = document.getElementById('saleModal');
+    const addSaleButton = document.getElementById('addSaleButton');
+    const closeModal = document.getElementById('closeModal');
+    const salesContainer = document.getElementById('sales-container');
+    const saleForm = document.getElementById('saleForm');
+    let selectedProduct = null;
+
+    addSaleButton.onclick = function() {
+        saleModal.style.display = 'block';
+    }
+
+    closeModal.onclick = function() {
+        saleModal.style.display = 'none';
+    }
+
+    window.onclick = function(event) {
+        if (event.target === saleModal) {
+            saleModal.style.display = 'none';
+        }
+    }
+
+    function selectProduct(button) {
+        selectedProduct = {
+            upc: button.getAttribute('data-upc'),
+            price: button.getAttribute('data-price'),
+            name: button.getAttribute('data-name')
+        };
+        document.getElementById('selectedProduct').value = selectedProduct.name;
+    }
+
+    document.getElementById('addProductButton').onclick = function() {
+        if (!selectedProduct) {
+            alert("Please select a product.");
+            return;
+        }
+
+        const quantity = document.getElementById('quantity').value;
+        if (!quantity) {
+            alert("Please enter a quantity.");
+            return;
+        }
+
+        const newRow = document.createElement('tr');
+
+        const productCell = document.createElement('td');
+        productCell.innerText = selectedProduct.name;
+        newRow.appendChild(productCell);
+
+        const quantityCell = document.createElement('td');
+        quantityCell.innerText = quantity;
+        newRow.appendChild(quantityCell);
+
+        const priceCell = document.createElement('td');
+        priceCell.innerText = selectedProduct.price;
+        newRow.appendChild(priceCell);
+
+        const actionCell = document.createElement('td');
+        const removeButton = document.createElement('button');
+        removeButton.type = 'button';
+        removeButton.innerText = 'Remove';
+        removeButton.onclick = function() {
+            newRow.remove();
+        };
+        actionCell.appendChild(removeButton);
+        newRow.appendChild(actionCell);
+
+        salesContainer.appendChild(newRow);
+        saleModal.style.display = 'none';
+        saleForm.reset();
+        selectedProduct = null;
     }
 </script>
-<script th:src="@{/webjars/bootstrap/5.3.3/js/bootstrap.bundle.min.js}"></script>
 </body>
 </html>

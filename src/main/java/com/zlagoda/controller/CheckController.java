@@ -22,6 +22,7 @@ import java.util.List;
 public class CheckController {
 
     private final CheckService checkService;
+    private final SaleService saleService;
     private final EmployeeService employeeService;
     private final CustomerCardService customerCardService;
     private final StoreProductService storeProductService;
