@@ -6,6 +6,7 @@ import com.zlagoda.dao.SaleDao;
 import com.zlagoda.dto.CheckDto;
 import com.zlagoda.dto.CustomerCardDto;
 import com.zlagoda.dto.EmployeeDto;
+import com.zlagoda.dto.SaleDto;
 import com.zlagoda.entity.Check;
 import com.zlagoda.entity.CustomerCard;
 import com.zlagoda.entity.Employee;
@@ -19,10 +20,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
-import java.math.RoundingMode;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
@@ -52,6 +53,8 @@ public class CheckServiceImpl implements CheckService {
 
     @Override
     public void create(CheckDto checkDto) {
+        String generatedId = UUID.randomUUID().toString().replaceAll("\\D", "").substring(0, 10); // Генеруємо тільки цифри
+        checkDto.setCheckNumber(generatedId);
         checkDto.setPrintDate(LocalDateTime.now());
         BigDecimal totalSum = checkDto.getSales().stream()
                 .map(sale -> sale.getSellingPrice().multiply(BigDecimal.valueOf(sale.getProductNumber())))
@@ -60,14 +63,12 @@ public class CheckServiceImpl implements CheckService {
         checkDto.setTotalSum(totalSum);
         checkDto.setVat(vat);
 
+        for (SaleDto sale : checkDto.getSales()) {
+            sale.setCheckNumber(generatedId);
+            saleService.create(sale);
+        }
         Check check = checkConverter.convertToEntity(checkDto);
         checkDao.create(check);
-
-        // Зберігаємо всі продажі
-        for (Sale sale : checkDto.getSales()) {
-            sale.setCheckNumber(check.getCheckNumber()); // Встановлюємо номер чека для кожного продажу
-            saleDao.create(sale);
-        }
     }
 
     @Override

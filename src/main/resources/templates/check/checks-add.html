@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <title>Create Check</title>
     <style>
-        /* Стили формы и модального окна */
         body {
             font-family: Arial, sans-serif;
             margin: 20px;
@@ -161,29 +160,27 @@
                     th:text="${customerCard.surname}"></option>
         </select>
     </div>
-
-    <div class="sales-section">
-        <h2>Sales</h2>
-        <table class="sales-table">
-            <thead>
-            <tr>
-                <th>Product</th>
-                <th>Quantity</th>
-                <th>Price</th>
-                <th>Actions</th>
-            </tr>
-            </thead>
-            <tbody id="sales-container">
-            <!-- Цей блок буде заповнюватися динамічно через JavaScript -->
-            </tbody>
-        </table>
-        <button type="button" id="addSaleButton">Add Sale</button>
+    <div id="salesDataContainer">
+        <div class="sales-section">
+            <h2>Sales</h2>
+            <table class="sales-table">
+                <thead>
+                <tr>
+                    <th>Product</th>
+                    <th>Quantity</th>
+                    <th>Price</th>
+                    <th>Actions</th>
+                </tr>
+                </thead>
+                <tbody id="sales-container">
+                </tbody>
+            </table>
+            <button type="button" id="addSaleButton">Add Sale</button>
+        </div>
     </div>
-
     <button type="submit">Add Check</button>
 </form>
 
-<!-- Модальне вікно для додавання покупки -->
 <div id="saleModal" class="modal">
     <div class="modal-content">
         <span class="close" id="closeModal">&times;</span>
@@ -204,7 +201,7 @@
                 <td th:text="${storeProduct.product.name}"></td>
                 <td th:text="${storeProduct.product.characteristics}"></td>
                 <td th:text="${storeProduct.quantity}"></td>
-                <td><button type="button" onclick="selectProduct(this)" data-upc="[[${storeProduct.upc}]]" data-price="[[${storeProduct.price}]]" data-name="[[${storeProduct.product.name}]]">Select</button></td>
+                <td><button type="button" onclick="selectProduct(this)" th:data-upc="${storeProduct.upc}" th:data-price="${storeProduct.price}" th:data-name="${storeProduct.product.name}">Select</button></td>
             </tr>
             </tbody>
         </table>
@@ -227,8 +224,10 @@
     const addSaleButton = document.getElementById('addSaleButton');
     const closeModal = document.getElementById('closeModal');
     const salesContainer = document.getElementById('sales-container');
+    const salesDataContainer = document.getElementById('salesDataContainer');
     const saleForm = document.getElementById('saleForm');
     let selectedProduct = null;
+    let saleIndex = 0;
 
     addSaleButton.onclick = function() {
         saleModal.style.display = 'block';
@@ -285,15 +284,109 @@
         removeButton.innerText = 'Remove';
         removeButton.onclick = function() {
             newRow.remove();
+            const hiddenField = document.getElementById(`sale-${saleIndex}`);
+            if (hiddenField) {
+                hiddenField.remove();
+            }
         };
         actionCell.appendChild(removeButton);
         newRow.appendChild(actionCell);
 
         salesContainer.appendChild(newRow);
+
+
+        const hiddenField = document.createElement('input');
+        hiddenField.type = 'hidden';
+        hiddenField.name = `sales[${saleIndex}].upc`;
+        hiddenField.value = selectedProduct.upc;
+        hiddenField.id = `sale-${saleIndex}`;
+        salesDataContainer.appendChild(hiddenField);
+
+        const hiddenFieldQuantity = document.createElement('input');
+        hiddenFieldQuantity.type = 'hidden';
+        hiddenFieldQuantity.name = `sales[${saleIndex}].quantity`;
+        hiddenFieldQuantity.value = quantity;
+        salesDataContainer.appendChild(hiddenFieldQuantity);
+
+        const hiddenFieldPrice = document.createElement('input');
+        hiddenFieldPrice.type = 'hidden';
+        hiddenFieldPrice.name = `sales[${saleIndex}].price`;
+        hiddenFieldPrice.value = selectedProduct.price;
+        salesDataContainer.appendChild(hiddenFieldPrice);
+
+        saleIndex++;
         saleModal.style.display = 'none';
         saleForm.reset();
         selectedProduct = null;
     }
+    document.getElementById('addProductButton').onclick = function() {
+        if (!selectedProduct) {
+            alert("Please select a product.");
+            return;
+        }
+
+        const quantity = document.getElementById('quantity').value;
+        if (!quantity) {
+            alert("Please enter a quantity.");
+            return;
+        }
+
+        // Додавання рядка до таблиці
+        const newRow = document.createElement('tr');
+        // Додавання даних про продукт, кількість та ціну
+        const productCell = document.createElement('td');
+        productCell.innerText = selectedProduct.name;
+        newRow.appendChild(productCell);
+
+        const quantityCell = document.createElement('td');
+        quantityCell.innerText = quantity;
+        newRow.appendChild(quantityCell);
+
+        const priceCell = document.createElement('td');
+        priceCell.innerText = selectedProduct.price;
+        newRow.appendChild(priceCell);
+
+        const actionCell = document.createElement('td');
+        const removeButton = document.createElement('button');
+        removeButton.type = 'button';
+        removeButton.innerText = 'Remove';
+        removeButton.onclick = function() {
+            newRow.remove();
+            const hiddenField = document.getElementById(`sale-${saleIndex}`);
+            if (hiddenField) {
+                hiddenField.remove();
+            }
+        };
+        actionCell.appendChild(removeButton);
+        newRow.appendChild(actionCell);
+
+        salesContainer.appendChild(newRow);
+
+        // Додавання прихованих полів для передачі даних в контролер
+        const hiddenField = document.createElement('input');
+        hiddenField.type = 'hidden';
+        hiddenField.name = `sales[${saleIndex}].upc`;
+        hiddenField.value = selectedProduct.upc;
+        hiddenField.id = `sale-${saleIndex}`;
+        salesDataContainer.appendChild(hiddenField);
+
+        const hiddenFieldQuantity = document.createElement('input');
+        hiddenFieldQuantity.type = 'hidden';
+        hiddenFieldQuantity.name = `sales[${saleIndex}].quantity`;
+        hiddenFieldQuantity.value = quantity;
+        salesDataContainer.appendChild(hiddenFieldQuantity);
+
+        const hiddenFieldPrice = document.createElement('input');
+        hiddenFieldPrice.type = 'hidden';
+        hiddenFieldPrice.name = `sales[${saleIndex}].price`;
+        hiddenFieldPrice.value = selectedProduct.price;
+        salesDataContainer.appendChild(hiddenFieldPrice);
+
+        saleIndex++;
+        saleModal.style.display = 'none';
+        saleForm.reset();
+        selectedProduct = null;
+    };
 </script>
 </body>
 </html>

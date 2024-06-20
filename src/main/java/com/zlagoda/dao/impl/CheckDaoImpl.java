@@ -54,8 +54,8 @@ public class CheckDaoImpl implements CheckDao {
 
     @Override
     public void create(Check check) {
-        String generatedId = UUID.randomUUID().toString().replaceAll("\\D", "").substring(0, 10); // Генеруємо тільки цифри
-        check.setCheckNumber(generatedId);
+        //String generatedId = UUID.randomUUID().toString().replaceAll("\\D", "").substring(0, 10); // Генеруємо тільки цифри
+        //check.setCheckNumber(generatedId);
 
         // Вставка чека
         jdbcTemplate.update(INSERT_CHECK,
@@ -64,16 +64,17 @@ public class CheckDaoImpl implements CheckDao {
                 check.getCustomerCard() != null ? check.getCustomerCard().getCardNumber() : null,
                 check.getPrintDate(),
                 check.getTotalSum(),
-                check.getVat());
+                check.getVat(),
+                check.getSales());
 
         // Вставка продажів
-        for (Sale sale : check.getSales()) {
-            jdbcTemplate.update(INSERT_SALE,
-                    sale.getStoreProduct().getUpc(),
-                    check.getCheckNumber(),
-                    sale.getProductNumber(),
-                    sale.getSellingPrice());
-        }
+//        for (Sale sale : check.getSales()) {
+//            jdbcTemplate.update(INSERT_SALE,
+//                    sale.getStoreProduct().getUpc(),
+//                    check.getCheckNumber(),
+//                    sale.getProductNumber(),
+//                    sale.getSellingPrice());
+//        }
     }
 
     @Override
