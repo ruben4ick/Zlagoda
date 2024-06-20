@@ -2,7 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org" lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Employees List</title>
+    <title>Cashiers List</title>
     <link rel="stylesheet" th:href="@{/css/style.css}">
     <link rel="stylesheet" th:href="@{/webjars/bootstrap/5.3.3/css/bootstrap.min.css}">
 </head>
@@ -42,7 +42,7 @@
             <div class="row">
                 <div class="dropdown col text-start">
                     <button class="btn btn-dark dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                        All employees
+                        Cashiers who served each customer
                     </button>
                     <ul class="dropdown-menu dropdown-menu-dark">
                         <li><a class="dropdown-item" href="/employees">All employees</a></li>
@@ -64,45 +64,45 @@
     </div>
 </div>
 <div class="container">
-<table class="table table-hover">
-    <thead class="table-dark">
-    <tr>
-        <th scope="col">ID</th>
-        <th scope="col">Surname</th>
-        <th scope="col">Name</th>
-        <th scope="col">Patronymic</th>
-        <th scope="col">Role</th>
-        <th scope="col">Salary</th>
-        <th scope="col">Start Date</th>
-        <th scope="col">Birth Date</th>
-        <th scope="col">Phone Number</th>
-        <th scope="col">City</th>
-        <th scope="col">Street</th>
-        <th scope="col">Zip Code</th>
-        <th scope="col">Actions</th>
-    </tr>
-    </thead>
-    <tbody>
-    <tr th:each="employee : ${employees}">
-        <th scope="row" th:text="${employee.id}"></th>
-        <td th:text="${employee.surname}"></td>
-        <td th:text="${employee.name}"></td>
-        <td th:text="${employee.patronymic}"></td>
-        <td th:text="${employee.role}"></td>
-        <td th:text="${employee.salary}"></td>
-        <td th:text="${#dates.format(employee.startDate, 'yyyy-MM-dd')}"></td>
-        <td th:text="${#dates.format(employee.birthDate, 'yyyy-MM-dd')}"></td>
-        <td th:text="${employee.phoneNumber}"></td>
-        <td th:text="${employee.city}"></td>
-        <td th:text="${employee.street}"></td>
-        <td th:text="${employee.zipCode}"></td>
-        <td>
-            <a th:href="@{'/employees/edit/' + ${employee.id}}" class="btn btn-info">Edit</a>
-            <a th:href="@{'/employees/delete/' + ${employee.id}}" class="btn btn-danger">Delete</a>
-        </td>
-    </tr>
-    </tbody>
-</table>
+    <table class="table table-hover">
+        <thead class="table-dark">
+        <tr>
+            <th>ID</th>
+            <th>Surname</th>
+            <th>Name</th>
+            <th>Patronymic</th>
+            <th>Role</th>
+            <th>Salary</th>
+            <th>Start Date</th>
+            <th>Birth Date</th>
+            <th>Phone Number</th>
+            <th>City</th>
+            <th>Street</th>
+            <th>Zip Code</th>
+            <th>Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="employee : ${employees}">
+            <th scope="row" th:text="${employee.id}"></th>
+            <td th:text="${employee.surname}"></td>
+            <td th:text="${employee.name}"></td>
+            <td th:text="${employee.patronymic}"></td>
+            <td th:text="${employee.role}"></td>
+            <td th:text="${employee.salary}"></td>
+            <td th:text="${#dates.format(employee.startDate, 'yyyy-MM-dd')}"></td>
+            <td th:text="${#dates.format(employee.birthDate, 'yyyy-MM-dd')}"></td>
+            <td th:text="${employee.phoneNumber}"></td>
+            <td th:text="${employee.city}"></td>
+            <td th:text="${employee.street}"></td>
+            <td th:text="${employee.zipCode}"></td>
+            <td>
+                <a th:href="@{'/employees/edit/' + ${employee.id}}" class="btn btn-info">Edit</a>
+                <a th:href="@{'/employees/delete/' + ${employee.id}}" class="btn btn-danger">Delete</a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
 </div>
 <script th:src="@{/webjars/bootstrap/5.3.3/js/bootstrap.bundle.min.js}"></script>
 </body>

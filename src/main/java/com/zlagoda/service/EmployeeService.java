@@ -11,4 +11,6 @@ public interface EmployeeService extends GenericService<EmployeeDto, String> {
 
     List<EmployeeDto> findContactDetailsBySurname(String surname);
 
+    List<EmployeeDto> getAllCashiersServedAllCustomers();
+
 }

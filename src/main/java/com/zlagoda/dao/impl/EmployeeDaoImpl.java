@@ -23,17 +23,23 @@ public class EmployeeDaoImpl implements EmployeeDao {
     private static final String FIND_ALL_EMPLOYEES = "SELECT * FROM `Employee` ORDER BY empl_surname";
     private static final String FIND_ALL_CASHIERS = "SELECT * FROM Employee WHERE empl_role = 'CASHIER' ORDER BY empl_surname";
 
-    private static final String EMPLOYEE_CREATED_CHECK_AMOUNT_AND_SUM =
-            "SELECT Employee.id_employee,\n" +
-                    "Employee.empl_name,\n" +
-                    "Employee.empl_surname,\n" +
-                    "Employee.empl_patronymic,\n" +
-                    "COUNT(ch.check_number) AS checks_count,\n" +
-                    "COALESCE(SUM(ch.sum_total + ch.vat), 0) AS total_sum\n" +
-                    "FROM Employee\n" +
-                    "LEFT JOIN `Check` AS ch ON ch.id_employee = Employee.id_employee\n" +
-                    "WHERE Employee.`role` = \"CASHIER\"\n" +
-                    "GROUP BY Employee.id_employee";
+    private static final String FIND_ALL_CASHIERS_SERVED_ALL_CLIENTS =
+            """
+            SELECT *
+            FROM Employee AS empl
+            WHERE NOT EXISTS (
+                SELECT c.card_number
+                FROM Customer_Card AS c
+                WHERE NOT EXISTS (
+                    SELECT *
+                    FROM `Check` AS ch
+                    WHERE ch.id_employee = empl.id_employee
+                    AND ch.card_number = c.card_number
+                )
+            )
+                       
+            """;
+
 
     private static final String UPDATE = "UPDATE Employee\n" +
             "SET empl_surname = ?,\n" +
@@ -70,6 +76,11 @@ public class EmployeeDaoImpl implements EmployeeDao {
     @Override
     public List<Employee> findContactDetailsBySurname(String surname) {
         return jdbcTemplate.query(FIND_CONTACT_DETAILS_BY_SURNAME, new Object[]{surname}, new EmployeeContactRowMapper());
+    }
+
+    @Override
+    public List<Employee> getAllCashiersServedAllCustomers() {
+        return jdbcTemplate.query(FIND_ALL_CASHIERS_SERVED_ALL_CLIENTS, new EmployeeRowMapper());
     }
 
     @Override

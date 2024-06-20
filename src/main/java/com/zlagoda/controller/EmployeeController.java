@@ -38,6 +38,13 @@ public class EmployeeController {
         return "employee/cashiers";
     }
 
+    @GetMapping("/cashiers-served-all-customers")
+    public String cashiersServedAllCustomers(Model model) {
+        List<EmployeeDto> cashiers = employeeService.getAllCashiersServedAllCustomers();
+        model.addAttribute("employees", cashiers);
+        return "employee/cashiers-served-all-customers";
+    }
+
     @GetMapping("/employees/contact")
     public String getEmployeeContactDetails(@RequestParam("surname") String surname, Model model) {
         List<EmployeeDto> employees = employeeService.findContactDetailsBySurname(surname);
