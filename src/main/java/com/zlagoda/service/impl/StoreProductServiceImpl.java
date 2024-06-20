@@ -10,6 +10,7 @@ import com.zlagoda.entity.Product;
 import com.zlagoda.entity.StoreProduct;
 import com.zlagoda.service.StoreProductService;
 import lombok.RequiredArgsConstructor;
+import org.apache.catalina.Store;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -35,6 +36,20 @@ public class StoreProductServiceImpl implements StoreProductService {
     }
 
     @Override
+    public List<StoreProductDto> getPromotionalProducts() {
+        return storeProductDao.getPromotionalProducts().stream()
+                .map(this::mapToStoreProductDto)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<StoreProductDto> getStandardProducts(){
+        return storeProductDao.getStandardProducts().stream()
+                .map(this::mapToStoreProductDto)
+                .collect(Collectors.toList());
+    }
+
+    @Override
     public Optional<StoreProductDto> getById(String upc) {
         return storeProductDao.getById(upc)
                 .map(converter::convertToDto);
@@ -56,13 +71,6 @@ public class StoreProductServiceImpl implements StoreProductService {
     @Override
     public void delete(String upc) {
         storeProductDao.delete(upc);
-    }
-
-    @Override
-    public List<StoreProductDto> getPromotionalProducts() {
-        return storeProductDao.getPromotionalProducts().stream()
-                .map(this::mapToStoreProductDto)
-                .collect(Collectors.toList());
     }
 
    /* @Override
