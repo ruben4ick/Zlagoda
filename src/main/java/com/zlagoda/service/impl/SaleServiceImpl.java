@@ -43,6 +43,7 @@ public class SaleServiceImpl implements SaleService {
         saleDao.create(sale);
     }
 
+    // я не розумію, що ти тут хтів зробити, тому я це чіпати не буду. з повагою bee
     /*@Override
     public void create(SaleDto saleDto) {
         Sale saleToCreate = saleConverter.convertToEntity(saleDto);

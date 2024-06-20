@@ -2,6 +2,7 @@ package com.zlagoda.service.impl;
 
 import com.zlagoda.converter.EmployeeConverter;
 import com.zlagoda.dao.EmployeeDao;
+import com.zlagoda.dao.mapper.EmployeeContactRowMapper;
 import com.zlagoda.dto.EmployeeDto;
 import com.zlagoda.entity.Employee;
 import com.zlagoda.service.EmployeeService;
@@ -10,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class EmployeeServiceImpl implements EmployeeService {
@@ -58,9 +60,10 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
     @Override
-    public Optional<EmployeeDto> findContactDetailsBySurname(String surname) {
-        return employeeDao.findContactDetailsBySurname(surname)
-                .map(employeeConverter::mapToEmployeeDto);
+    public List<EmployeeDto> findContactDetailsBySurname(String surname) {
+        return employeeDao.findContactDetailsBySurname(surname).stream()
+                .map(employeeConverter::mapToEmployeeDto)
+                .collect(Collectors.toList());
     }
 
 
