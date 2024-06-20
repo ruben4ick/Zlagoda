@@ -38,6 +38,13 @@ public class EmployeeController {
         return "employee/cashiers";
     }
 
+    @GetMapping("/employees/contact")
+    public String getEmployeeContactDetails(@RequestParam("surname") String surname, Model model) {
+        List<EmployeeDto> employees = employeeService.findContactDetailsBySurname(surname);
+        model.addAttribute("employees", employees);
+        return "employee/employees-contact";
+    }
+
     @GetMapping("employees/add")
     public String employeeAdd(Model model) {
         model.addAttribute("roles", Employee.Role.values());
@@ -92,14 +99,4 @@ public class EmployeeController {
         return "employee/employees-search";
     }
 
-    @GetMapping("/employees/contact")
-    public String getEmployeeContactDetails(@RequestParam("surname") String surname, Model model) {
-        Optional<EmployeeDto> employeeDto = employeeService.findContactDetailsBySurname(surname);
-        if (employeeDto.isPresent()) {
-            model.addAttribute("employee", employeeDto.get());
-        } else {
-            model.addAttribute("error", "Employee not found with surname: " + surname);
-        }
-        return "employee/employees-contact";
-    }
 }

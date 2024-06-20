@@ -55,7 +55,7 @@ public class EmployeeDaoImpl implements EmployeeDao {
 
     private static final String DELETE_EMPLOYEE = "DELETE FROM Employee WHERE id_employee = ?";
 
-    private static final String FIND_CONTACT_DETAILS_BY_SURNAME = "SELECT empl_surname, phone_number, city, street, zip_code FROM Employee WHERE empl_surname = ?";
+    private static final String FIND_CONTACT_DETAILS_BY_SURNAME = "SELECT empl_surname, empl_name, empl_patronymic, phone_number, city, street, zip_code FROM Employee WHERE empl_surname = ?";
 
     @Override
     public List<Employee> getAll() {
@@ -65,6 +65,11 @@ public class EmployeeDaoImpl implements EmployeeDao {
     @Override
     public List<Employee> getAllCashiers() {
         return jdbcTemplate.query(FIND_ALL_CASHIERS, new EmployeeRowMapper());
+    }
+
+    @Override
+    public List<Employee> findContactDetailsBySurname(String surname) {
+        return jdbcTemplate.query(FIND_CONTACT_DETAILS_BY_SURNAME, new Object[]{surname}, new EmployeeContactRowMapper());
     }
 
     @Override
@@ -118,11 +123,5 @@ public class EmployeeDaoImpl implements EmployeeDao {
                 employee.getId()
         };
         jdbcTemplate.update(UPDATE, params);
-    }
-
-    @Override
-    public Optional<Employee> findContactDetailsBySurname(String surname) {
-        List<Employee> employees = jdbcTemplate.query(FIND_CONTACT_DETAILS_BY_SURNAME, new Object[]{surname}, new EmployeeContactRowMapper());
-        return employees.stream().findFirst();
     }
 }
