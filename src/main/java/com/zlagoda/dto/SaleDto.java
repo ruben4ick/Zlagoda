@@ -19,8 +19,6 @@ public class SaleDto {
 
     private String storeProductUpc;
 
-    private String checkNumber;
-
     private int productNumber;
 
     private BigDecimal sellingPrice;

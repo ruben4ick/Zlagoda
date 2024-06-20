@@ -204,7 +204,9 @@
                 <td th:text="${storeProduct.product.name}"></td>
                 <td th:text="${storeProduct.product.characteristics}"></td>
                 <td th:text="${storeProduct.quantity}"></td>
-                <td><button type="button" onclick="selectProduct(this)" data-upc="[[${storeProduct.upc}]]" data-price="[[${storeProduct.price}]]" data-name="[[${storeProduct.product.name}]]">Select</button></td>
+                <td>
+                    <button type="button" th:data-upc="${storeProduct.upc}" th:data-price="${storeProduct.price}" th:data-name="${storeProduct.product.name}" onclick="selectProduct(this)">Select</button>
+                </td>
             </tr>
             </tbody>
         </table>
@@ -269,14 +271,17 @@
 
         const productCell = document.createElement('td');
         productCell.innerText = selectedProduct.name;
+        productCell.innerHTML += '<input type="hidden" name="sales[' + salesContainer.children.length + '].storeProductUpc" value="' + selectedProduct.upc + '">';
         newRow.appendChild(productCell);
 
         const quantityCell = document.createElement('td');
         quantityCell.innerText = quantity;
+        quantityCell.innerHTML += '<input type="hidden" name="sales[' + salesContainer.children.length + '].productNumber" value="' + quantity + '">';
         newRow.appendChild(quantityCell);
 
         const priceCell = document.createElement('td');
         priceCell.innerText = selectedProduct.price;
+        priceCell.innerHTML += '<input type="hidden" name="sales[' + salesContainer.children.length + '].sellingPrice" value="' + selectedProduct.price + '">';
         newRow.appendChild(priceCell);
 
         const actionCell = document.createElement('td');

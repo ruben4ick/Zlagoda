@@ -1,11 +1,13 @@
 package com.zlagoda.service.impl;
 
 import com.zlagoda.converter.CheckConverter;
+import com.zlagoda.converter.SaleConverter;
 import com.zlagoda.dao.CheckDao;
 import com.zlagoda.dao.SaleDao;
 import com.zlagoda.dto.CheckDto;
 import com.zlagoda.dto.CustomerCardDto;
 import com.zlagoda.dto.EmployeeDto;
+import com.zlagoda.dto.SaleDto;
 import com.zlagoda.entity.Check;
 import com.zlagoda.entity.CustomerCard;
 import com.zlagoda.entity.Employee;
@@ -32,6 +34,7 @@ public class CheckServiceImpl implements CheckService {
     private final CheckDao checkDao;
     private final SaleDao saleDao;
     private final CheckConverter checkConverter;
+    private final SaleConverter saleConverter;
 
     private final CustomerCardService customerCardService;
     private final StoreProductService storeProductService;
@@ -64,7 +67,8 @@ public class CheckServiceImpl implements CheckService {
         checkDao.create(check);
 
         // Зберігаємо всі продажі
-        for (Sale sale : checkDto.getSales()) {
+        for (SaleDto saleDto : checkDto.getSales()) {
+            Sale sale = saleConverter.convertToEntity(saleDto);
             sale.setCheckNumber(check.getCheckNumber()); // Встановлюємо номер чека для кожного продажу
             saleDao.create(sale);
         }
