@@ -11,4 +11,5 @@ public interface EmployeeService extends GenericService<EmployeeDto, String> {
 
     Optional<EmployeeDto> findContactDetailsBySurname(String surname);
 
+    List<Employee.Role> getEmployeeRoles();
 }

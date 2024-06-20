@@ -66,6 +66,11 @@ public class EmployeeServiceImpl implements EmployeeService {
                 .map(employeeConverter::mapToEmployeeDto);
     }
 
+    @Override
+    public List<Employee.Role> getEmployeeRoles() {
+        return List.of(Employee.Role.values());
+    }
+
 
     /*private Employee setOnlyPresentFields(final Employee oldEmployee, final Employee newEmployee) {
         String name = newEmployee.getName();
