@@ -37,6 +37,13 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
     @Override
+    public List<EmployeeDto> getAllCashiersServedAllCustomers() {
+        return employeeDao.getAllCashiersServedAllCustomers().stream()
+                .map(employeeConverter::mapToEmployeeDto)
+                .toList();
+    }
+
+    @Override
     public void create(final EmployeeDto employeeDto) {
         Employee employee = employeeConverter.mapToEmployee(employeeDto);
         employeeDao.create(employee);
@@ -64,13 +71,6 @@ public class EmployeeServiceImpl implements EmployeeService {
         return employeeDao.findContactDetailsBySurname(surname).stream()
                 .map(employeeConverter::mapToEmployeeDto)
                 .collect(Collectors.toList());
-    }
-
-    @Override
-    public List<EmployeeDto> getAllCashiersServedAllCustomers() {
-        return employeeDao.getAllCashiersServedAllCustomers().stream()
-                .map(employeeConverter::mapToEmployeeDto)
-                .toList();
     }
 
 }

@@ -1,8 +1,10 @@
 package com.zlagoda.dao.impl;
 
 import com.zlagoda.dao.ProductDao;
+import com.zlagoda.dao.mapper.ProductClassicRowMapper;
 import com.zlagoda.dao.mapper.ProductRowMapper;
 import com.zlagoda.entity.Product;
+import com.zlagoda.entity.ProductClassic;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
@@ -41,6 +43,14 @@ public class ProductDaoImpl implements ProductDao {
                     "INNER JOIN Category c ON p.category_number = c.category_number " +
                     "WHERE p.category_number = ? " +
                     "ORDER BY p.product_name;";
+
+    private static final String GET_PRODUCT_COUNTS_BY_CATEGORY =
+            "SELECT c.category_name, p.product_name, SUM(sp.products_number) AS product_count " +
+                    "FROM store_product sp " +
+                    "JOIN product p ON sp.id_product = p.id_product " +
+                    "JOIN category c ON p.category_number = c.category_number " +
+                    "GROUP BY c.category_name, p.product_name " +
+                    "ORDER BY c.category_name, p.product_name";
 
     @Override
     public List<Product> getAll() {
@@ -83,5 +93,10 @@ public class ProductDaoImpl implements ProductDao {
     public List<Product> findByName(String name) {
         String query = name + "%"; // Пошук часткового збігу
         return jdbcTemplate.query(FIND_PRODUCTS_BY_NAME, new Object[]{query}, new ProductRowMapper());
+    }
+
+    @Override
+    public List<ProductClassic> getProductCountsByCategory() {
+        return jdbcTemplate.query(GET_PRODUCT_COUNTS_BY_CATEGORY, new ProductClassicRowMapper());
     }
 }

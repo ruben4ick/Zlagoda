@@ -1,6 +1,7 @@
 package com.zlagoda.controller;
 
 import com.zlagoda.dto.CategoryDto;
+import com.zlagoda.dto.ProductClassicDto;
 import com.zlagoda.dto.ProductDto;
 import com.zlagoda.entity.Category;
 import com.zlagoda.service.ProductService;
@@ -30,6 +31,13 @@ public class ProductController {
         model.addAttribute("products", products);
         model.addAttribute("categories", categories);
         return "product/products";
+    }
+
+    @GetMapping("/classic-view")
+    public String classicView(Model model) {
+        List<ProductClassicDto> products = productService.getProductCountsByCategory();
+        model.addAttribute("products", products);
+        return "product/classic-view";
     }
 
     @GetMapping("/category-search")
