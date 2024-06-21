@@ -1,6 +1,7 @@
 package com.zlagoda.controller;
 
 import com.zlagoda.dto.CategoryDto;
+import com.zlagoda.dto.CategorySalesDto;
 import com.zlagoda.service.CategoryService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -73,5 +74,12 @@ public class CategoryController {
     public String deleteCategory(@PathVariable("categoryNumber") Long categoryNumber) {
         categoryService.delete(categoryNumber);
         return "redirect:/categories";
+    }
+
+    @GetMapping("/category-sales")
+    public String getCategorySales(Model model) {
+        List<CategorySalesDto> categorySalesList = categoryService.findTotalSalesByCategory();
+        model.addAttribute("categorySales", categorySalesList);
+        return "category/category-sales";
     }
 }

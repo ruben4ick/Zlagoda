@@ -42,6 +42,28 @@ public class ProductDaoImpl implements ProductDao {
                     "WHERE p.category_number = ? " +
                     "ORDER BY p.product_name;";
 
+    private static final String FIND_PRODUCTS_SOLD_FROM_CERTAIN_CITY = """
+    SELECT DISTINCT Product.*, Category.*
+     FROM Product
+     INNER JOIN Store_Product ON Product.id_product = Store_Product.id_product
+     INNER JOIN Sale ON Store_Product.UPC = Sale.UPC
+     INNER JOIN `Check` ON Sale.check_number = `Check`.check_number
+     INNER JOIN Employee ON `Check`.id_employee = Employee.id_employee
+     INNER JOIN Category ON Product.category_number = Category.category_number
+     WHERE Product.id_product NOT IN (
+         SELECT Product.id_product
+         FROM Product
+         INNER JOIN Store_Product ON Product.id_product = Store_Product.id_product
+         INNER JOIN Sale ON Store_Product.UPC = Sale.UPC
+         INNER JOIN `Check` ON Sale.check_number = `Check`.check_number
+         INNER JOIN Employee ON `Check`.id_employee = Employee.id_employee
+         WHERE Employee.id_employee NOT IN (
+             SELECT id_employee
+             FROM Employee
+             WHERE city = ?
+         )
+     );
+    """;
     @Override
     public List<Product> getAll() {
         return jdbcTemplate.query(FIND_ALL_PRODUCTS, new ProductRowMapper());
@@ -83,5 +105,10 @@ public class ProductDaoImpl implements ProductDao {
     public List<Product> findByName(String name) {
         String query = name + "%"; // Пошук часткового збігу
         return jdbcTemplate.query(FIND_PRODUCTS_BY_NAME, new Object[]{query}, new ProductRowMapper());
+    }
+
+    @Override
+    public List<Product> findBySoldFromCertainCity(String city) {
+        return jdbcTemplate.query(FIND_PRODUCTS_SOLD_FROM_CERTAIN_CITY, new ProductRowMapper(), city);
     }
 }

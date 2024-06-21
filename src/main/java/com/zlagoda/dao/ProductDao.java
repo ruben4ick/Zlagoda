@@ -11,4 +11,6 @@ public interface ProductDao extends GenericDao<Product, Long>{
 
     List<Product> findByName(String name);
 
+    List<Product> findBySoldFromCertainCity(String name);
+
 }

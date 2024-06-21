@@ -3,10 +3,14 @@ package com.zlagoda.dao.impl;
 import com.zlagoda.dao.CategoryDao;
 import com.zlagoda.dao.mapper.CategoryRowMapper;
 import com.zlagoda.entity.Category;
+import com.zlagoda.dto.CategorySalesDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -22,6 +26,14 @@ public class CategoryDaoImpl implements CategoryDao {
     private static final String INSERT_CATEGORY = "INSERT INTO Category (category_number, category_name) VALUES (?, ?)";
     private static final String UPDATE_CATEGORY = "UPDATE Category SET category_name = ? WHERE category_number = ?";
     private static final String DELETE_CATEGORY = "DELETE FROM Category WHERE category_number = ?";
+
+    private static final String FIND_TOTAL_SALES_BY_CATEGORY = """
+            SELECT Category.category_number, Category.category_name, SUM(Sale.selling_price * Sale.product_number) AS total_sales
+            FROM ((Sale INNER JOIN Store_Product ON Sale.UPC = Store_Product.UPC)
+            INNER JOIN Product ON Store_Product.id_product = Product.id_product)
+            INNER JOIN Category ON Product.category_number = Category.category_number
+            GROUP BY Category.category_number, Category.category_name;
+            """;
 
     @Override
     public List<Category> getAll() {
@@ -47,5 +59,19 @@ public class CategoryDaoImpl implements CategoryDao {
     @Override
     public void delete(Long categoryNumber) {
         jdbcTemplate.update(DELETE_CATEGORY, categoryNumber);
+    }
+
+    public List<CategorySalesDto> findTotalSalesByCategory() {
+        return jdbcTemplate.query(FIND_TOTAL_SALES_BY_CATEGORY, new RowMapper<CategorySalesDto>() {
+            @Override
+            public CategorySalesDto mapRow(ResultSet rs, int rowNum) throws SQLException {
+                CategorySalesDto categorySalesDto = new CategorySalesDto();
+                categorySalesDto.setCategoryNumber(rs.getLong("category_number"));
+                categorySalesDto.setCategoryName(rs.getString("category_name"));
+                categorySalesDto.setTotalSales(rs.getBigDecimal("total_sales"));
+                return categorySalesDto;
+            }
+        });
+
     }
 }
