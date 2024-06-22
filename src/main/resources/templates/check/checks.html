@@ -6,26 +6,6 @@
     <link rel="stylesheet" th:href="@{/css/style.css}">
     <link rel="stylesheet" th:href="@{/webjars/bootstrap/5.3.3/css/bootstrap.min.css}">
     <style>
-        .button-container {
-            text-align: center;
-            margin-bottom: 20px;
-        }
-
-        .button {
-            padding: 10px 20px;
-            font-size: 16px;
-            background-color: #4CAF50;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            text-decoration: none;
-        }
-
-        .button:hover {
-            background-color: #45a049;
-        }
-
         .delete-button {
             background-color: #f44336;
             color: white;
@@ -72,6 +52,7 @@
 </header>
 
 <div class="container text-end">
+    <button class="btn btn-dark" id="print-button"><i class="bi bi-printer-fill"></i></button>
     <a href="/checks/add" class="btn btn-success">Add Check</a>
 </div>
 <div class="container">
@@ -103,5 +84,6 @@
 </table>
 </div>
 <script th:src="@{/webjars/bootstrap/5.3.3/js/bootstrap.bundle.min.js}"></script>
+<script th:src="@{/js/script.js}"></script>
 </body>
 </html>
