@@ -19,6 +19,8 @@ public class SaleDto {
 
     private String storeProductUpc;
 
+    @NotNull(message = "cant be null")
+    @Min(value = 1, message = "product number must  be more than 1")
     private int productNumber;
 
     private BigDecimal sellingPrice;
