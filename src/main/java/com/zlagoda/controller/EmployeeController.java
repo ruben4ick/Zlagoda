@@ -33,7 +33,7 @@ public class EmployeeController {
 
     @GetMapping("/cashiers")
     public String cashiers(Model model) {
-        List<Employee> cashiers = employeeService.getAllCashiers();
+        List<EmployeeDto> cashiers = employeeService.getAllCashiers();
         model.addAttribute("employees", cashiers);
         return "employee/cashiers";
     }

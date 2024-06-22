@@ -32,6 +32,14 @@ public class CheckDaoImpl implements CheckDao {
                     "LEFT JOIN Customer_Card cc ON c.card_number = cc.card_number " +
                     "WHERE c.check_number = ?";
 
+    private static final String FIND_ALL_CHECKS_BY_EMPLOYEE_ID =
+            "SELECT c.*, e.id_employee, e.empl_name, e.empl_surname, cc.card_number, cc.cust_name, cc.cust_surname " +
+                    "FROM `Check` c " +
+                    "INNER JOIN Employee e ON c.id_employee = e.id_employee " +
+                    "LEFT JOIN Customer_Card cc ON c.card_number = cc.card_number " +
+                    "WHERE e.id_employee = ? " +
+                    "ORDER BY c.print_date DESC";
+
     private static final String INSERT_CHECK =
             "INSERT INTO `Check` (check_number, id_employee, card_number, print_date, sum_total, vat) VALUES (?, ?, ?, ?, ?, ?)";
 
@@ -50,6 +58,11 @@ public class CheckDaoImpl implements CheckDao {
     public Optional<Check> getById(String checkNumber) {
         List<Check> checks = jdbcTemplate.query(FIND_BY_ID, new Object[]{checkNumber}, new CheckRowMapper());
         return checks.stream().findFirst();
+    }
+
+    @Override
+    public List<Check> getByEmplId(String employee_id){
+        return jdbcTemplate.query(FIND_ALL_CHECKS_BY_EMPLOYEE_ID, new CheckRowMapper(), employee_id);
     }
 
     @Override

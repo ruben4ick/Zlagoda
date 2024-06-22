@@ -17,8 +17,6 @@ public class EmployeeDaoImpl implements EmployeeDao {
 
     @Autowired
     private JdbcTemplate jdbcTemplate;
-
-    private static final String FIND_BY_NAME = "SELECT * FROM `Employee` WHERE empl_name = ?";
     private static final String FIND_BY_ID = "SELECT * FROM `Employee` WHERE id_employee = ?";
     private static final String FIND_ALL_EMPLOYEES = "SELECT * FROM `Employee` ORDER BY empl_surname";
     private static final String FIND_ALL_CASHIERS = "SELECT * FROM Employee WHERE empl_role = 'CASHIER' ORDER BY empl_surname";
@@ -56,6 +54,7 @@ public class EmployeeDaoImpl implements EmployeeDao {
     private static final String DELETE_EMPLOYEE = "DELETE FROM Employee WHERE id_employee = ?";
 
     private static final String FIND_CONTACT_DETAILS_BY_SURNAME = "SELECT empl_surname, empl_name, empl_patronymic, phone_number, city, street, zip_code FROM Employee WHERE empl_surname = ?";
+    private static final String FIND_BY_SURNAME = "SELECT * FROM Employee WHERE empl_surname = ?";
 
     @Override
     public List<Employee> getAll() {
@@ -65,6 +64,11 @@ public class EmployeeDaoImpl implements EmployeeDao {
     @Override
     public List<Employee> getAllCashiers() {
         return jdbcTemplate.query(FIND_ALL_CASHIERS, new EmployeeRowMapper());
+    }
+
+    @Override
+    public List<Employee> getBySurname(String surname) {
+        return jdbcTemplate.query(FIND_BY_SURNAME, new EmployeeRowMapper(), surname);
     }
 
     @Override

@@ -12,16 +12,14 @@ import com.zlagoda.entity.Check;
 import com.zlagoda.entity.CustomerCard;
 import com.zlagoda.entity.Employee;
 import com.zlagoda.entity.Sale;
-import com.zlagoda.service.CheckService;
-import com.zlagoda.service.CustomerCardService;
-import com.zlagoda.service.SaleService;
-import com.zlagoda.service.StoreProductService;
+import com.zlagoda.service.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -38,6 +36,7 @@ public class CheckServiceImpl implements CheckService {
     private final CustomerCardService customerCardService;
     private final StoreProductService storeProductService;
     private final SaleService saleService;
+    private final EmployeeService employeeService;
 
     @Override
     public List<CheckDto> getAll() {
@@ -50,6 +49,23 @@ public class CheckServiceImpl implements CheckService {
     public Optional<CheckDto> getById(String checkNumber) {
         return checkDao.getById(checkNumber)
                 .map(checkConverter::convertToDto);
+    }
+
+    @Override
+    public List<CheckDto> getByEmplId(String employee_id){
+        return checkDao.getByEmplId(employee_id).stream()
+                .map(checkConverter::convertToDto)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<CheckDto> getByEmplSurname(String employee_surname){
+        List<EmployeeDto> employees = employeeService.getBySurname(employee_surname);
+        List<CheckDto> checks = new ArrayList<>();
+        for (EmployeeDto employee : employees){
+            checks.addAll(getByEmplId(employee.getId()));
+        }
+        return checks;
     }
 
     @Override

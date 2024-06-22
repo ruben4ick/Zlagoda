@@ -28,6 +28,4 @@ public class Check {
     private BigDecimal totalSum;
 
     private BigDecimal vat;
-
-    private List<Sale> sales;
 }

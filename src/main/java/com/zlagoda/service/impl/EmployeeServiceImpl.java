@@ -32,8 +32,17 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
     @Override
-    public List<Employee> getAllCashiers() {
-        return employeeDao.getAllCashiers();
+    public List<EmployeeDto> getAllCashiers() {
+        return employeeDao.getAllCashiers().stream()
+                .map(employeeConverter::mapToEmployeeDto)
+                .toList();
+    }
+
+    @Override
+    public List<EmployeeDto> getBySurname(String surname) {
+        return employeeDao.getBySurname(surname).stream()
+                .map(employeeConverter::mapToEmployeeDto)
+                .toList();
     }
 
     @Override
@@ -58,6 +67,7 @@ public class EmployeeServiceImpl implements EmployeeService {
         return employeeDao.getById(employeeId)
                 .map(employeeConverter::mapToEmployeeDto);
     }
+
 
     @Override
     public List<EmployeeDto> findContactDetailsBySurname(String surname) {

@@ -36,7 +36,7 @@ public class ProductController {
     public String productsByCategory(@RequestParam(value = "category_number", required = false, defaultValue = "-1" ) Long categoryNumber, Model model) {
         if (categoryNumber == -1) {
             model.addAttribute("categories", categoryService.getAll());
-            return "product/category-search";
+            return "product/products";
         }
         model.addAttribute("products", productService.findByCategory(categoryNumber));
         return "product/products";
@@ -45,7 +45,7 @@ public class ProductController {
     @GetMapping("/name-search")
     public String searchProductsByName(@RequestParam(value = "name", required = false, defaultValue = "null") String name, Model model) {
         if (name.equals("null"))
-            return "product/name-search";
+            return "product/products";
         model.addAttribute("products", productService.findByName(name));
         return "product/products";
     }

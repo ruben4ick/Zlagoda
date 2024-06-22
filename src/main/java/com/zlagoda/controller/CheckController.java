@@ -68,7 +68,7 @@ public class CheckController {
         return "redirect:/checks";
     }
 
-    @GetMapping("/search")
+    @GetMapping("/check-id")
     public String getSaleInfoByCheck(@RequestParam(value = "check_number", required = false, defaultValue = "null")
                                          String check_number, Model model){
         if (check_number.equals("null"))
@@ -84,5 +84,15 @@ public class CheckController {
         model.addAttribute("product_names", product_names);
         model.addAttribute("size", sales.size());
         return "check/sale-info";
+    }
+
+    @GetMapping("/empl-id")
+    public String getChecksByEmployeeSurname(@RequestParam(value = "employee_surname", required = false, defaultValue = "null")
+                                                 String employee_surname, Model model){
+        if (employee_surname.equals("null")){
+            return "check/checks";
+        }
+        model.addAttribute("checks", checkService.getByEmplSurname(employee_surname));
+        return "check/checks";
     }
 }

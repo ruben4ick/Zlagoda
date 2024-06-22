@@ -37,8 +37,14 @@
 </header>
 <div class="row">
     <div class="col text-start">
-        <form class="input-group mb-3" th:action="@{/checks/search}" method="get">
+        <form class="input-group mb-3" th:action="@{/checks/check-id}" method="get">
             <input class="form-control" type="text" name="check_number" placeholder="Check number" required>
+            <button type="submit" class="btn btn-outline-dark">Search</button>
+        </form>
+    </div>
+    <div class="col text-start">
+        <form class="input-group mb-3" th:action="@{/checks/empl-id}" method="get">
+            <input class="form-control" type="text" name="employee_surname" placeholder="Employee" required>
             <button type="submit" class="btn btn-outline-dark">Search</button>
         </form>
     </div>

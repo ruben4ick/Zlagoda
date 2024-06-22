@@ -7,7 +7,9 @@ import java.util.List;
 import java.util.Optional;
 
 public interface EmployeeService extends GenericService<EmployeeDto, String> {
-    List<Employee> getAllCashiers();
+    List<EmployeeDto> getAllCashiers();
+
+    List<EmployeeDto> getBySurname(String surname);
 
     List<EmployeeDto> findContactDetailsBySurname(String surname);
 
