@@ -6,6 +6,7 @@ import com.zlagoda.service.StoreProductService;
 import com.zlagoda.service.ProductService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.Max;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -106,4 +107,21 @@ public class StoreProductController {
         storeProductService.removePromotionStoreProduct(upc);
         return "redirect:/store-products";
     }
+
+    @GetMapping("/upc")
+    public String getStoreProductByUPC(@RequestParam(value = "upc_search", required = false, defaultValue = "null")
+                                       String upc_search, Model model){
+        if (upc_search.equals("null"))
+            return "store-product/upc_search";
+
+        Optional<StoreProductDto> storeProductOpt = storeProductService.getById(upc_search);
+        if (storeProductOpt.isPresent()) {
+            StoreProductDto storeProduct = storeProductOpt.get();
+            model.addAttribute("storeProducts", List.of(storeProduct));
+        } else {
+            model.addAttribute("storeProducts", List.of());
+        }
+        return "store-product/store-products";
+    }
+
 }

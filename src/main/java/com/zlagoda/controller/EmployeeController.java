@@ -93,10 +93,4 @@ public class EmployeeController {
         employeeService.update(employee);
         return "redirect:/employees";
     }
-
-    @GetMapping("/employees/search")
-    public String showSearchForm() {
-        return "employee/employees-search";
-    }
-
 }

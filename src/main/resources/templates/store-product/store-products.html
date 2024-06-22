@@ -54,6 +54,15 @@
                 </ul>
             </div>
         </div>
+        <div class="col text-start">
+            <form class="input-group mb-3" th:action="@{/store-products/upc}" method="get">
+                <input class="form-control" type="text" name="upc_search" placeholder="UPC" required>
+                <button type="submit" class="btn btn-outline-dark">Search</button>
+            </form>
+        </div>
+        <div class="col text-start">
+            <a href="/store-products" class="btn btn-dark">Reset</a>
+        </div>
         <div class="col text-end">
             <button class="btn btn-dark" id="print-button"><i class="bi bi-printer-fill"></i></button>
             <a href="/store-products/add" class="btn btn-success">Add product</a>
