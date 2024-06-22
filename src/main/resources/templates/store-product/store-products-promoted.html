@@ -80,21 +80,21 @@
             <td class="not-printable">
                 <a class="btn btn-success disabled"
                    disabled
-                   href="#" th:if="${storeProduct.isPromotional}">Promoted</a>
+                   href="#" th:if="${storeProduct.isPromotional}"><i class="bi bi-tags-fill"></i></a>
                 <a class="btn btn-success"
                    th:href="@{/store-products/add/prom/{upc}(upc=${storeProduct.upc})}"
-                   th:if="${storeProduct.upcProm == null && !storeProduct.isPromotional}">Add</a>
+                   th:if="${storeProduct.upcProm == null && !storeProduct.isPromotional}"><i class="bi bi-tag-fill"></i></a>
                 <a class="btn btn-warning"
                    th:href="@{/store-products/remove/prom/{upc}(upc=${storeProduct.upc})}"
-                   th:if="${storeProduct.upcProm != null && !storeProduct.isPromotional}">Remove</a>
+                   th:if="${storeProduct.upcProm != null && !storeProduct.isPromotional}"><i class="bi bi-dash-square-fill"></a>
             </td>
             <td>
                 <a th:href="@{'/store-products/edit/' + ${storeProduct.upc}}"
                    class="btn btn-info" th:classappend="${((storeProduct.upcProm != null && !storeProduct.isPromotional) || storeProduct.isPromotional) ? 'disabled' : ''}"
-                   th:attr="disabled=${((storeProduct.upcProm != null && !storeProduct.isPromotional) || storeProduct.isPromotional)}">Edit</a>
+                   th:attr="disabled=${((storeProduct.upcProm != null && !storeProduct.isPromotional) || storeProduct.isPromotional)}"><i class="bi bi-pencil-fill"></i></a>
                 <a th:href="@{'/store-products/delete/' + ${storeProduct.upc}}"
                    class="btn btn-danger" th:classappend="${((storeProduct.upcProm != null && !storeProduct.isPromotional) || storeProduct.isPromotional) ? 'disabled' : ''}"
-                   th:attr="disabled=${((storeProduct.upcProm != null && !storeProduct.isPromotional) || storeProduct.isPromotional)}">Delete</a>
+                   th:attr="disabled=${((storeProduct.upcProm != null && !storeProduct.isPromotional) || storeProduct.isPromotional)}"><i class="bi bi-trash-fill"></i></a>
             </td>
         </tr>
         </tbody>

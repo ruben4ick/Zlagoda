@@ -90,8 +90,8 @@
         <td th:text="${product.name}"></td>
         <td th:text="${product.characteristics}"></td>
         <td>
-            <a th:href="@{'/products/edit/' + ${product.id}}" class="btn btn-info">Edit</a>
-            <a th:href="@{'/products/delete/' + ${product.id}}" class="btn btn-danger">Delete</a>
+            <a th:href="@{'/products/edit/' + ${product.id}}" class="btn btn-info"><i class="bi bi-pencil-fill"></i></a>
+            <a th:href="@{'/products/delete/' + ${product.id}}" class="btn btn-danger"><i class="bi bi-trash-fill"></i></a>
         </td>
     </tr>
     </tbody>

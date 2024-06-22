@@ -96,8 +96,8 @@
         <td th:text="${employee.street}"></td>
         <td th:text="${employee.zipCode}"></td>
         <td>
-            <a th:href="@{'/employees/edit/' + ${employee.id}}" class="btn btn-info">Edit</a>
-            <a th:href="@{'/employees/delete/' + ${employee.id}}" class="btn btn-danger">Delete</a>
+            <a th:href="@{'/employees/edit/' + ${employee.id}}" class="btn btn-info"><i class="bi bi-pencil-fill"></i></a>
+            <a th:href="@{'/employees/delete/' + ${employee.id}}" class="btn btn-danger"><i class="bi bi-trash-fill"></i></a>
         </td>
     </tr>
     </tbody>

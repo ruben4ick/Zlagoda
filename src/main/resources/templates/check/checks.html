@@ -96,7 +96,7 @@
         <td th:text="${check.totalSum}"></td>
         <td th:text="${check.vat}"></td>
         <td>
-            <a th:href="@{'/checks/delete/' + ${check.checkNumber}}" class="delete-button">Delete</a>
+            <a th:href="@{'/checks/delete/' + ${check.checkNumber}}" class="delete-button"><i class="bi bi-trash-fill"></i></a>
         </td>
     </tr>
     </tbody>
