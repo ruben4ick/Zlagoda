@@ -69,6 +69,17 @@ public class CheckServiceImpl implements CheckService {
     }
 
     @Override
+    public BigDecimal sumOfChecks(List<CheckDto> checks){
+        BigDecimal sum = BigDecimal.ZERO;
+
+        for (CheckDto check : checks) {
+            sum = sum.add(check.getTotalSum());
+        }
+
+        return sum;
+    }
+
+    @Override
     public void create(CheckDto checkDto) {
         checkDto.setPrintDate(LocalDateTime.now());
         BigDecimal totalSum = checkDto.getSales().stream()
