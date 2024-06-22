@@ -9,7 +9,9 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Controller
 @RequiredArgsConstructor
@@ -64,5 +66,23 @@ public class CheckController {
     public String deleteCheck(@PathVariable("checkNumber") String checkNumber) {
         checkService.delete(checkNumber);
         return "redirect:/checks";
+    }
+
+    @GetMapping("/search")
+    public String getSaleInfoByCheck(@RequestParam(value = "check_number", required = false, defaultValue = "null")
+                                         String check_number, Model model){
+        if (check_number.equals("null"))
+            return "check/sale-info";
+
+        List<SaleDto> sales = saleService.getByCheck(check_number);
+        List<String> product_names = new ArrayList<>();
+        for(SaleDto sale : sales){
+            Optional<StoreProductDto> storeProduct = storeProductService.getById(sale.getStoreProductUpc());
+            product_names.add(storeProduct.get().getProduct().getName());
+        }
+        model.addAttribute("sales", sales);
+        model.addAttribute("product_names", product_names);
+        model.addAttribute("size", sales.size());
+        return "check/sale-info";
     }
 }

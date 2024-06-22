@@ -20,6 +20,7 @@ public class SaleDaoImpl implements SaleDao {
 
     private static final String FIND_ALL_SALES = "SELECT * FROM Sale";
     private static final String FIND_BY_UPC_AND_CHECK_NUMBER = "SELECT * FROM Sale WHERE UPC = ? AND check_number = ?";
+    private static final String FIND_BY_UPC = "SELECT * FROM Sale WHERE check_number = ?";
     private static final String INSERT_SALE = "INSERT INTO Sale (UPC, check_number, product_number, selling_price) VALUES (?, ?, ?, ?)";
     private static final String UPDATE_SALE = "UPDATE Sale SET product_number = ?, selling_price = ? WHERE UPC = ? AND check_number = ?";
     private static final String DELETE_SALE = "DELETE FROM Sale WHERE UPC = ? AND check_number = ?";
@@ -33,6 +34,11 @@ public class SaleDaoImpl implements SaleDao {
     public Optional<Sale> getById(Pair<String, String> upcAndCheckNumber) {
         List<Sale> sales = jdbcTemplate.query(FIND_BY_UPC_AND_CHECK_NUMBER, new SaleRowMapper(), upcAndCheckNumber.getLeft(), upcAndCheckNumber.getRight());
         return sales.stream().findFirst();
+    }
+
+    @Override
+    public List<Sale> getByCheck(String check){
+        return  jdbcTemplate.query(FIND_BY_UPC, new SaleRowMapper(), check);
     }
 
     @Override
