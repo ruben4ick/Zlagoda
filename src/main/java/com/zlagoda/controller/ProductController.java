@@ -2,6 +2,7 @@ package com.zlagoda.controller;
 
 import com.zlagoda.dto.CategoryDto;
 import com.zlagoda.dto.ProductDto;
+import com.zlagoda.entity.Category;
 import com.zlagoda.service.ProductService;
 import com.zlagoda.service.CategoryService;
 import jakarta.validation.Valid;
@@ -25,7 +26,9 @@ public class ProductController {
     @GetMapping
     public String products(Model model) {
         List<ProductDto> products = productService.getAll();
+        List<CategoryDto> categories = categoryService.getAll();
         model.addAttribute("products", products);
+        model.addAttribute("categories", categories);
         return "product/products";
     }
 
@@ -44,6 +47,13 @@ public class ProductController {
         if (name.equals("null"))
             return "product/name-search";
         model.addAttribute("products", productService.findByName(name));
+        return "product/products";
+    }
+
+    @GetMapping("/sold-from-certain-city")
+    public String findBySoldFromCertainCity(@RequestParam(value = "city") String city, Model model) {
+        List<ProductDto> products = productService.findBySoldFromCertainCity(city);
+        model.addAttribute("products", products);
         return "product/products";
     }
 
@@ -98,4 +108,5 @@ public class ProductController {
         productService.delete(productId);
         return "redirect:/products";
     }
+
 }

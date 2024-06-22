@@ -65,6 +65,15 @@ public class ProductServiceImpl implements ProductService {
                 .map(productConverter::convertToDto)
                 .toList();
     }
+
+    @Override
+    public List<ProductDto> findBySoldFromCertainCity(String city) {
+        return productDao.findBySoldFromCertainCity(city).stream()
+                .map(productConverter::convertToDto)
+                .toList();
+    }
+
+
     /*private Product mapToProduct(ProductDto productDto) {
         return Product.builder()
                 .id(productDto.getId())

@@ -6,6 +6,7 @@ import java.util.List;
 
 public interface StoreProductDao extends GenericDao<StoreProduct, String> {
     List<StoreProduct> getPromotionalProducts();
+    List<StoreProduct> getStandardProducts();
     void subtractAmountByUpc(String upc, int delta);
 
 }

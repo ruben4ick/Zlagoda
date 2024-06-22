@@ -9,6 +9,8 @@ import java.util.Optional;
 public interface EmployeeService extends GenericService<EmployeeDto, String> {
     List<Employee> getAllCashiers();
 
-    Optional<EmployeeDto> findContactDetailsBySurname(String surname);
+    List<EmployeeDto> findContactDetailsBySurname(String surname);
+
+    List<EmployeeDto> getAllCashiersServedAllCustomers();
 
 }

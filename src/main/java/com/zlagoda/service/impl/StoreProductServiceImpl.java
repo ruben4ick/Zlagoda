@@ -10,6 +10,7 @@ import com.zlagoda.entity.Product;
 import com.zlagoda.entity.StoreProduct;
 import com.zlagoda.service.StoreProductService;
 import lombok.RequiredArgsConstructor;
+import org.apache.catalina.Store;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -17,6 +18,8 @@ import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
+import java.util.Random;
+
 
 @Service
 @RequiredArgsConstructor
@@ -30,6 +33,20 @@ public class StoreProductServiceImpl implements StoreProductService {
         return storeProductDao.getAll().stream()
                 .map(converter::convertToDto)
                 .toList();
+    }
+
+    @Override
+    public List<StoreProductDto> getPromotionalProducts() {
+        return storeProductDao.getPromotionalProducts().stream()
+                .map(this::mapToStoreProductDto)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<StoreProductDto> getStandardProducts(){
+        return storeProductDao.getStandardProducts().stream()
+                .map(this::mapToStoreProductDto)
+                .collect(Collectors.toList());
     }
 
     @Override
@@ -54,13 +71,6 @@ public class StoreProductServiceImpl implements StoreProductService {
     @Override
     public void delete(String upc) {
         storeProductDao.delete(upc);
-    }
-
-    @Override
-    public List<StoreProductDto> getPromotionalProducts() {
-        return storeProductDao.getPromotionalProducts().stream()
-                .map(this::mapToStoreProductDto)
-                .collect(Collectors.toList());
     }
 
    /* @Override
@@ -123,4 +133,54 @@ public class StoreProductServiceImpl implements StoreProductService {
                 .build();
     }
 
+    @Override
+    public void addPromotionStoreProduct(String upc){
+        StoreProduct storeProductOriginal = storeProductDao.getById(upc).orElseThrow();
+
+        if (storeProductOriginal.getUpcProm() != null) {
+            //    trow new Exception("Already promoted:" + storeProductOriginal.getUpcProm()); // щось треба буде зробити з цим ексепшином
+        }
+        String newUPS = randomUPC();
+        StoreProduct storeProductPromote = new StoreProduct(
+                newUPS,
+                null,
+                storeProductOriginal.getProduct(),
+                storeProductOriginal.getPrice() * 0.8,
+                storeProductOriginal.getQuantity(),
+                true
+        );
+        storeProductDao.create(storeProductPromote);
+        storeProductOriginal.setQuantity(0);
+        storeProductOriginal.setUpcProm(storeProductPromote);
+        storeProductDao.update(storeProductOriginal);
+    }
+
+    @Override
+    public void removePromotionStoreProduct(String upc){
+        StoreProduct storeProductOriginal = storeProductDao.getById(upc).orElseThrow();
+
+        if (storeProductOriginal.getUpcProm() == null) {
+            //    trow new Exception("No promotion."); // щось треба буде зробити з цим ексепшином
+        }
+
+        int productsQuantity = storeProductOriginal.getUpcProm().getQuantity();
+        storeProductOriginal.setQuantity(productsQuantity);
+
+        storeProductDao.delete(storeProductOriginal.getUpcProm().getUpc());
+        storeProductOriginal.setUpcProm(null);
+        storeProductDao.update(storeProductOriginal);
+    }
+
+    // цю штуку треба буде кудись перенести мабуть
+    public static String randomUPC() {
+        Random random = new Random();
+        StringBuilder upc = new StringBuilder();
+
+        for (int i = 0; i < 12; i++) {
+            int digit = random.nextInt(10);
+            upc.append(digit);
+        }
+
+        return upc.toString();
+    }
 }

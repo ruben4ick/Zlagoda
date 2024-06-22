@@ -86,7 +86,7 @@ public class CustomerCardController {
     }
 
     @GetMapping("/surname-search")
-    public String searchProductsByName(@RequestParam(value = "surname", required = false, defaultValue = "null") String surname, Model model) {
+    public String searchCustomerBySurname(@RequestParam(value = "surname", required = false, defaultValue = "null") String surname, Model model) {
         if (surname.equals("null"))
             return "customer-card/surname-search";
         model.addAttribute("customerCards", customerCardService.findBySurname(surname));
