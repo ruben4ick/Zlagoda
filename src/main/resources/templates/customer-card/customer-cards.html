@@ -41,19 +41,19 @@
         <div class="col-8 text-start">
             <div class="row">
                 <div class="col text-start">
-                <form class="input-group mb-3" th:action="@{customers/percent-search}" method="get">
-                    <input class="form-control" type="number" name="percent" min="0" max="100" placeholder="% discount" required>
-                    <button type="submit" class="btn btn-outline-dark">Search</button>
-                </form>
+                    <form class="input-group mb-3" th:action="@{/customers/percent-search}" method="get">
+                        <input class="form-control" type="number" name="percent" min="0" max="100" placeholder="% discount" required>
+                        <button type="submit" class="btn btn-outline-dark">Search</button>
+                    </form>
                 </div>
                 <div class="col text-start">
-                    <form class="input-group mb-3" th:action="@{customers/surname-search}" method="get">
+                    <form class="input-group mb-3" th:action="@{/customers/surname-search}" method="get">
                         <input class="form-control" type="text" name="surname" placeholder="Surname" required>
                         <button type="submit" class="btn btn-outline-dark">Search</button>
                     </form>
                 </div>
                 <div class="col text-start">
-                <a href="/customers" class="btn btn-dark">Reset</a>
+                    <a href="/customers" class="btn btn-dark">Reset</a>
                 </div>
             </div>
         </div>
