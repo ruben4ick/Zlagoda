@@ -71,6 +71,12 @@ public class EmployeeServiceImpl implements EmployeeService {
         return List.of(Employee.Role.values());
     }
 
+    @Override
+    public Optional<EmployeeDto> findByUsername(String username) {
+        return employeeDao.findByUsername(username)
+                .map(employeeConverter::mapToEmployeeDto);
+    }
+
 
     /*private Employee setOnlyPresentFields(final Employee oldEmployee, final Employee newEmployee) {
         String name = newEmployee.getName();

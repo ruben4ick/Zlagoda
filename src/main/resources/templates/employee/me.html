@@ -31,7 +31,7 @@
         </li>
       </ul>
       <div class="text-end">
-<!--        <button th: type="button" class="btn btn-outline-light me-2">Sign-out</button>-->
+        <!--        <button th: type="button" class="btn btn-outline-light me-2">Sign-out</button>-->
         <form th:action="@{/logout}" method="post">
           <input type="submit" value="Sign Out" class="btn btn-outline-light me-2"/>
         </form>
@@ -39,10 +39,14 @@
     </div>
   </div>
 </header>
-<div class="container text-center"><h1 id="aboba">Hello World</h1></div>
-<h1 sec:authorize="hasAnyAuthority('MANAGER')">MANAGER JAHSDAKFJNSDAKJNFNSDFLNS</h1>
-<h2 sec:authorize="hasAnyAuthority('CASHIER')">HAHAYAYYAYAHSAKDASJ </h2>
-<a th:href="@{/employees/me}">BALSLS</a>
+<div class="container text-center">
+  <ul>
+    <li th:text="${me.name}"></li>
+    <li th:text="${me.id}"></li>
+    <li th:text="${me.surname}"></li>
+    <li th:text="${me.role}"></li>
+  </ul>
+</div>
 <script th:src="@{/webjars/bootstrap/5.3.3/js/bootstrap.bundle.min.js}"></script>
 </body>
 </html>

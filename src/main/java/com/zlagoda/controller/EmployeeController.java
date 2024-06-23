@@ -5,6 +5,8 @@ import com.zlagoda.entity.Employee;
 import com.zlagoda.service.EmployeeService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -101,6 +103,18 @@ public class EmployeeController {
             model.addAttribute("error", "Employee not found with surname: " + surname);
         }
         return "employee/employees-contact";
+    }
+
+    @GetMapping("/employees/me")
+    public String getMeInformationPage(Model model) {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        Optional<EmployeeDto> employeeDto = employeeService.findByUsername(auth.getName());
+        if (employeeDto.isPresent()) {
+            model.addAttribute("me", employeeDto.get());
+        } else {
+            return "redirect:/home";
+        }
+        return "/employee/me";
     }
 
     @GetMapping("/login")
