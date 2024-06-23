@@ -1,8 +1,10 @@
 package com.zlagoda.service.impl;
 
+import com.zlagoda.converter.ProductClassicConverter;
 import com.zlagoda.converter.ProductConverter;
 import com.zlagoda.dao.ProductDao;
 import com.zlagoda.dto.CategoryDto;
+import com.zlagoda.dto.ProductClassicDto;
 import com.zlagoda.dto.ProductDto;
 import com.zlagoda.entity.Category;
 import com.zlagoda.entity.Product;
@@ -23,6 +25,7 @@ public class ProductServiceImpl implements ProductService {
 
     private final ProductDao productDao;
     private final ProductConverter productConverter;
+    private final ProductClassicConverter productClassicConverter;
 
     @Override
     public List<ProductDto> getAll() {
@@ -88,6 +91,14 @@ public class ProductServiceImpl implements ProductService {
                 .toList();
     }
 
+
+
+    @Override
+    public List<ProductClassicDto> getProductCountsByCategory() {
+        return productDao.getProductCountsByCategory().stream()
+                .map(productClassicConverter::convertToDto)
+                .toList();
+    }
 
     /*private Product mapToProduct(ProductDto productDto) {
         return Product.builder()

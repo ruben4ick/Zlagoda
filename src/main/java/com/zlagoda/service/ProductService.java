@@ -1,6 +1,7 @@
 package com.zlagoda.service;
 
 
+import com.zlagoda.dto.ProductClassicDto;
 import com.zlagoda.dto.ProductDto;
 
 import java.time.LocalDateTime;
@@ -18,5 +19,8 @@ public interface ProductService extends GenericService<ProductDto, Long> {
     List<ProductDto> findNotInStoreNeverSoldProducts();
 
     List<ProductDto> findBySoldFromCertainCity(String name);
+
+
+    List<ProductClassicDto> getProductCountsByCategory();
 
 }

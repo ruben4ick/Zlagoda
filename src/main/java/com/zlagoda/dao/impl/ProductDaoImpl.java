@@ -1,11 +1,12 @@
 package com.zlagoda.dao.impl;
 
 import com.zlagoda.dao.ProductDao;
+import com.zlagoda.dao.mapper.ProductClassicRowMapper;
 import com.zlagoda.dao.mapper.ProductRowMapper;
 import com.zlagoda.entity.Product;
+import com.zlagoda.entity.ProductClassic;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDateTime;
@@ -91,6 +92,14 @@ public class ProductDaoImpl implements ProductDao {
          )
      );
     """;
+    private static final String GET_PRODUCT_COUNTS_BY_CATEGORY =
+            "SELECT c.category_name, p.product_name, SUM(sp.products_number) AS product_count " +
+                    "FROM store_product sp " +
+                    "JOIN product p ON sp.id_product = p.id_product " +
+                    "JOIN category c ON p.category_number = c.category_number " +
+                    "GROUP BY c.category_name, p.product_name " +
+                    "ORDER BY c.category_name, p.product_name";
+
     @Override
     public List<Product> getAll() {
         return jdbcTemplate.query(FIND_ALL_PRODUCTS, new ProductRowMapper());
@@ -152,5 +161,10 @@ public class ProductDaoImpl implements ProductDao {
 
     public List<Product> findBySoldFromCertainCity(String city) {
         return jdbcTemplate.query(FIND_PRODUCTS_SOLD_FROM_CERTAIN_CITY, new ProductRowMapper(), city);
+    }
+
+    @Override
+    public List<ProductClassic> getProductCountsByCategory() {
+        return jdbcTemplate.query(GET_PRODUCT_COUNTS_BY_CATEGORY, new ProductClassicRowMapper());
     }
 }
