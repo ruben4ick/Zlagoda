@@ -51,6 +51,15 @@
     <div class="col text-start">
         <a href="/checks" class="btn btn-dark">Reset</a>
     </div>
+    <div class="row">
+        <div class="col text-start">
+            <form class="input-group mb-3" th:action="@{/checks/date-range}" method="get">
+                <input class="form-control" type="datetime-local" name="start" placeholder="Start Date" required>
+                <input class="form-control" type="datetime-local" name="end" placeholder="End Date" required>
+                <button type="submit" class="btn btn-outline-dark">Filter by Date</button>
+            </form>
+        </div>
+    </div>
     <div class="col text-end">
         <button class="btn btn-dark" id="print-button"><i class="bi bi-printer-fill"></i></button>
         <a href="/checks/add" class="btn btn-success">Add Check</a>
