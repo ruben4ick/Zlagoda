@@ -55,11 +55,7 @@ public class StoreProductDaoImpl implements StoreProductDao {
                     "LEFT JOIN Store_Product sp_upc ON sp.upc_prom = sp_upc.upc " +
                     "WHERE sp.promotional_product = false AND sp.upc_prom IS NULL";
 
-    private static final String SUBTRACT_AMOUNT = """
-                UPDATE store_product
-                SET products_number = products_number - ?
-                WHERE upc = ?
-                """;
+    private static final String UPDATE_QUANTITY = "UPDATE Store_Product SET products_number = products_number - ? WHERE upc = ?";
 
     private static final String FIND_BY_PROM_UPC =
             "SELECT * FROM store_product WHERE UPC_PROM = ?";
@@ -123,8 +119,7 @@ public class StoreProductDaoImpl implements StoreProductDao {
     }
 
     @Override
-    public void subtractAmountByUpc(String upc, int delta) {
-
-        jdbcTemplate.update(SUBTRACT_AMOUNT, delta, upc);
+    public void updateProductQuantity(String upc, int quantity) {
+        jdbcTemplate.update(UPDATE_QUANTITY, quantity, upc);
     }
 }

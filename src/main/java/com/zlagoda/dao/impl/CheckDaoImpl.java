@@ -74,7 +74,7 @@ public class CheckDaoImpl implements CheckDao {
         jdbcTemplate.update(INSERT_CHECK,
                 check.getCheckNumber(),
                 check.getEmployee().getId(),
-                check.getCustomerCard() != null ? check.getCustomerCard().getCardNumber() : null,
+                check.getCustomerCard() == null ? null : check.getCustomerCard().getCardNumber(),
                 check.getPrintDate(),
                 check.getTotalSum(),
                 check.getVat());

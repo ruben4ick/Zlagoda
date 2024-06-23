@@ -15,5 +15,7 @@ public interface StoreProductService extends GenericService<StoreProductDto, Str
 
     void removePromotionStoreProduct(String upc);
 
+    void updateProductQuantity(String upc, int quantity);
+
   /*  BigDecimal getPriceByUpc(String upc);*/
 }

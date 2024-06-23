@@ -9,6 +9,6 @@ public interface StoreProductDao extends GenericDao<StoreProduct, String> {
     List<StoreProduct> getPromotionalProducts();
     List<StoreProduct> getStandardProducts();
     Optional<StoreProduct> findByUpcProm(String prom_upc);
-    void subtractAmountByUpc(String upc, int delta);
+    void updateProductQuantity(String upc, int quantity);
 
 }
