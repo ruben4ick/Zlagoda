@@ -26,6 +26,7 @@ public class SaleDto {
     private BigDecimal sellingPrice;
 
     public void normalize() {
-        storeProductUpc = storeProductUpc.trim();
+        if (storeProductUpc != null)
+            storeProductUpc = storeProductUpc.trim();
     }
 }

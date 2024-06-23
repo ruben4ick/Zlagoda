@@ -48,12 +48,16 @@ public class CustomerCardDto {
     private int percent;
 
     public void normalize() {
-        cardNumber = cardNumber.trim();
-        surname = surname.trim();
-        name = name.trim();
+        if (cardNumber != null)
+            cardNumber = cardNumber.trim();
+        if (surname != null)
+            surname = surname.trim();
+        if (name != null)
+            name = name.trim();
         if (patronymic != null)
             patronymic = patronymic.trim();
-        phoneNumber = phoneNumber.trim();
+        if (phoneNumber != null)
+            phoneNumber = phoneNumber.trim();
         if (city != null)
             city = city.trim();
         if (street != null)
