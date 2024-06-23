@@ -74,4 +74,11 @@ public class CategoryController {
         categoryService.delete(categoryNumber);
         return "redirect:/categories";
     }
+
+    @GetMapping("/moreThan")
+    public String moreThan(@RequestParam(value = "prodQuantity") int quantity, Model model) {
+        List<CategoryDto> categories = categoryService.findWithTotalProductsMoreThan(quantity);
+        model.addAttribute("categories", categories);
+        return "category/categories";
+    }
 }

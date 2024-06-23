@@ -14,4 +14,5 @@ public interface ProductService extends GenericService<ProductDto, Long> {
                                                          LocalDateTime startDate,
                                                          LocalDateTime endDate);
     List<ProductDto> findByName(String name);
+    List<ProductDto> findNotInStoreNeverSoldProducts();
 }

@@ -120,4 +120,11 @@ public class ProductController {
         }
         return "redirect:/products";
     }
+
+    @GetMapping("/neverSold")
+    public String findNotInStoreNeverSoldProducts(Model model) {
+        List<ProductDto> products = productService.findNotInStoreNeverSoldProducts();
+        model.addAttribute("products", products);
+        return "/product/products";
+    }
 }
