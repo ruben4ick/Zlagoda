@@ -9,6 +9,7 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -29,7 +30,9 @@ public class CheckController {
     @GetMapping
     public String listChecks(Model model) {
         List<CheckDto> checks = checkService.getAll();
+        BigDecimal sum = checkService.sumOfChecks(checks);
         model.addAttribute("checks", checks);
+        model.addAttribute("sum_of_checks", sum);
         return "check/checks";
     }
 
