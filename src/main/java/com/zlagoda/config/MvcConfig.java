@@ -6,6 +6,8 @@ import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import org.springframework.web.servlet.handler.SimpleMappingExceptionResolver;
 
+import java.util.Properties;
+
 @Configuration
 public class MvcConfig implements WebMvcConfigurer {
     public void addViewControllers(ViewControllerRegistry registry) {
@@ -14,11 +16,16 @@ public class MvcConfig implements WebMvcConfigurer {
         registry.addViewController("/login").setViewName("login");
     }
 
-//    @Bean(name = "simpleMappingExceptionResolver")
-//    public SimpleMappingExceptionResolver createSimpleMappingExceptionResolver() {
-//        SimpleMappingExceptionResolver r = new SimpleMappingExceptionResolver();
-//
-//        r.setDefaultErrorView("error");
-//        return r;
-//    }
+    @Bean(name = "simpleMappingExceptionResolver")
+    public SimpleMappingExceptionResolver createSimpleMappingExceptionResolver() {
+        SimpleMappingExceptionResolver r = new SimpleMappingExceptionResolver();
+
+        Properties mappings = new Properties();
+        mappings.setProperty("java.sql.SQLIntegrityConstraintViolationException", "integrity");
+
+        r.setExceptionMappings(mappings);
+        r.setExceptionAttribute("ex");
+        r.setDefaultErrorView("error");
+        return r;
+    }
 }

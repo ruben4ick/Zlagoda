@@ -59,7 +59,7 @@ public class CategoryController {
     }
 
     @PostMapping("/edit/{categoryNumber}")
-    public String editCategory(@PathVariable("categoryNumber") Long categoryNumber, @ModelAttribute("category") CategoryDto category, BindingResult result, Model model) {
+    public String editCategory(@PathVariable("categoryNumber") Long categoryNumber, @Valid @ModelAttribute("category") CategoryDto category, BindingResult result, Model model) {
         if (result.hasErrors()) {
             model.addAttribute("category", category);
             return "category/categories-edit";

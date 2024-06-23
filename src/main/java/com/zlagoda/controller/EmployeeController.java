@@ -85,7 +85,7 @@ public class EmployeeController {
         }
     }
     @PostMapping("/employees/edit/{employeeId}")
-    public String editEmployee(@PathVariable("employeeId") String employeeId, @ModelAttribute("employee") EmployeeDto employee, BindingResult result, Model model) {
+    public String editEmployee(@PathVariable("employeeId") String employeeId, @Valid @ModelAttribute("employee") EmployeeDto employee, BindingResult result, Model model) {
         if(result.hasErrors()) {
             model.addAttribute("employee", employee);
             model.addAttribute("roles", Employee.Role.values());

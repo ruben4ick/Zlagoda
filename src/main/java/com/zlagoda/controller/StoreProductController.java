@@ -79,7 +79,7 @@ public class StoreProductController {
     }
 
     @PostMapping("/edit/{upc}")
-    public String editStoreProduct(@PathVariable("upc") String upc, @ModelAttribute("storeProduct") StoreProductDto storeProduct, BindingResult result, Model model) {
+    public String editStoreProduct(@PathVariable("upc") String upc, @Valid @ModelAttribute("storeProduct") StoreProductDto storeProduct, BindingResult result, Model model) {
         if (result.hasErrors()) {
             model.addAttribute("storeProduct", storeProduct);
             return "store-product/store-products-edit";
