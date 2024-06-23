@@ -22,9 +22,10 @@ public class MvcConfig implements WebMvcConfigurer {
 
         Properties mappings = new Properties();
         mappings.setProperty("java.sql.SQLIntegrityConstraintViolationException", "integrity");
+        mappings.setProperty("org.springframework.dao.DataIntegrityViolationException", "integrity");
 
         r.setExceptionMappings(mappings);
-        r.setExceptionAttribute("ex");
+        r.setExceptionAttribute("exception");
         r.setDefaultErrorView("error");
         return r;
     }
