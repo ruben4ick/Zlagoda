@@ -116,4 +116,11 @@ public class ProductController {
         model.addAttribute("salesSum", sum.get());
         return "/product/ZHIZa";
     }
+
+    @GetMapping("/neverSold")
+    public String findNotInStoreNeverSoldProducts(Model model) {
+        List<ProductDto> products = productService.findNotInStoreNeverSoldProducts();
+        model.addAttribute("products", products);
+        return "/product/products";
+    }
 }
