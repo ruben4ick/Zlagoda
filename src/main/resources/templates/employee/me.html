@@ -35,13 +35,39 @@
     </div>
   </div>
 </header>
-<div class="container text-center">
-  <ul>
-    <li th:text="${me.name}"></li>
-    <li th:text="${me.id}"></li>
-    <li th:text="${me.surname}"></li>
-    <li th:text="${me.role}"></li>
-  </ul>
+<div class="container">
+  <table class="table table-hover">
+    <thead class="table-dark">
+    <tr>
+      <th>ID</th>
+      <th>Surname</th>
+      <th>Name</th>
+      <th>Patronymic</th>
+      <th>Role</th>
+      <th>Salary</th>
+      <th>Start Date</th>
+      <th>Birth Date</th>
+      <th>Phone Number</th>
+      <th>City</th>
+      <th>Street</th>
+      <th>Zip Code</th>
+    </tr>
+    </thead>
+    <tbody>
+      <th scope="row" th:text="${me.id}"></th>
+      <td th:text="${me.surname}"></td>
+      <td th:text="${me.name}"></td>
+      <td th:text="${me.patronymic}"></td>
+      <td th:text="${me.role}"></td>
+      <td th:text="${me.salary}"></td>
+      <td th:text="${#dates.format(me.startDate, 'yyyy-MM-dd')}"></td>
+      <td th:text="${#dates.format(me.birthDate, 'yyyy-MM-dd')}"></td>
+      <td th:text="${me.phoneNumber}"></td>
+      <td th:text="${me.city}"></td>
+      <td th:text="${me.street}"></td>
+      <td th:text="${me.zipCode}"></td>
+    </tbody>
+  </table>
 </div>
 <script th:src="@{/webjars/bootstrap/5.3.3/js/bootstrap.bundle.min.js}"></script>
 </body>
