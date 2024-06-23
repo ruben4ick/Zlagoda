@@ -85,6 +85,13 @@ public class CheckServiceImpl implements CheckService {
         BigDecimal totalSum = checkDto.getSales().stream()
                 .map(sale -> sale.getSellingPrice().multiply(BigDecimal.valueOf(sale.getProductNumber())))
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
+        String customerCardNumber = checkDto.getCustomerCard().getCardNumber();
+        if (!customerCardNumber.isEmpty()) {
+            double percent = customerCardService.getById(customerCardNumber)
+                    .map(CustomerCardDto::getPercent)
+                    .orElse(0);
+            totalSum = totalSum.multiply(BigDecimal.valueOf(1 - percent / 100));
+        } else checkDto.setCustomerCard(null);
         BigDecimal vat = totalSum.multiply(BigDecimal.valueOf(0.2));
         checkDto.setTotalSum(totalSum);
         checkDto.setVat(vat);
@@ -97,6 +104,8 @@ public class CheckServiceImpl implements CheckService {
             Sale sale = saleConverter.convertToEntity(saleDto);
             sale.setCheckNumber(check.getCheckNumber()); // Встановлюємо номер чека для кожного продажу
             saleDao.create(sale);
+
+            storeProductService.updateProductQuantity(sale.getStoreProduct().getUpc(), sale.getProductNumber());
         }
     }
 

@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <title>Create Check</title>
     <style>
-        /* Стили формы и модального окна */
         body {
             font-family: Arial, sans-serif;
             margin: 20px;
@@ -155,7 +154,7 @@
     <div class="form-group">
         <label for="customerCard">Customer Card:</label>
         <select id="customerCard" th:field="*{customerCard.cardNumber}">
-            <option value="" disabled selected>Select a customer card</option>
+            <option value="">Select a customer card</option>
             <option th:each="customerCard : ${customerCards}"
                     th:value="${customerCard.cardNumber}"
                     th:text="${customerCard.surname}"></option>

@@ -171,6 +171,11 @@ public class StoreProductServiceImpl implements StoreProductService {
         storeProductDao.update(storeProductOriginal);
     }
 
+    @Override
+    public void updateProductQuantity(String upc, int quantity) {
+        storeProductDao.updateProductQuantity(upc, quantity);
+    }
+
     // цю штуку треба буде кудись перенести мабуть
     public static String randomUPC() {
         Random random = new Random();
