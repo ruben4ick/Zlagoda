@@ -77,4 +77,16 @@ public class EmployeeDto {
 
     @NotNull(message = "Password cannot be null")
     private String password;
+
+    public void normalize() {
+        id = id.trim();
+        surname = surname.trim();
+        name = name.trim();
+        if (patronymic != null)
+            patronymic = patronymic.trim();
+        city = city.trim();
+        street = street.trim();
+        zipCode = zipCode.trim();
+        username = username.trim();
+    }
 }

@@ -47,12 +47,14 @@ public class CheckServiceImpl implements CheckService {
 
     @Override
     public Optional<CheckDto> getById(String checkNumber) {
+        checkNumber = checkNumber.trim();
         return checkDao.getById(checkNumber)
                 .map(checkConverter::convertToDto);
     }
 
     @Override
     public List<CheckDto> getByEmplId(String employee_id){
+        employee_id = employee_id.trim();
         return checkDao.getByEmplId(employee_id).stream()
                 .map(checkConverter::convertToDto)
                 .collect(Collectors.toList());
@@ -60,6 +62,7 @@ public class CheckServiceImpl implements CheckService {
 
     @Override
     public List<CheckDto> getByEmplSurname(String employee_surname){
+        employee_surname = employee_surname.trim();
         List<EmployeeDto> employees = employeeService.getBySurname(employee_surname);
         List<CheckDto> checks = new ArrayList<>();
         for (EmployeeDto employee : employees){
@@ -81,6 +84,7 @@ public class CheckServiceImpl implements CheckService {
 
     @Override
     public void create(CheckDto checkDto) {
+        checkDto.normalize();
         checkDto.setPrintDate(LocalDateTime.now());
         BigDecimal totalSum = checkDto.getSales().stream()
                 .map(sale -> sale.getSellingPrice().multiply(BigDecimal.valueOf(sale.getProductNumber())))

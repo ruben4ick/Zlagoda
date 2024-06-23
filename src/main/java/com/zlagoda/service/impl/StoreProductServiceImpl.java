@@ -52,12 +52,14 @@ public class StoreProductServiceImpl implements StoreProductService {
 
     @Override
     public Optional<StoreProductDto> getById(String upc) {
+        upc = upc.trim();
         return storeProductDao.getById(upc)
                 .map(converter::convertToDto);
     }
 
     @Override
     public void create(StoreProductDto storeProductDto) {
+        storeProductDto.normalize();
         StoreProduct storeProduct = converter.convertToEntity(storeProductDto);
 //        storeProduct.setIsPromotional(false);
         storeProductDao.create(storeProduct);
@@ -65,6 +67,7 @@ public class StoreProductServiceImpl implements StoreProductService {
 
     @Override
     public void update(StoreProductDto storeProductDto) {
+        storeProductDto.normalize();
         StoreProduct storeProduct = converter.convertToEntity(storeProductDto);
         storeProductDao.update(storeProduct);
     }
@@ -136,6 +139,7 @@ public class StoreProductServiceImpl implements StoreProductService {
 
     @Override
     public void addPromotionStoreProduct(String upc){
+        upc = upc.trim();
         StoreProduct storeProductOriginal = storeProductDao.getById(upc).orElseThrow();
 
         if (storeProductOriginal.getUpcProm() != null) {
@@ -158,6 +162,7 @@ public class StoreProductServiceImpl implements StoreProductService {
 
     @Override
     public void removePromotionStoreProduct(String upc){
+        upc = upc.trim();
         StoreProduct storeProductOriginal = storeProductDao.getById(upc).orElseThrow();
 
         if (storeProductOriginal.getUpcProm() == null) {
@@ -174,6 +179,7 @@ public class StoreProductServiceImpl implements StoreProductService {
 
     @Override
     public void updateProductQuantity(String upc, int quantity) {
+        upc = upc.trim();
         storeProductDao.updateProductQuantity(upc, quantity);
     }
 

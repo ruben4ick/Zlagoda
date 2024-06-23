@@ -24,4 +24,8 @@ public class SaleDto {
     private int productNumber;
 
     private BigDecimal sellingPrice;
+
+    public void normalize() {
+        storeProductUpc = storeProductUpc.trim();
+    }
 }

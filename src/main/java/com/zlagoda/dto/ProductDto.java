@@ -25,4 +25,10 @@ public class ProductDto {
     @NotNull(message = "Product characteristics cannot be null")
     @Size(min = 1, max = 100, message = "Product characteristics length must be between 1 and 100 characters")
     private String characteristics;
+
+    public void normalize() {
+        category.normalize();
+        name = name.trim();
+        characteristics = characteristics.trim();
+    }
 }

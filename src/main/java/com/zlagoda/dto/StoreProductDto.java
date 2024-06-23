@@ -25,4 +25,11 @@ public class StoreProductDto {
 
     @Nullable
     private Boolean isPromotional;
+
+    public void normalize() {
+        upc = upc.trim();
+        if (upcProm != null)
+            upcProm.normalize();
+        product.normalize();
+    }
 }

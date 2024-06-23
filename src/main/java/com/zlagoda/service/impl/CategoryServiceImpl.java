@@ -35,12 +35,14 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     public void create(final CategoryDto categoryDto) {
+        categoryDto.normalize();
         Category category = mapToCategory(categoryDto);
         categoryDao.create(category);
     }
 
     @Override
     public void update(final CategoryDto categoryDto) {
+        categoryDto.normalize();
         Category category = mapToCategory(categoryDto);
         categoryDao.update(category);
     }

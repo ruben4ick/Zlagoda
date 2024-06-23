@@ -21,9 +21,9 @@ public class CheckDto {
 
     private String checkNumber;
 
-    private Employee employee;
+    private EmployeeDto employee;
 
-    private CustomerCard customerCard;
+    private CustomerCardDto customerCard;
 
     private LocalDateTime printDate;
 
@@ -32,4 +32,10 @@ public class CheckDto {
     private BigDecimal vat;
 
     private List<SaleDto> sales;
+
+    public void normalize() {
+        checkNumber = checkNumber.trim();
+        employee.normalize();
+        customerCard.normalize();
+    }
 }

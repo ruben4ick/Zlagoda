@@ -39,6 +39,7 @@ public class SaleServiceImpl implements SaleService {
 
     @Override
     public List<SaleDto> getByCheck(String check_number){
+        check_number = check_number.trim();
         return saleDao.getByCheck(check_number).stream()
                 .map(saleConverter::mapToSaleDto)
                 .collect(Collectors.toList());
@@ -46,6 +47,7 @@ public class SaleServiceImpl implements SaleService {
 
     @Override
     public void create(SaleDto saleDto) {
+        saleDto.normalize();
         Sale sale = saleConverter.convertToEntity(saleDto);
         saleDao.create(sale);
     }

@@ -38,12 +38,14 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public void create(ProductDto productDto) {
+        productDto.normalize();
         Product product = productConverter.convertToEntity(productDto);
         productDao.create(product);
     }
 
     @Override
     public void update(ProductDto productDto) {
+        productDto.normalize();
         Product product = productConverter.convertToEntity(productDto);
         productDao.update(product);
     }
@@ -61,6 +63,7 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public List<ProductDto> findByName(String name) {
+        name = name.trim();
         return productDao.findByName(name).stream()
                 .map(productConverter::convertToDto)
                 .toList();

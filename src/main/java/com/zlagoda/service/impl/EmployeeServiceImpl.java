@@ -42,6 +42,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     @Override
     public List<EmployeeDto> getBySurname(String surname) {
+        surname = surname.trim();
         return employeeDao.getBySurname(surname).stream()
                 .map(employeeConverter::mapToEmployeeDto)
                 .toList();
@@ -49,6 +50,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     @Override
     public void create(final EmployeeDto employeeDto) {
+        employeeDto.normalize();
         Employee employee = employeeConverter.mapToEmployee(employeeDto);
         employee.setPassword(passwordEncoder.encode(employeeDto.getPassword()));
         employeeDao.create(employee);
@@ -61,12 +63,14 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     @Override
     public void update(EmployeeDto employeeDto) {
+        employeeDto.normalize();
         Employee employee = employeeConverter.mapToEmployee(employeeDto);
         employeeDao.update(employee);
     }
 
     @Override
     public Optional<EmployeeDto> getById(String employeeId) {
+        employeeId = employeeId.trim();
         return employeeDao.getById(employeeId)
                 .map(employeeConverter::mapToEmployeeDto);
     }
@@ -74,6 +78,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     @Override
     public List<EmployeeDto> findContactDetailsBySurname(String surname) {
+        surname = surname.trim();
         return employeeDao.findContactDetailsBySurname(surname).stream()
                 .map(employeeConverter::mapToEmployeeDto)
                 .collect(Collectors.toList());
