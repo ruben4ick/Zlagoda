@@ -122,10 +122,11 @@ public class CheckController {
         } else {
             checks = checkService.getByEmplSurname(employee_surname);
         }
-
+        BigDecimal sum = checkService.sumOfChecks(checks);
         model.addAttribute("checks", checks);
         model.addAttribute("start", start);
         model.addAttribute("end", end);
+        model.addAttribute("sum_of_checks", sum);
         return "check/checks";
     }
 
@@ -138,10 +139,11 @@ public class CheckController {
 
         List<CheckDto> allChecks = checkService.getAll();
         List<CheckDto> checks = checkService.selectByDate(allChecks, startDate, endDate);
-
+        BigDecimal sum = checkService.sumOfChecks(checks);
         model.addAttribute("checks", checks);
         model.addAttribute("start", start);
         model.addAttribute("end", end);
+        model.addAttribute("sum_of_checks", sum);
         return "check/checks";
     }
 }

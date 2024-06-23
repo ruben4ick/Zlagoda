@@ -120,7 +120,7 @@
 
     <div class="form-group">
         <label for="phoneNumber">Phone Number:</label>
-        <input type="text" id="phoneNumber" th:field="*{phoneNumber}" required />
+        <input type="text" pattern="\+?380\d{9}" id="phoneNumber" th:field="*{phoneNumber}" required />
         <div th:if="${#fields.hasErrors('phoneNumber')}" class="error">
             <p th:errors="*{phoneNumber}"></p>
         </div>
