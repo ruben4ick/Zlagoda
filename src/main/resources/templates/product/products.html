@@ -40,33 +40,29 @@
 </div>
 <div class="container text-center">
     <div class="row">
-        <div class="col-8 text-start">
-            <div class="row">
-                <div class="col-4 text-start">
-                    <form class="input-group mb-3" th:action="@{/products/name-search}" method="get">
-                        <input class="form-control" placeholder="name" type="text" id="name" name="name" required>
-                        <button type="submit" class="btn btn-outline-dark">Search</button>
-                    </form>
-                </div>
-                <div class="dropdown col text-center">
+        <div class="col-md-8 text-start">
+            <div class="d-flex align-items-center">
+                <form class="input-group me-2" th:action="@{/products/name-search}" method="get">
+                    <input class="form-control" placeholder="name" type="text" id="name" name="name" required>
+                    <button type="submit" class="btn btn-outline-dark">Search</button>
+                </form>
+                <div class="dropdown me-2">
                     <button class="btn btn-dark dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
                         Category
                     </button>
                     <ul class="dropdown-menu dropdown-menu-dark">
-                        <li><a class="dropdown-item"
-                               th:each="category : ${categories}"
-                               th:href="@{'/products/category-search?category_number=' +
-                               ${category.number}}"
+                        <li th:each="category : ${categories}">
+                            <a class="dropdown-item"
+                               th:href="@{'/products/category-search?category_number=' + ${category.number}}"
                                th:text="${category.name}">
-                        </a></li>
+                            </a>
+                        </li>
                     </ul>
                 </div>
-                <div class="col-6 text-start">
-                    <a href="/products" class="btn btn-dark">Reset</a>
-                </div>
+                <a href="/products" class="btn btn-dark">Reset</a>
             </div>
         </div>
-        <div class="col text-end">
+        <div class="col-md-4 text-end">
             <button class="btn btn-dark" id="print-button"><i class="bi bi-printer-fill"></i></button>
             <a href="/products/add" class="btn btn-success">Add Product</a>
         </div>

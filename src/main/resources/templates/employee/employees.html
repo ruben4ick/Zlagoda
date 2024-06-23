@@ -37,9 +37,9 @@
 </header>
 <div class="container text-center">
     <div class="row">
-        <div class="col-5 text-start">
-            <div class="row">
-                <div class="dropdown col text-start">
+        <div class="col-md-7 text-start">
+            <div class="d-flex align-items-center">
+                <div class="dropdown me-2">
                     <button class="btn btn-dark dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
                         All employees
                     </button>
@@ -48,15 +48,13 @@
                         <li><a class="dropdown-item" href="/cashiers">Cashiers</a></li>
                     </ul>
                 </div>
-                <div class="col text-start">
-                    <form class="input-group mb-3" th:action="@{/employees/contact}" method="get">
-                        <input class="form-control" type="text" name="surname" placeholder="Surname" required>
-                        <button type="submit" class="btn btn-outline-dark">Search</button>
-                    </form>
-                </div>
+                <form class="input-group" th:action="@{/employees/contact}" method="get">
+                    <input class="form-control" type="text" name="surname" placeholder="Surname" required>
+                    <button type="submit" class="btn btn-outline-dark">Search</button>
+                </form>
             </div>
         </div>
-        <div class="col text-end">
+        <div class="col-md-5 text-end">
             <button class="btn btn-dark" id="print-button"><i class="bi bi-printer-fill"></i></button>
             <a href="/employees/add" class="btn btn-success">Add Employee</a>
         </div>

@@ -35,28 +35,22 @@
         </div>
     </div>
 </header>
-<div class="container text-center">
+<div class="container text-center align-items-center">
     <div class="row">
-        <div class="col-8 text-start">
-            <div class="row">
-                <div class="col text-start">
-                    <form class="input-group mb-3" th:action="@{/customers/percent-search}" method="get">
-                        <input class="form-control" type="number" name="percent" min="0" max="100" placeholder="% discount" required>
-                        <button type="submit" class="btn btn-outline-dark">Search</button>
-                    </form>
-                </div>
-                <div class="col text-start">
-                    <form class="input-group mb-3" th:action="@{/customers/surname-search}" method="get">
-                        <input class="form-control" type="text" name="surname" placeholder="Surname" required>
-                        <button type="submit" class="btn btn-outline-dark">Search</button>
-                    </form>
-                </div>
-                <div class="col text-start">
-                    <a href="/customers" class="btn btn-dark">Reset</a>
-                </div>
+        <div class="col-md-8 text-start">
+            <div class="d-flex align-items-center">
+                <form class="input-group me-2" th:action="@{/customers/percent-search}" method="get">
+                    <input class="form-control" type="number" name="percent" min="0" max="100" placeholder="% discount" required>
+                    <button type="submit" class="btn btn-outline-dark">Search</button>
+                </form>
+                <form class="input-group me-2" th:action="@{/customers/surname-search}" method="get">
+                    <input class="form-control" type="text" name="surname" placeholder="Surname" required>
+                    <button type="submit" class="btn btn-outline-dark">Search</button>
+                </form>
+                <a href="/customers" class="btn btn-dark">Reset</a>
             </div>
         </div>
-        <div class="col text-end">
+        <div class="col-md-4 text-end">
             <button class="btn btn-dark" id="print-button"><i class="bi bi-printer-fill"></i></button>
             <a href="/customers/add" class="btn btn-success">Add Customer Card</a>
         </div>

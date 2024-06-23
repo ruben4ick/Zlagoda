@@ -5,39 +5,15 @@
     <title>Employee Contact Details</title>
     <link rel="stylesheet" th:href="@{/css/style.css}">
     <link rel="stylesheet" th:href="@{/webjars/bootstrap/5.3.3/css/bootstrap.min.css}">
-    <style>
-        .details-container h2 {
-            margin-bottom: 20px;
-        }
-
-        .details-container p {
-            font-size: 18px;
-            margin: 10px 0;
-        }
-
-        .back-button {
-            display: block;
-            margin: 20px auto;
-            padding: 10px 20px;
-            font-size: 16px;
-            background-color: #4CAF50;
-            color: white;
-            text-decoration: none;
-            border-radius: 5px;
-            text-align: center;
-            width: fit-content;
-        }
-
-        .back-button:hover {
-            background-color: #45a049;
-        }
-    </style>
 </head>
 <body>
 <div class="container">
 <h1>Employee Contact Details</h1>
 </div>
-
+<div class="container text-end">
+    <a href="/employees" class="btn btn-dark">Back to Employee List</a>
+</div>
+<div class="container">
 <table class="table table-hover">
     <thead class="table-dark">
     <tr>
@@ -62,8 +38,7 @@
     </tr>
     </tbody>
 </table>
-
-<a href="/employees" class="back-button">Back to Employee List</a>
+</div>
 
 <script th:src="@{/webjars/bootstrap/5.3.3/js/bootstrap.bundle.min.js}"></script>
 </body>

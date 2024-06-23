@@ -39,6 +39,7 @@ public class ProductController {
             return "product/products";
         }
         model.addAttribute("products", productService.findByCategory(categoryNumber));
+        model.addAttribute("categories", categoryService.getAll());
         return "product/products";
     }
 
