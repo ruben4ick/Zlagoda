@@ -4,6 +4,7 @@ import com.zlagoda.dto.ProductDto;
 import com.zlagoda.dto.StoreProductDto;
 import com.zlagoda.service.StoreProductService;
 import com.zlagoda.service.ProductService;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
@@ -27,6 +28,20 @@ public class StoreProductController {
         List<StoreProductDto> storeProducts = storeProductService.getAll();
         model.addAttribute("storeProducts", storeProducts);
         return "store-product/store-products";
+    }
+
+    @GetMapping("/promoted")
+    public String listStoreProductsPromoted(Model model){
+        List<StoreProductDto> storeProducts = storeProductService.getPromotionalProducts();
+        model.addAttribute("storeProducts", storeProducts);
+        return "store-product/store-products-promoted";
+    }
+
+    @GetMapping("/standard")
+    public String listStoreProductsStandard(Model model){
+        List<StoreProductDto> storeProducts = storeProductService.getStandardProducts();
+        model.addAttribute("storeProducts", storeProducts);
+        return "store-product/store-products-standard";
     }
 
     @GetMapping("/add")
@@ -105,9 +120,10 @@ public class StoreProductController {
     }
 
     @GetMapping("/add/prom/{upc}")
-    public String makeProm(@PathVariable String upc) {
+    public String makeProm(@PathVariable String upc, HttpServletRequest request) {
         storeProductService.addPromotionStoreProduct(upc);
-        return "redirect:/store-products";
+        String referer = request.getHeader("Referer");
+        return "redirect:" + referer;
     }
 
     @GetMapping("/remove/prom/{upc}")

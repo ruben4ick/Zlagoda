@@ -65,6 +65,13 @@ public class ProductServiceImpl implements ProductService {
                 .map(productConverter::convertToDto)
                 .toList();
     }
+
+    @Override
+    public List<ProductDto> findNotInStoreNeverSoldProducts() {
+        return productDao.findNotInStoreNeverSoldProducts().stream()
+                .map(productConverter::convertToDto)
+                .collect(Collectors.toList());
+    }
     /*private Product mapToProduct(ProductDto productDto) {
         return Product.builder()
                 .id(productDto.getId())

@@ -42,6 +42,22 @@ public class ProductDaoImpl implements ProductDao {
                     "WHERE p.category_number = ? " +
                     "ORDER BY p.product_name;";
 
+    private static final String FIND_NOT_IN_STOCK_AND_NEVER_SOLD = "SELECT " +
+            "p.id_product, p.category_number, p.product_name, p.characteristics, c.category_name" +
+            " FROM product p " +
+            "INNER JOIN Category c ON p.category_number = c.category_number " +
+            "WHERE NOT EXISTS (" +
+            "SELECT sp.id_product " +
+            "FROM Store_Product sp " +
+            "WHERE sp.id_product = p.id_product" +
+            ") " +
+            "AND NOT EXISTS (" +
+            "SELECT sp.UPC " +
+            "FROM sale s " +
+            "INNER JOIN Store_Product sp ON s.UPC = sp.UPC " +
+            "WHERE sp.id_product = p.id_product" +
+            ")";
+
     @Override
     public List<Product> getAll() {
         return jdbcTemplate.query(FIND_ALL_PRODUCTS, new ProductRowMapper());
@@ -83,5 +99,10 @@ public class ProductDaoImpl implements ProductDao {
     public List<Product> findByName(String name) {
         String query = name + "%"; // Пошук часткового збігу
         return jdbcTemplate.query(FIND_PRODUCTS_BY_NAME, new Object[]{query}, new ProductRowMapper());
+    }
+
+    @Override
+    public List<Product> findNotInStoreNeverSoldProducts() {
+        return jdbcTemplate.query(FIND_NOT_IN_STOCK_AND_NEVER_SOLD, new ProductRowMapper());
     }
 }

@@ -9,5 +9,5 @@ import java.util.List;
 import java.util.Optional;
 
 public interface CategoryService extends GenericService<CategoryDto, Long> {
-
+    List<CategoryDto> findWithTotalProductsMoreThan(int quantity);
 }

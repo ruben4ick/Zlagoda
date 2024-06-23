@@ -2,6 +2,7 @@ package com.zlagoda.controller;
 
 import com.zlagoda.dto.CategoryDto;
 import com.zlagoda.dto.ProductDto;
+import com.zlagoda.entity.Category;
 import com.zlagoda.service.ProductService;
 import com.zlagoda.service.CategoryService;
 import jakarta.validation.Valid;
@@ -25,7 +26,9 @@ public class ProductController {
     @GetMapping
     public String products(Model model) {
         List<ProductDto> products = productService.getAll();
+        List<CategoryDto> categories = categoryService.getAll();
         model.addAttribute("products", products);
+        model.addAttribute("categories", categories);
         return "product/products";
     }
 
@@ -97,5 +100,12 @@ public class ProductController {
     public String deleteProduct(@PathVariable("productId") Long productId) {
         productService.delete(productId);
         return "redirect:/products";
+    }
+
+    @GetMapping("/neverSold")
+    public String findNotInStoreNeverSoldProducts(Model model) {
+        List<ProductDto> products = productService.findNotInStoreNeverSoldProducts();
+        model.addAttribute("products", products);
+        return "/product/products";
     }
 }

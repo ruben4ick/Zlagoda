@@ -22,10 +22,10 @@ public class DevAuths {
 
     @EventListener(value = ApplicationReadyEvent.class)
     public void createTestEmployees() {
-        if (employeeService.findContactDetailsBySurname("Admin").isPresent())
+        if (!employeeService.findContactDetailsBySurname("Admin").isEmpty())
             return;
 
-        if (employeeService.findContactDetailsBySurname("Cashier").isPresent())
+        if (!employeeService.findContactDetailsBySurname("Cashier").isEmpty())
             return;
 
         EmployeeDto manager = new EmployeeDto();

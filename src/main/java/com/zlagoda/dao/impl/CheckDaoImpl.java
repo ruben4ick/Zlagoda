@@ -66,14 +66,6 @@ public class CheckDaoImpl implements CheckDao {
                 check.getTotalSum(),
                 check.getVat());
 
-        // Вставка продажів
-        for (Sale sale : check.getSales()) {
-            jdbcTemplate.update(INSERT_SALE,
-                    sale.getStoreProduct().getUpc(),
-                    check.getCheckNumber(),
-                    sale.getProductNumber(),
-                    sale.getSellingPrice());
-        }
     }
 
     @Override

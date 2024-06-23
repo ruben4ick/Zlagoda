@@ -5,41 +5,6 @@
     <title>Categories List</title>
     <link rel="stylesheet" th:href="@{/css/style.css}">
     <link rel="stylesheet" th:href="@{/webjars/bootstrap/5.3.3/css/bootstrap.min.css}">
-    <style>
-        .button-container {
-            text-align: center;
-            margin-bottom: 20px;
-        }
-
-        .button {
-            padding: 10px 20px;
-            font-size: 16px;
-            background-color: #4CAF50;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            text-decoration: none;
-        }
-
-        .button:hover {
-            background-color: #45a049;
-        }
-
-        .delete-button {
-            background-color: #f44336;
-            color: white;
-            border: none;
-            padding: 5px 10px;
-            text-decoration: none;
-            border-radius: 5px;
-            cursor: pointer;
-        }
-
-        .delete-button:hover {
-            background-color: #d32f2f;
-        }
-    </style>
 </head>
 <body>
 <header class="p-3 bg-dark text-white">
@@ -71,10 +36,23 @@
         </div>
     </div>
 </header>
+<div class="container text-center">
 <h1>Categories List</h1>
-
-<div class="button-container">
-    <a href="/categories/add" class="button">Add Category</a>
+</div>
+<div class="container mb-3">
+    <div class="row align-items-center">
+        <div class="col-md-4">
+            <form class="input-group mb-3" th:action="@{categories/moreThan}" method="get">
+                <label for="prodQuantity" class="input-group-text">Products more than:</label>
+                <input class="form-control" placeholder="quantity" type="text" id="prodQuantity" name="prodQuantity" required>
+                <button type="submit" class="btn btn-outline-dark">Search</button>
+            </form>
+        </div>
+        <div class="col-md-8 text-end">
+            <a href="/categories" class="btn btn-dark">Reset</a>
+            <a href="/categories/add" class="btn btn-success">Add Category</a>
+        </div>
+    </div>
 </div>
 <div class="container">
 <table class="table table-hover">
@@ -90,8 +68,8 @@
         <th scope="row" th:text="${category.number}"></th>
         <td th:text="${category.name}"></td>
         <td>
-            <a th:href="@{'/categories/edit/' + ${category.number}}" class="button">Edit</a>
-            <a th:href="@{'/categories/delete/' + ${category.number}}" class="delete-button">Delete</a>
+            <a th:href="@{'/categories/edit/' + ${category.number}}" class="btn btn-info">Edit</a>
+            <a th:href="@{'/categories/delete/' + ${category.number}}" class="btn btn-danger">Delete</a>
         </td>
     </tr>
     </tbody>

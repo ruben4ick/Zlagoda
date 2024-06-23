@@ -3,6 +3,8 @@ package com.zlagoda.dao;
 import com.zlagoda.entity.Category;
 import com.zlagoda.entity.Employee;
 
-public interface CategoryDao extends GenericDao<Category, Long> {
+import java.util.List;
 
+public interface CategoryDao extends GenericDao<Category, Long> {
+    List<Category> findWithTotalProductsMoreThan(int quantity);
 }

@@ -27,20 +27,20 @@ public class CategoryController {
     public String categories(Model model) {
         List<CategoryDto> categories = categoryService.getAll();
         model.addAttribute("categories", categories);
-        return "categories";
+        return "category/categories";
     }
 
     @GetMapping("/add")
     public String categoryAdd(Model model) {
         model.addAttribute("category", new CategoryDto());
-        return "categories-add";
+        return "category/categories-add";
     }
 
     @PostMapping("/add")
     public String saveCategory(@Valid @ModelAttribute("category") CategoryDto categoryDto, BindingResult result, Model model) {
         if (result.hasErrors()) {
             model.addAttribute("category", categoryDto);
-            return "categories-add";
+            return "category/categories-add";
         }
         categoryService.create(categoryDto);
         return "redirect:/categories";
@@ -52,7 +52,7 @@ public class CategoryController {
 
         if (categoryOpt.isPresent()) {
             model.addAttribute("category", categoryOpt.get());
-            return "categories-edit";
+            return "category/categories-edit";
         } else {
             return "redirect:/categories";
         }
@@ -62,7 +62,7 @@ public class CategoryController {
     public String editCategory(@PathVariable("categoryNumber") Long categoryNumber, @ModelAttribute("category") CategoryDto category, BindingResult result, Model model) {
         if (result.hasErrors()) {
             model.addAttribute("category", category);
-            return "categories-edit";
+            return "category/categories-edit";
         }
         category.setNumber(categoryNumber);
         categoryService.update(category);
@@ -73,5 +73,12 @@ public class CategoryController {
     public String deleteCategory(@PathVariable("categoryNumber") Long categoryNumber) {
         categoryService.delete(categoryNumber);
         return "redirect:/categories";
+    }
+
+    @GetMapping("/moreThan")
+    public String moreThan(@RequestParam(value = "prodQuantity") int quantity, Model model) {
+        List<CategoryDto> categories = categoryService.findWithTotalProductsMoreThan(quantity);
+        model.addAttribute("categories", categories);
+        return "category/categories";
     }
 }

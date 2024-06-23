@@ -1,5 +1,6 @@
 package com.zlagoda.service.impl;
 
+import com.zlagoda.entity.CustomerCard;
 import com.zlagoda.entity.Sale;
 import org.modelmapper.internal.Pair;
 import com.zlagoda.converter.SaleConverter;
@@ -37,10 +38,12 @@ public class SaleServiceImpl implements SaleService {
     }
 
     @Override
-    public void create(SaleDto e) {
-
+    public void create(SaleDto saleDto) {
+        Sale sale = saleConverter.convertToEntity(saleDto);
+        saleDao.create(sale);
     }
 
+    // я не розумію, що ти тут хтів зробити, тому я це чіпати не буду. з повагою bee
     /*@Override
     public void create(SaleDto saleDto) {
         Sale saleToCreate = saleConverter.convertToEntity(saleDto);
