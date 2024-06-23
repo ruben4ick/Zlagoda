@@ -27,7 +27,8 @@ public class ProductDto {
     private String characteristics;
 
     public void normalize() {
-        category.normalize();
+        if (category != null)
+            category.normalize();
         name = name.trim();
         characteristics = characteristics.trim();
     }

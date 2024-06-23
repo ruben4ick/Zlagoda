@@ -48,7 +48,8 @@ public class CustomerCardDto {
     private int percent;
 
     public void normalize() {
-        cardNumber = cardNumber.trim();
+        if (cardNumber != null)
+            cardNumber = cardNumber.trim();
         surname = surname.trim();
         name = name.trim();
         if (patronymic != null)

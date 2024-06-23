@@ -10,18 +10,14 @@
 <header class="p-3 bg-dark text-white">
     <div class="container">
         <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
-            <a href="/" class="d-flex align-items-center mb-2 mb-lg-0 text-white text-decoration-none">
-                <svg class="bi me-2" width="40" height="32" role="img" aria-label="Bootstrap"><use xlink:href="#bootstrap"/></svg>
-            </a>
-
             <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0 align-items-center">
-                <li><a href="/" class="nav-link px-3 text-white">Home</a></li>
-                <li><a href="/employees" class="nav-link px-3 text-secondary">Employees</a></li>
-                <li><a href="/checks" class="nav-link px-3 text-white">Checks</a></li>
-                <li><a href="/customers" class="nav-link px-3 text-white">Customers</a></li>
+                <li><a href="/" class="nav-link px-3 text-white"><i class="bi bi-house"></i> Home</a></li>
+                <li><a href="/checks" class="nav-link px-3 text-white"><i class="bi bi-piggy-bank"></i> Checks</a></li>
+                <li><a href="/employees" class="nav-link px-3 text-secondary"><i class="bi bi-person"></i> Employees</a></li>
+                <li><a href="/customers" class="nav-link px-3 text-white"><i class="bi bi-people"></i> Customers</a></li>
                 <li class="nav-item dropdown">
                     <a class="nav-link px-3 text-white dropdown-toggle" id="productsDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                        Products
+                        <i class="bi bi-handbag"></i> Products
                     </a>
                     <ul class="dropdown-menu gap-1 p-2 rounded-3 mx-0 border-0 shadow w-220px" aria-labelledby="productsDropdown" data-bs-theme="dark">
                         <li><a class="dropdown-item rounded-2" href="/products">Products</a></li>
@@ -30,8 +26,11 @@
                     </ul>
                 </li>
             </ul>
-            <div class="text-end">
-                <button type="button" class="btn btn-outline-light me-2">Sign-out</button>
+            <div class="text-end d-flex align-items-center justify-content-end">
+                <a href="/employees/me" class="nav-link px-3 text-white"><i class="bi bi-person-circle"></i> Profile</a>
+                <form th:action="@{/logout}" method="post" class="ms-2">
+                    <input type="submit" value="Sign Out" class="btn btn-outline-light me-2"/>
+                </form>
             </div>
         </div>
     </div>

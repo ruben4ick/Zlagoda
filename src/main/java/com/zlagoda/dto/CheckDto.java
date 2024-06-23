@@ -34,8 +34,11 @@ public class CheckDto {
     private List<SaleDto> sales;
 
     public void normalize() {
-        checkNumber = checkNumber.trim();
-        employee.normalize();
-        customerCard.normalize();
+        if (checkNumber != null)
+            checkNumber = checkNumber.trim();
+        if (employee != null)
+            employee.normalize();
+        if (customerCard != null)
+            customerCard.normalize();
     }
 }

@@ -20,6 +20,7 @@ public class CategoryDto {
     private String name;
 
     public void normalize() {
-        name = name.trim();
+        if (name != null)
+            name = name.trim();
     }
 }
