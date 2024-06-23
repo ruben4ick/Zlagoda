@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', function () {
-    document.getElementById('sp-print-button').addEventListener('click', print_report);
+    document.getElementById('print-button').addEventListener('click', print_report);
     function print_report() {
         const tables = document.querySelectorAll('table');
         const currentDate = new Date().toLocaleDateString();
