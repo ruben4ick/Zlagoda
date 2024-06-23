@@ -79,7 +79,8 @@ public class EmployeeDto {
     private String password;
 
     public void normalize() {
-        id = id.trim();
+        if (id != null)
+            id = id.trim();
         surname = surname.trim();
         name = name.trim();
         if (patronymic != null)
