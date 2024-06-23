@@ -57,6 +57,9 @@ public class StoreProductDaoImpl implements StoreProductDao {
 
     private static final String UPDATE_QUANTITY = "UPDATE Store_Product SET products_number = products_number - ? WHERE upc = ?";
 
+    private static final String FIND_BY_PROM_UPC =
+            "SELECT * FROM store_product WHERE UPC_PROM = ?";
+
     @Override
     public List<StoreProduct> getAll() {
         return jdbcTemplate.query(FIND_ALL_STORE_PRODUCTS, new StoreProductRowMapper());
@@ -66,6 +69,11 @@ public class StoreProductDaoImpl implements StoreProductDao {
     public Optional<StoreProduct> getById(String upc) {
         List<StoreProduct> products = jdbcTemplate.query(FIND_BY_ID, new Object[]{upc}, new StoreProductRowMapper());
         return products.stream().findFirst();
+    }
+
+    @Override
+    public Optional<StoreProduct> findByUpcProm(String prom_upc){
+        return jdbcTemplate.query(FIND_BY_PROM_UPC, new StoreProductRowMapper(), prom_upc).stream().findFirst();
     }
 
     @Override

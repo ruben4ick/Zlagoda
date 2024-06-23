@@ -9,6 +9,7 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -93,6 +94,18 @@ public class CheckController {
             return "check/checks";
         }
         model.addAttribute("checks", checkService.getByEmplSurname(employee_surname));
+        return "check/checks";
+    }
+
+    @GetMapping("/date-range")
+    public String getChecksByDateRange(@RequestParam("start") String start,
+                                       @RequestParam("end") String end,
+                                       Model model) {
+        LocalDateTime startDate = LocalDateTime.parse(start);
+        LocalDateTime endDate = LocalDateTime.parse(end);
+        List<CheckDto> allChecks = checkService.getAll();
+        List<CheckDto> checks = checkService.selectByDate(allChecks, startDate, endDate);
+        model.addAttribute("checks", checks);
         return "check/checks";
     }
 }

@@ -56,6 +56,12 @@ public class StoreProductServiceImpl implements StoreProductService {
     }
 
     @Override
+    public Optional<StoreProductDto> findByUpcProm(String prom_upc){
+        return storeProductDao.findByUpcProm(prom_upc)
+                .map(converter::convertToDto);
+    }
+
+    @Override
     public void create(StoreProductDto storeProductDto) {
         StoreProduct storeProduct = converter.convertToEntity(storeProductDto);
         storeProduct.setIsPromotional(false);
