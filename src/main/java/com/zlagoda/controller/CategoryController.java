@@ -82,6 +82,7 @@ public class CategoryController {
         List<CategoryDto> categories = categoryService.findWithTotalProductsMoreThan(quantity);
         model.addAttribute("categories", categories);
         return "category/categories";
+    }
 
     @GetMapping("/category-sales")
     public String getCategorySales(Model model) {

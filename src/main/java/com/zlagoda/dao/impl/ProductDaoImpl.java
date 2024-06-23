@@ -148,6 +148,7 @@ public class ProductDaoImpl implements ProductDao {
 
     public List<Product> findNotInStoreNeverSoldProducts() {
         return jdbcTemplate.query(FIND_NOT_IN_STOCK_AND_NEVER_SOLD, new ProductRowMapper());
+    }
 
     public List<Product> findBySoldFromCertainCity(String city) {
         return jdbcTemplate.query(FIND_PRODUCTS_SOLD_FROM_CERTAIN_CITY, new ProductRowMapper(), city);

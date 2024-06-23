@@ -149,14 +149,6 @@ public class EmployeeServiceImpl implements EmployeeService {
         }
         return oldEmployee;
     }*/
-
-    @Override
-    public Employee getCurrent() {
-        EmployeeDetails employeeDetails = (EmployeeDetails) SecurityContextHolder.getContext().getAuthentication()
-                .getPrincipal();
-        Employee employee = employeeDetails.getEmployee();
-        return employee;
-
     public List<EmployeeDto> getAllCashiersServedAllCustomers() {
         return employeeDao.getAllCashiersServedAllCustomers().stream()
                 .map(employeeConverter::mapToEmployeeDto)

@@ -59,6 +59,7 @@ public class CategoryServiceImpl implements CategoryService {
         return categoryDao.findWithTotalProductsMoreThan(quantity).stream()
                 .map(this::mapToCategoryDto)
                 .collect(Collectors.toList());
+    }
 
     public List<CategorySalesDto> findTotalSalesByCategory() {
         return categoryDao.findTotalSalesByCategory();

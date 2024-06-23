@@ -71,6 +71,7 @@ public class CategoryDaoImpl implements CategoryDao {
 
     public List<Category> findWithTotalProductsMoreThan(int quantity) {
         return jdbcTemplate.query(FIND_WITH_PRODUCTS_MORE_THAN_STATED, new Object[]{quantity}, new CategoryRowMapper());
+    }
 
     public List<CategorySalesDto> findTotalSalesByCategory() {
         return jdbcTemplate.query(FIND_TOTAL_SALES_BY_CATEGORY, new RowMapper<CategorySalesDto>() {
