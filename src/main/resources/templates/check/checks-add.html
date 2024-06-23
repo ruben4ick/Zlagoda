@@ -135,6 +135,10 @@
         .promo {
             color: red;
         }
+
+        .discount {
+            font-weight: bold;
+        }
     </style>
 </head>
 <body>
@@ -153,11 +157,12 @@
 
     <div class="form-group">
         <label for="customerCard">Customer Card:</label>
-        <select id="customerCard" th:field="*{customerCard.cardNumber}">
+        <select id="customerCard" th:field="*{customerCard.cardNumber}" onchange="updateDiscount()">
             <option value="">Select a customer card</option>
             <option th:each="customerCard : ${customerCards}"
                     th:value="${customerCard.cardNumber}"
-                    th:text="${customerCard.surname}"></option>
+                    th:data-discount="${customerCard.percent}"
+                    th:text="${customerCard.surname + ' - ' + customerCard.percent + '% discount'}"></option>
         </select>
     </div>
 
@@ -177,6 +182,11 @@
             </tbody>
         </table>
         <button type="button" id="addSaleButton">Add Sale</button>
+    </div>
+
+    <div class="form-group">
+        <p class="discount">Discount: <span id="discountAmount">0%</span></p>
+        <p class="discount">Total Sum: <span id="totalSum">₴0.00</span></p>
     </div>
 
     <button type="submit">Add Check</button>
@@ -233,8 +243,12 @@
     const closeModal = document.getElementById('closeModal');
     const salesContainer = document.getElementById('sales-container');
     const saleForm = document.getElementById('saleForm');
+    const discountAmount = document.getElementById('discountAmount');
+    const totalSum = document.getElementById('totalSum');
     let selectedProduct = null;
     let maxQuantity = 0;
+    let currentDiscount = 0;
+    let currentTotal = 0;
 
     addSaleButton.onclick = function() {
         saleModal.style.display = 'block';
@@ -253,7 +267,7 @@
     function selectProduct(button) {
         selectedProduct = {
             upc: button.getAttribute('data-upc'),
-            price: button.getAttribute('data-price'),
+            price: parseFloat(button.getAttribute('data-price')),
             name: button.getAttribute('data-name')
         };
         maxQuantity = parseInt(button.getAttribute('data-quantity'), 10);
@@ -278,7 +292,6 @@
         }
 
         const newRow = document.createElement('tr');
-
         const productCell = document.createElement('td');
         productCell.innerText = selectedProduct.name;
         productCell.innerHTML += '<input type="hidden" name="sales[' + salesContainer.children.length + '].storeProductUpc" value="' + selectedProduct.upc + '">';
@@ -300,6 +313,7 @@
         removeButton.innerText = 'Remove';
         removeButton.onclick = function() {
             newRow.remove();
+            updateTotalSum(-quantity * selectedProduct.price);
         };
         actionCell.appendChild(removeButton);
         newRow.appendChild(actionCell);
@@ -307,7 +321,22 @@
         salesContainer.appendChild(newRow);
         saleModal.style.display = 'none';
         saleForm.reset();
+        updateTotalSum(quantity * selectedProduct.price);
         selectedProduct = null;
+    }
+
+    function updateTotalSum(amount) {
+        currentTotal += amount;
+        const discountedTotal = currentTotal * (1 - currentDiscount / 100);
+        totalSum.innerText = '€' + discountedTotal.toFixed(2);
+    }
+
+    function updateDiscount() {
+        const customerCard = document.getElementById('customerCard');
+        const selectedOption = customerCard.options[customerCard.selectedIndex];
+        currentDiscount = parseFloat(selectedOption.getAttribute('data-discount')) || 0;
+        discountAmount.innerText = currentDiscount + '%';
+        updateTotalSum(0); // Trigger total sum recalculation with new discount
     }
 </script>
 </body>
