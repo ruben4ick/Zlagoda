@@ -13,7 +13,7 @@
       <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0 align-items-center">
         <li><a href="/" class="nav-link px-3 text-secondary"><i class="bi bi-house"></i> Home</a></li>
         <li><a href="/checks" class="nav-link px-3 text-white"><i class="bi bi-piggy-bank"></i> Checks</a></li>
-        <li><a href="/employees" class="nav-link px-3 text-white"><i class="bi bi-person"></i> Employees</a></li>
+        <li sec:authorize="hasAnyAuthority('MANAGER')"><a href="/employees" class="nav-link px-3 text-white"><i class="bi bi-person"></i> Employees</a></li>
         <li><a href="/customers" class="nav-link px-3 text-white"><i class="bi bi-people"></i> Customers</a></li>
         <li class="nav-item dropdown">
           <a class="nav-link px-3 text-white dropdown-toggle" id="productsDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">

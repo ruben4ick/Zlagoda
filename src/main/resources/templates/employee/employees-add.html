@@ -144,7 +144,7 @@
 
     <div class="form-group">
         <label for="zipCode">Zip Code:</label>
-        <input type="text" id="zipCode" th:field="*{zipCode}" required />
+        <input type="text" pattern="\d{5}" id="zipCode" th:field="*{zipCode}" required />
         <div th:if="${#fields.hasErrors('zipCode')}" class="error">
             <p th:errors="*{zipCode}"></p>
         </div>

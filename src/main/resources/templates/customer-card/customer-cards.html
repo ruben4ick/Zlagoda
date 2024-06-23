@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6" lang="en">
 <head>
     <meta charset="UTF-8">
     <title>Customer Cards List</title>
@@ -13,7 +13,7 @@
             <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0 align-items-center">
                 <li><a href="/" class="nav-link px-3 text-white"><i class="bi bi-house"></i> Home</a></li>
                 <li><a href="/checks" class="nav-link px-3 text-white"><i class="bi bi-piggy-bank"></i> Checks</a></li>
-                <li><a href="/employees" class="nav-link px-3 text-white"><i class="bi bi-person"></i> Employees</a></li>
+                <li><a href="/employees" class="nav-link px-3 text-white" sec:authorize="hasAnyAuthority('MANAGER')"><i class="bi bi-person"></i> Employees</a></li>
                 <li><a href="/customers" class="nav-link px-3 text-secondary"><i class="bi bi-people"></i> Customers</a></li>
                 <li class="nav-item dropdown">
                     <a class="nav-link px-3 text-white dropdown-toggle" id="productsDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -51,7 +51,7 @@
             </div>
         </div>
         <div class="col-md-4 text-end">
-            <button class="btn btn-dark" id="print-button"><i class="bi bi-printer-fill"></i></button>
+            <button class="btn btn-dark" id="print-button" sec:authorize="hasAnyAuthority('MANAGER')"><i class="bi bi-printer-fill"></i></button>
             <a href="/customers/add" class="btn btn-success">Add Customer Card</a>
         </div>
     </div>
@@ -85,7 +85,7 @@
         <td th:text="${customerCard.percent}">%</td>
         <td>
             <a th:href="@{'/customers/edit/' + ${customerCard.cardNumber}}" class="btn btn-info"><i class="bi bi-pencil-fill"></i></a>
-            <a th:href="@{'/customers/delete/' + ${customerCard.cardNumber}}" class="btn btn-danger"><i class="bi bi-trash-fill"></i></a>
+            <a th:href="@{'/customers/delete/' + ${customerCard.cardNumber}}" class="btn btn-danger" sec:authorize="hasAnyAuthority('MANAGER')"><i class="bi bi-trash-fill"></i></a>
         </td>
     </tr>
     </tbody>
