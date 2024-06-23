@@ -149,9 +149,7 @@
         <label for="employee">Employee:</label>
         <select id="employee" th:field="*{employee.id}" required>
             <option value="" disabled selected>Select an employee</option>
-            <option th:each="employee : ${employees}"
-                    th:value="${employee.id}"
-                    th:text="${employee.surname + ' ' + employee.name}"></option>
+            <option th:value="${employee.id}" th:text="${employee.surname + ' ' + employee.name}"></option>
         </select>
     </div>
 

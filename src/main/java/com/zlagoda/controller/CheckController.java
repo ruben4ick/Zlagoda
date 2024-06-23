@@ -4,6 +4,8 @@ import com.zlagoda.dto.*;
 import com.zlagoda.service.*;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -38,11 +40,12 @@ public class CheckController {
 
     @GetMapping("/add")
     public String addCheck(Model model) {
-        List<EmployeeDto> employees = employeeService.getAll();
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        Optional<EmployeeDto> employee = employeeService.findByUsername(auth.getName());
         List<CustomerCardDto> customerCards = customerCardService.getAll();
         List<StoreProductDto> storeProducts = storeProductService.getAll();
 
-        model.addAttribute("employees", employees);
+        model.addAttribute("employee", employee.get());
         model.addAttribute("customerCards", customerCards);
         model.addAttribute("storeProducts", storeProducts);
         model.addAttribute("check", new CheckDto());
