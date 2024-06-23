@@ -217,7 +217,9 @@
                     <button type="button" th:data-upc="${storeProduct.upc}"
                             th:data-price="${storeProduct.price}"
                             th:data-name="${storeProduct.product.name}"
+                            th:data-description="${storeProduct.product.characteristics}"
                             th:data-quantity="${storeProduct.quantity}"
+                            th:data-is-promotional="${storeProduct.isPromotional}"
                             onclick="selectProduct(this)">Select</button>
                 </td>
             </tr>
@@ -268,7 +270,9 @@
         selectedProduct = {
             upc: button.getAttribute('data-upc'),
             price: parseFloat(button.getAttribute('data-price')),
-            name: button.getAttribute('data-name')
+            name: button.getAttribute('data-name'),
+            description: button.getAttribute('data-description'),
+            isPromotional: button.getAttribute('data-is-promotional') === 'true'
         };
         maxQuantity = parseInt(button.getAttribute('data-quantity'), 10);
         document.getElementById('selectedProduct').value = selectedProduct.name;
@@ -294,7 +298,10 @@
         const newRow = document.createElement('tr');
         const productCell = document.createElement('td');
         productCell.innerText = selectedProduct.name;
-        productCell.innerHTML += '<input type="hidden" name="sales[' + salesContainer.children.length + '].storeProductUpc" value="' + selectedProduct.upc + '">';
+        productCell.innerHTML += '<input type="hidden" name="sales[' + salesContainer.children.length + '].storeProduct.upc" value="' + selectedProduct.upc + '">';
+        productCell.innerHTML += '<input type="hidden" name="sales[' + salesContainer.children.length + '].storeProduct.name" value="' + selectedProduct.name + '">';
+        productCell.innerHTML += '<input type="hidden" name="sales[' + salesContainer.children.length + '].storeProduct.characteristics" value="' + selectedProduct.description + '">';
+        productCell.innerHTML += '<input type="hidden" name="sales[' + salesContainer.children.length + '].storeProduct.isPromotional" value="' + selectedProduct.isPromotional + '">';
         newRow.appendChild(productCell);
 
         const quantityCell = document.createElement('td');
@@ -328,7 +335,7 @@
     function updateTotalSum(amount) {
         currentTotal += amount;
         const discountedTotal = currentTotal * (1 - currentDiscount / 100);
-        totalSum.innerText = '€' + discountedTotal.toFixed(2);
+        totalSum.innerText = '₴' + discountedTotal.toFixed(2);
     }
 
     function updateDiscount() {

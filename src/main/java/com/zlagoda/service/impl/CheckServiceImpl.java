@@ -113,11 +113,14 @@ public class CheckServiceImpl implements CheckService {
 
         // Зберігаємо всі продажі
         for (SaleDto saleDto : checkDto.getSales()) {
+            storeProductService.updateProductQuantity(saleDto.getStoreProduct().getUpc(), saleDto.getProductNumber());
+
+            if (saleDto.getStoreProduct().getIsPromotional() ) {
+                saleDto.setStoreProduct(storeProductService.findByUpcProm(saleDto.getStoreProduct().getUpc()).get());
+            }
             Sale sale = saleConverter.convertToEntity(saleDto);
             sale.setCheckNumber(check.getCheckNumber()); // Встановлюємо номер чека для кожного продажу
             saleDao.create(sale);
-
-            storeProductService.updateProductQuantity(sale.getStoreProduct().getUpc(), sale.getProductNumber());
         }
     }
 
