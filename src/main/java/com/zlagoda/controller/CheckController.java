@@ -81,7 +81,7 @@ public class CheckController {
         List<SaleDto> sales = saleService.getByCheck(check_number);
         List<String> product_names = new ArrayList<>();
         for(SaleDto sale : sales){
-            Optional<StoreProductDto> storeProduct = storeProductService.getById(sale.getStoreProductUpc());
+            Optional<StoreProductDto> storeProduct = storeProductService.getById(sale.getStoreProduct().getUpc());
             product_names.add(storeProduct.get().getProduct().getName());
         }
         model.addAttribute("sales", sales);

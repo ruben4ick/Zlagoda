@@ -52,7 +52,7 @@
     </thead>
     <tbody>
     <tr th:each="i : ${#numbers.sequence(0, size - 1)}">
-      <th scope="row" th:text="${sales[i].storeProductUpc}"></th>
+      <th scope="row" th:text="${sales[i].storeProduct.upc}"></th>
       <td th:text="${product_names[i]}"></td>
       <td th:text="${sales[i].productNumber}"></td>
       <td th:text="${sales[i].sellingPrice}"></td>

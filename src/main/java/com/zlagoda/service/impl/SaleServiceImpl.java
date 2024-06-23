@@ -40,7 +40,7 @@ public class SaleServiceImpl implements SaleService {
     @Override
     public List<SaleDto> getByCheck(String check_number){
         return saleDao.getByCheck(check_number).stream()
-                .map(saleConverter::mapToSaleDto)
+                .map(saleConverter::convertToDto)
                 .collect(Collectors.toList());
     }
 

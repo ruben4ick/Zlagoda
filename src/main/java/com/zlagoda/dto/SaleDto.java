@@ -1,5 +1,6 @@
 package com.zlagoda.dto;
 
+import com.zlagoda.entity.StoreProduct;
 import jakarta.annotation.Nullable;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
@@ -17,7 +18,8 @@ import java.math.BigDecimal;
 @NoArgsConstructor
 public class SaleDto {
 
-    private String storeProductUpc;
+    @NotNull(message = "Store product cannot be null")
+    private StoreProductDto storeProduct;
 
     @NotNull(message = "cant be null")
     @Min(value = 1, message = "product number must  be more than 1")

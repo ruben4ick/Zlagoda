@@ -23,6 +23,5 @@ public class StoreProductDto {
 
     private Integer quantity;
 
-    @Nullable
     private Boolean isPromotional;
 }
