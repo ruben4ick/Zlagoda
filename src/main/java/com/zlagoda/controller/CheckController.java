@@ -9,6 +9,8 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -28,7 +30,9 @@ public class CheckController {
     @GetMapping
     public String listChecks(Model model) {
         List<CheckDto> checks = checkService.getAll();
+        BigDecimal sum = checkService.sumOfChecks(checks);
         model.addAttribute("checks", checks);
+        model.addAttribute("sum_of_checks", sum);
         return "check/checks";
     }
 
@@ -93,6 +97,18 @@ public class CheckController {
             return "check/checks";
         }
         model.addAttribute("checks", checkService.getByEmplSurname(employee_surname));
+        return "check/checks";
+    }
+
+    @GetMapping("/date-range")
+    public String getChecksByDateRange(@RequestParam("start") String start,
+                                       @RequestParam("end") String end,
+                                       Model model) {
+        LocalDateTime startDate = LocalDateTime.parse(start);
+        LocalDateTime endDate = LocalDateTime.parse(end);
+        List<CheckDto> allChecks = checkService.getAll();
+        List<CheckDto> checks = checkService.selectByDate(allChecks, startDate, endDate);
+        model.addAttribute("checks", checks);
         return "check/checks";
     }
 }

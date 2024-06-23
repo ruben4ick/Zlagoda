@@ -5,16 +5,13 @@ import com.zlagoda.converter.SaleConverter;
 import com.zlagoda.dao.CheckDao;
 import com.zlagoda.dao.SaleDao;
 import com.zlagoda.dto.CheckDto;
-import com.zlagoda.dto.CustomerCardDto;
 import com.zlagoda.dto.EmployeeDto;
 import com.zlagoda.dto.SaleDto;
+import com.zlagoda.dto.CustomerCardDto;
 import com.zlagoda.entity.Check;
-import com.zlagoda.entity.CustomerCard;
-import com.zlagoda.entity.Employee;
 import com.zlagoda.entity.Sale;
 import com.zlagoda.service.*;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -71,6 +68,17 @@ public class CheckServiceImpl implements CheckService {
         return checks;
     }
 
+    @Override
+    public List<CheckDto> selectByDate(List<CheckDto> checks, LocalDateTime start, LocalDateTime end){
+        List<CheckDto> selectedChecks = new ArrayList<>();
+        for (CheckDto check : checks){
+            if ((check.getPrintDate().isAfter(start) && check.getPrintDate().isBefore(end))
+                    || check.getPrintDate().isEqual(start) || check.getPrintDate().isEqual(end)){
+                selectedChecks.add(check);
+            }
+        }
+        return selectedChecks;
+    }
     @Override
     public BigDecimal sumOfChecks(List<CheckDto> checks){
         BigDecimal sum = BigDecimal.ZERO;
