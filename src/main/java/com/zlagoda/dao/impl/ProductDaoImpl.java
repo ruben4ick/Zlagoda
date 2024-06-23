@@ -98,10 +98,13 @@ public class ProductDaoImpl implements ProductDao {
 
     @Override
     public Optional<Integer> findTotalSalesByNameInDateRange(String productName, LocalDateTime startDate, LocalDateTime endDate) {
-        return Optional.ofNullable(jdbcTemplate.query(FIND_SUM_OF_PRODUCT_SALES_BY_NAME_AND_DATES,
+        List<Integer> l = jdbcTemplate.query(FIND_SUM_OF_PRODUCT_SALES_BY_NAME_AND_DATES,
                 new Object[]{productName, startDate, endDate},
                 (rs, row) -> {
                     return rs.getInt(1);
-                }).getFirst());
+                });
+        if (l.isEmpty())
+            return Optional.empty();
+        return Optional.of(l.getFirst());
     }
 }

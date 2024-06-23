@@ -36,6 +36,7 @@ public class SecurityConfig {
                         .requestMatchers("/products/add").hasAnyAuthority("MANAGER")
                         .requestMatchers("/products/edit/**").hasAnyAuthority("MANAGER")
                         .requestMatchers("/products/delete/**").hasAnyAuthority("MANAGER")
+                        .requestMatchers("/products/totalSales/**").hasAnyAuthority("MANAGER")
                         .requestMatchers("/store-products/edit/**").hasAnyAuthority("MANAGER")
                         .requestMatchers("/store-products/add").hasAnyAuthority("MANAGER")
                         .requestMatchers("/store-products/add/**").hasAnyAuthority("MANAGER")

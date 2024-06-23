@@ -104,8 +104,8 @@ public class ProductController {
         return "redirect:/products";
     }
 
-    @GetMapping("/totalSales/{productName}")
-    public String getProductSalesByDateRange(@PathVariable("productName") String productName,
+    @GetMapping("/totalSales")
+    public String getProductSalesByDateRange(@RequestParam(value = "productName", required = false) String productName,
                                              @RequestParam(value = "start", required = false) String start,
                                              @RequestParam(value = "end", required = false) String end,
                                              Model model) {
@@ -113,7 +113,11 @@ public class ProductController {
         LocalDateTime endDate = (end != null && !end.isEmpty()) ? LocalDateTime.parse(end) : LocalDateTime.MAX;
 
         Optional<Integer> sum = productService.findTotalSalesByNameInDateRange(productName, startDate, endDate);
+        if (sum.isPresent()){
+        model.addAttribute("productName", productName);
         model.addAttribute("salesSum", sum.get());
-        return "/product/ZHIZa";
+        return "/product/quantofsale";
+        }
+        return "redirect:/products";
     }
 }
