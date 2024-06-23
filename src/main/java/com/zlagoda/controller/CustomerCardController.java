@@ -77,18 +77,19 @@ public class CustomerCardController {
     }
 
     @GetMapping("/percent-search")
-    public String customerCardsByPercent(@RequestParam(value = "percent", required = false, defaultValue = "-1") int percent,
-                                    Model model) {
+    public String customerCardsByPercent(@RequestParam(value = "percent", required = false, defaultValue = "-1")
+                                             int percent, Model model) {
         if (percent == -1)
-            return "customer-card/percent-search";
+            return "customer-card/customer-cards";
         model.addAttribute("customerCards", customerCardService.findByPercent(percent));
         return "customer-card/customer-cards";
     }
 
     @GetMapping("/surname-search")
-    public String searchCustomerBySurname(@RequestParam(value = "surname", required = false, defaultValue = "null") String surname, Model model) {
+    public String searchCustomerBySurname(@RequestParam(value = "surname", required = false, defaultValue = "null")
+                                              String surname, Model model) {
         if (surname.equals("null"))
-            return "customer-card/surname-search";
+            return "customer-card/customer-cards";
         model.addAttribute("customerCards", customerCardService.findBySurname(surname));
         return "customer-card/customer-cards";
     }

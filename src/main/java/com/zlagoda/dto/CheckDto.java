@@ -31,5 +31,5 @@ public class CheckDto {
 
     private BigDecimal vat;
 
-    private List<Sale> sales;
+    private List<SaleDto> sales;
 }

@@ -20,7 +20,7 @@ public class CustomerCardDaoImpl implements CustomerCardDao {
     private static final String FIND_ALL = "SELECT * FROM Customer_Card ORDER BY cust_surname";
 
     private static final String FIND_CUSTOMERS_BY_SURNAME =
-            "SELECT * FROM Customer_Card WHERE cust_surname LIKE ? ORDER BY cust_surname";
+            "SELECT * FROM Customer_Card WHERE cust_surname = ? ORDER BY cust_surname";
     private static final String FIND_BY_ID = "SELECT * FROM Customer_Card WHERE card_number = ?";
     private static final String INSERT = "INSERT INTO Customer_Card (card_number, cust_surname, cust_name, cust_patronymic, phone_number, city, street, zip_code, percent) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
     private static final String UPDATE = "UPDATE Customer_Card SET cust_surname = ?, cust_name = ?, cust_patronymic = ?, phone_number = ?, city = ?, street = ?, zip_code = ?, percent = ? WHERE card_number = ?";
@@ -86,7 +86,6 @@ public class CustomerCardDaoImpl implements CustomerCardDao {
 
     @Override
     public List<CustomerCard> findBySurname(String surname) {
-        String query = surname + "%"; // Пошук часткового збігу
-        return jdbcTemplate.query(FIND_CUSTOMERS_BY_SURNAME, new Object[]{query}, new CustomerCardRowMapper());
+        return jdbcTemplate.query(FIND_CUSTOMERS_BY_SURNAME, new CustomerCardRowMapper(), surname);
     }
 }

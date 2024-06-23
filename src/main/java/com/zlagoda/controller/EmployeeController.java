@@ -35,9 +35,16 @@ public class EmployeeController {
 
     @GetMapping("/cashiers")
     public String cashiers(Model model) {
-        List<Employee> cashiers = employeeService.getAllCashiers();
+        List<EmployeeDto> cashiers = employeeService.getAllCashiers();
         model.addAttribute("employees", cashiers);
         return "employee/cashiers";
+    }
+
+    @GetMapping("/employees/contact")
+    public String getEmployeeContactDetails(@RequestParam("surname") String surname, Model model) {
+        List<EmployeeDto> employees = employeeService.findContactDetailsBySurname(surname);
+        model.addAttribute("employees", employees);
+        return "employee/employees-contact";
     }
 
     @GetMapping("employees/add")
@@ -87,22 +94,6 @@ public class EmployeeController {
         employee.setId(employeeId);
         employeeService.update(employee);
         return "redirect:/employees";
-    }
-
-    @GetMapping("/employees/search")
-    public String showSearchForm() {
-        return "employee/employees-search";
-    }
-
-    @GetMapping("/employees/contact")
-    public String getEmployeeContactDetails(@RequestParam("surname") String surname, Model model) {
-        Optional<EmployeeDto> employeeDto = employeeService.findContactDetailsBySurname(surname);
-        if (employeeDto.isPresent()) {
-            model.addAttribute("employee", employeeDto.get());
-        } else {
-            model.addAttribute("error", "Employee not found with surname: " + surname);
-        }
-        return "employee/employees-contact";
     }
 
     @GetMapping("/employees/me")

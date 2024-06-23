@@ -12,6 +12,8 @@ public class EmployeeContactRowMapper implements RowMapper<Employee> {
     public Employee mapRow(ResultSet rs, int rowNum) throws SQLException {
         Employee employee = new Employee();
         employee.setSurname(rs.getString("empl_surname"));
+        employee.setName(rs.getString("empl_name"));
+        employee.setPatronymic(rs.getString("empl_patronymic"));
         employee.setPhoneNumber(rs.getString("phone_number"));
         employee.setCity(rs.getString("city"));
         employee.setStreet(rs.getString("street"));

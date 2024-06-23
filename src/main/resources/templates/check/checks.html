@@ -5,41 +5,6 @@
     <title>Checks List</title>
     <link rel="stylesheet" th:href="@{/css/style.css}">
     <link rel="stylesheet" th:href="@{/webjars/bootstrap/5.3.3/css/bootstrap.min.css}">
-    <style>
-        .button-container {
-            text-align: center;
-            margin-bottom: 20px;
-        }
-
-        .button {
-            padding: 10px 20px;
-            font-size: 16px;
-            background-color: #4CAF50;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            text-decoration: none;
-        }
-
-        .button:hover {
-            background-color: #45a049;
-        }
-
-        .delete-button {
-            background-color: #f44336;
-            color: white;
-            border: none;
-            padding: 5px 10px;
-            text-decoration: none;
-            border-radius: 5px;
-            cursor: pointer;
-        }
-
-        .delete-button:hover {
-            background-color: #d32f2f;
-        }
-    </style>
 </head>
 <body>
 <header class="p-3 bg-dark text-white">
@@ -70,9 +35,26 @@
         </div>
     </div>
 </header>
-
-<div class="button-container">
-    <a href="/checks/add" class="button">Add Check</a>
+<div class="row">
+    <div class="col text-start">
+        <form class="input-group mb-3" th:action="@{/checks/check-id}" method="get">
+            <input class="form-control" type="text" name="check_number" placeholder="Check number" required>
+            <button type="submit" class="btn btn-outline-dark">Search</button>
+        </form>
+    </div>
+    <div class="col text-start">
+        <form class="input-group mb-3" th:action="@{/checks/empl-id}" method="get">
+            <input class="form-control" type="text" name="employee_surname" placeholder="Employee" required>
+            <button type="submit" class="btn btn-outline-dark">Search</button>
+        </form>
+    </div>
+    <div class="col text-start">
+        <a href="/checks" class="btn btn-dark">Reset</a>
+    </div>
+    <div class="col text-end">
+        <button class="btn btn-dark" id="print-button"><i class="bi bi-printer-fill"></i></button>
+        <a href="/checks/add" class="btn btn-success">Add Check</a>
+    </div>
 </div>
 <div class="container">
 <table class="table table-hover">
@@ -96,12 +78,13 @@
         <td th:text="${check.totalSum}"></td>
         <td th:text="${check.vat}"></td>
         <td>
-            <a th:href="@{'/checks/delete/' + ${check.checkNumber}}" class="delete-button">Delete</a>
+            <a th:href="@{'/checks/delete/' + ${check.checkNumber}}" class="btn btn-danger"><i class="bi bi-trash-fill"></i></a>
         </td>
     </tr>
     </tbody>
 </table>
 </div>
 <script th:src="@{/webjars/bootstrap/5.3.3/js/bootstrap.bundle.min.js}"></script>
+<script th:src="@{/js/script.js}"></script>
 </body>
 </html>

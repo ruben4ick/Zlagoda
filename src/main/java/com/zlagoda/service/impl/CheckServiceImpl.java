@@ -1,26 +1,25 @@
 package com.zlagoda.service.impl;
 
 import com.zlagoda.converter.CheckConverter;
+import com.zlagoda.converter.SaleConverter;
 import com.zlagoda.dao.CheckDao;
 import com.zlagoda.dao.SaleDao;
 import com.zlagoda.dto.CheckDto;
 import com.zlagoda.dto.CustomerCardDto;
 import com.zlagoda.dto.EmployeeDto;
+import com.zlagoda.dto.SaleDto;
 import com.zlagoda.entity.Check;
 import com.zlagoda.entity.CustomerCard;
 import com.zlagoda.entity.Employee;
 import com.zlagoda.entity.Sale;
-import com.zlagoda.service.CheckService;
-import com.zlagoda.service.CustomerCardService;
-import com.zlagoda.service.SaleService;
-import com.zlagoda.service.StoreProductService;
+import com.zlagoda.service.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
-import java.math.RoundingMode;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -32,10 +31,12 @@ public class CheckServiceImpl implements CheckService {
     private final CheckDao checkDao;
     private final SaleDao saleDao;
     private final CheckConverter checkConverter;
+    private final SaleConverter saleConverter;
 
     private final CustomerCardService customerCardService;
     private final StoreProductService storeProductService;
     private final SaleService saleService;
+    private final EmployeeService employeeService;
 
     @Override
     public List<CheckDto> getAll() {
@@ -51,11 +52,46 @@ public class CheckServiceImpl implements CheckService {
     }
 
     @Override
+    public List<CheckDto> getByEmplId(String employee_id){
+        return checkDao.getByEmplId(employee_id).stream()
+                .map(checkConverter::convertToDto)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<CheckDto> getByEmplSurname(String employee_surname){
+        List<EmployeeDto> employees = employeeService.getBySurname(employee_surname);
+        List<CheckDto> checks = new ArrayList<>();
+        for (EmployeeDto employee : employees){
+            checks.addAll(getByEmplId(employee.getId()));
+        }
+        return checks;
+    }
+
+    @Override
+    public BigDecimal sumOfChecks(List<CheckDto> checks){
+        BigDecimal sum = BigDecimal.ZERO;
+
+        for (CheckDto check : checks) {
+            sum = sum.add(check.getTotalSum());
+        }
+
+        return sum;
+    }
+
+    @Override
     public void create(CheckDto checkDto) {
         checkDto.setPrintDate(LocalDateTime.now());
         BigDecimal totalSum = checkDto.getSales().stream()
                 .map(sale -> sale.getSellingPrice().multiply(BigDecimal.valueOf(sale.getProductNumber())))
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
+        String customerCardNumber = checkDto.getCustomerCard().getCardNumber();
+        if (!customerCardNumber.isEmpty()) {
+            double percent = customerCardService.getById(customerCardNumber)
+                    .map(CustomerCardDto::getPercent)
+                    .orElse(0);
+            totalSum = totalSum.multiply(BigDecimal.valueOf(1 - percent / 100));
+        } else checkDto.setCustomerCard(null);
         BigDecimal vat = totalSum.multiply(BigDecimal.valueOf(0.2));
         checkDto.setTotalSum(totalSum);
         checkDto.setVat(vat);
@@ -64,9 +100,12 @@ public class CheckServiceImpl implements CheckService {
         checkDao.create(check);
 
         // Зберігаємо всі продажі
-        for (Sale sale : checkDto.getSales()) {
+        for (SaleDto saleDto : checkDto.getSales()) {
+            Sale sale = saleConverter.convertToEntity(saleDto);
             sale.setCheckNumber(check.getCheckNumber()); // Встановлюємо номер чека для кожного продажу
             saleDao.create(sale);
+
+            storeProductService.updateProductQuantity(sale.getStoreProduct().getUpc(), sale.getProductNumber());
         }
     }
 

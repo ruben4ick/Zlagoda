@@ -4,7 +4,9 @@ import com.zlagoda.dto.ProductDto;
 import com.zlagoda.dto.StoreProductDto;
 import com.zlagoda.service.StoreProductService;
 import com.zlagoda.service.ProductService;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.Max;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -27,6 +29,20 @@ public class StoreProductController {
         List<StoreProductDto> storeProducts = storeProductService.getAll();
         model.addAttribute("storeProducts", storeProducts);
         return "store-product/store-products";
+    }
+
+    @GetMapping("/promoted")
+    public String listStoreProductsPromoted(Model model){
+        List<StoreProductDto> storeProducts = storeProductService.getPromotionalProducts();
+        model.addAttribute("storeProducts", storeProducts);
+        return "store-product/store-products-promoted";
+    }
+
+    @GetMapping("/standard")
+    public String listStoreProductsStandard(Model model){
+        List<StoreProductDto> storeProducts = storeProductService.getStandardProducts();
+        model.addAttribute("storeProducts", storeProducts);
+        return "store-product/store-products-standard";
     }
 
     @GetMapping("/add")
@@ -90,24 +106,11 @@ public class StoreProductController {
         return "store-product/store-products-edit";
     }
 
-    @GetMapping("/promotional")
-    public String findPromotionalStoreProducts(Model model) {
-        List<StoreProductDto> storeProducts = storeProductService.getPromotionalProducts();
-        model.addAttribute("storeProducts", storeProducts);
-        return "store-product/store-products";
-    }
-
-    @GetMapping("/not-promotional")
-    public String findNotPromotionalStoreProducts(Model model) {
-        List<StoreProductDto> storeProducts = storeProductService.getNotPromotionalProducts();
-        model.addAttribute("storeProducts", storeProducts);
-        return "store-product/store-products";
-    }
-
     @GetMapping("/add/prom/{upc}")
-    public String makeProm(@PathVariable String upc) {
+    public String makeProm(@PathVariable String upc, HttpServletRequest request) {
         storeProductService.addPromotionStoreProduct(upc);
-        return "redirect:/store-products";
+        String referer = request.getHeader("Referer");
+        return "redirect:" + referer;
     }
 
     @GetMapping("/remove/prom/{upc}")
@@ -115,4 +118,21 @@ public class StoreProductController {
         storeProductService.removePromotionStoreProduct(upc);
         return "redirect:/store-products";
     }
+
+    @GetMapping("/upc")
+    public String getStoreProductByUPC(@RequestParam(value = "upc_search", required = false, defaultValue = "null")
+                                       String upc_search, Model model){
+        if (upc_search.equals("null"))
+            return "store-product/upc_search";
+
+        Optional<StoreProductDto> storeProductOpt = storeProductService.getById(upc_search);
+        if (storeProductOpt.isPresent()) {
+            StoreProductDto storeProduct = storeProductOpt.get();
+            model.addAttribute("storeProducts", List.of(storeProduct));
+        } else {
+            model.addAttribute("storeProducts", List.of());
+        }
+        return "store-product/store-products";
+    }
+
 }

@@ -3,16 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <title>Edit Store Product</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <link rel="stylesheet" th:href="@{/webjars/bootstrap/5.3.3/css/bootstrap.min.css}">
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 20px;
-        }
-
-        h1 {
-            text-align: center;
-        }
-
         form {
             max-width: 600px;
             margin: 0 auto;
@@ -22,7 +15,7 @@
             background: #f9f9f9;
         }
 
-        label, input, select {
+        label, input {
             display: block;
             width: 100%;
             margin-bottom: 10px;
@@ -30,23 +23,9 @@
             font-size: 16px;
         }
 
-        input, select {
+        input {
             border: 1px solid #ccc;
             border-radius: 5px;
-        }
-
-        button {
-            padding: 10px 20px;
-            font-size: 16px;
-            background-color: #4CAF50;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-        }
-
-        button:hover {
-            background-color: #45a049;
         }
 
         .form-group {
@@ -60,31 +39,32 @@
     </style>
 </head>
 <body>
-<h1>Edit Store Product</h1>
+<div class="container text-center">
+    <h1>Edit Store Product</h1>
+</div>
 
 <form th:action="@{/store-products/edit/{upc}(upc=${storeProduct.upc})}" th:object="${storeProduct}" method="post">
     <div class="form-group">
-        <label>UPC: <th:block th:text="${upc}"></th:block></label>
-        <label>Product: <th:block th:text="${storeProduct.product.name}"></th:block> </label>
-    </div>
-
-    <div class="form-group">
         <label for="price">Price:</label>
-        <input type="number" id="price" th:field="*{price}" step="0.01" required />
+        <input type="text" id="price" th:field="*{price}" required />
     </div>
 
     <div class="form-group">
         <label for="quantity">Quantity:</label>
-        <input type="number" id="quantity" th:field="*{quantity}" required />
+        <input type="text" id="quantity" th:field="*{quantity}" required />
     </div>
 
-    <div class="form-group">
-        <label for="isPromotional">Is Promotional:</label>
-        <input type="checkbox" id="isPromotional" th:field="*{isPromotional}" />
-        <input type="hidden" name="product.id" th:field="*{product.id}" th:value="${storeProduct.product.id}">
+    <div class="container text-center">
+        <div class="row">
+            <div class="col text-start">
+                <a href="/store-products" class="btn btn-secondary">Cancel</a>
+            </div>
+            <div class="col text-end">
+                <button type="submit" class="btn btn-success">Submit</button>
+            </div>
+        </div>
     </div>
-
-    <button type="submit">Save Changes</button>
 </form>
+<script th:src="@{/webjars/bootstrap/5.3.3/js/bootstrap.bundle.min.js}"></script>
 </body>
 </html>

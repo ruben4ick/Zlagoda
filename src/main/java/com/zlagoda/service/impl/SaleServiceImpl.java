@@ -1,5 +1,6 @@
 package com.zlagoda.service.impl;
 
+import com.zlagoda.entity.CustomerCard;
 import com.zlagoda.entity.Sale;
 import org.modelmapper.internal.Pair;
 import com.zlagoda.converter.SaleConverter;
@@ -12,13 +13,13 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
 public class SaleServiceImpl implements SaleService {
     private final SaleDao saleDao;
     private final SaleConverter saleConverter;
-    private final StoreProductService storeProductService;
 
 
     @Override
@@ -37,24 +38,17 @@ public class SaleServiceImpl implements SaleService {
     }
 
     @Override
-    public void create(SaleDto e) {
-
+    public List<SaleDto> getByCheck(String check_number){
+        return saleDao.getByCheck(check_number).stream()
+                .map(saleConverter::mapToSaleDto)
+                .collect(Collectors.toList());
     }
 
-    /*@Override
+    @Override
     public void create(SaleDto saleDto) {
-        Sale saleToCreate = saleConverter.convertToEntity(saleDto);
-        saleToCreate.setSellingPrice(storeProductService.getPriceByUpc(saleDto.getStoreProductUpc()));
-
-        int availableAmount = storeProductService.getAmountByUpc(saleDto.getStoreProductUpc());
-        if (saleDto.getProductNumber() > availableAmount)
-            throw new EntityCreationException("Not enough amount of store products with id = " +
-                    saleDto.getStoreProductUpc() + " to create check");
-
-        storeProductService.subtractAmountByUpc(saleDto.getStoreProductUpc(), saleDto.getProductNumber());
-
-        saleDao.create(saleToCreate);
-    }*/
+        Sale sale = saleConverter.convertToEntity(saleDto);
+        saleDao.create(sale);
+    }
 
     @Override
     public void update(SaleDto e) {

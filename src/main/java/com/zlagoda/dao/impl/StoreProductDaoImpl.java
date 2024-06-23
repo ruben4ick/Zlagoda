@@ -47,11 +47,15 @@ public class StoreProductDaoImpl implements StoreProductDao {
                     "INNER JOIN Product p ON sp.id_product = p.id_product " +
                     "WHERE sp.promotional_product = true";
 
-    private static final String SUBTRACT_AMOUNT = """
-                UPDATE store_product
-                SET products_number = products_number - ?
-                WHERE upc = ?
-                """;
+    private static final String FIND_STANDARD_PRODUCTS =
+            "SELECT sp.*, p.id_product, p.product_name, p.characteristics, " +
+                    "sp_upc.upc AS upc_prom, sp_upc.selling_price AS prom_price, sp_upc.products_number AS prom_quantity, sp_upc.promotional_product AS prom_isPromotional " +
+                    "FROM Store_Product sp " +
+                    "INNER JOIN Product p ON sp.id_product = p.id_product " +
+                    "LEFT JOIN Store_Product sp_upc ON sp.upc_prom = sp_upc.upc " +
+                    "WHERE sp.promotional_product = false AND sp.upc_prom IS NULL";
+
+    private static final String UPDATE_QUANTITY = "UPDATE Store_Product SET products_number = products_number - ? WHERE upc = ?";
 
     @Override
     public List<StoreProduct> getAll() {
@@ -78,16 +82,17 @@ public class StoreProductDaoImpl implements StoreProductDao {
         jdbcTemplate.update(INSERT_STORE_PRODUCT, params);
     }
 
-
+    // need some attention
     @Override
     public void update(StoreProduct storeProduct) {
+        StoreProduct currentStoreProduct = getById(storeProduct.getUpc()).get();
         jdbcTemplate.update(UPDATE_STORE_PRODUCT,
                 storeProduct.getUpcProm() != null ? storeProduct.getUpcProm().getUpc() : null,
-                storeProduct.getProduct().getId(),
-                storeProduct.getPrice(),
-                storeProduct.getQuantity(),
-                storeProduct.getIsPromotional(),
-                storeProduct.getUpc());
+                storeProduct.getProduct() != null ? storeProduct.getProduct().getId() : currentStoreProduct.getProduct().getId(),
+                storeProduct.getPrice() != null ? storeProduct.getPrice() : currentStoreProduct.getPrice(),
+                storeProduct.getQuantity() != null ? storeProduct.getQuantity() : currentStoreProduct.getQuantity(),
+                storeProduct.getIsPromotional() != null ? storeProduct.getIsPromotional() : currentStoreProduct.getIsPromotional(),
+                storeProduct.getUpc() != null ? storeProduct.getUpc() : currentStoreProduct.getUpc());
     }
 
     @Override
@@ -101,8 +106,12 @@ public class StoreProductDaoImpl implements StoreProductDao {
     }
 
     @Override
-    public void subtractAmountByUpc(String upc, int delta) {
+    public List<StoreProduct> getStandardProducts() {
+        return jdbcTemplate.query(FIND_STANDARD_PRODUCTS, new StoreProductRowMapper());
+    }
 
-        jdbcTemplate.update(SUBTRACT_AMOUNT, delta, upc);
+    @Override
+    public void updateProductQuantity(String upc, int quantity) {
+        jdbcTemplate.update(UPDATE_QUANTITY, quantity, upc);
     }
 }
