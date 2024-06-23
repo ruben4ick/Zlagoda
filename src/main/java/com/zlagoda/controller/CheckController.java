@@ -95,24 +95,53 @@ public class CheckController {
     }
 
     @GetMapping("/empl-id")
-    public String getChecksByEmployeeSurname(@RequestParam(value = "employee_surname", required = false, defaultValue = "null")
-                                                 String employee_surname, Model model){
+    public String getChecksByEmployeeSurname(@RequestParam(value = "employee_surname", required = false, defaultValue = "null") String employee_surname,
+                                             @RequestParam(value = "start", required = false) String start,
+                                             @RequestParam(value = "end", required = false) String end,
+                                             Model model){
         if (employee_surname.equals("null")){
             return "check/checks";
         }
-        model.addAttribute("checks", checkService.getByEmplSurname(employee_surname));
+
+        List<CheckDto> checks;
+        if (start != null && !start.isEmpty() && end != null && !end.isEmpty()) {
+            LocalDateTime startDate = LocalDateTime.parse(start);
+            LocalDateTime endDate = LocalDateTime.parse(end);
+            List<CheckDto> allChecks = checkService.getByEmplSurname(employee_surname);
+            checks = checkService.selectByDate(allChecks, startDate, endDate);
+        } else if ((start == null || start.isEmpty()) && end != null && !end.isEmpty()) {
+            LocalDateTime startDate = LocalDateTime.MIN;
+            LocalDateTime endDate = LocalDateTime.parse(end);
+            List<CheckDto> allChecks = checkService.getByEmplSurname(employee_surname);
+            checks = checkService.selectByDate(allChecks, startDate, endDate);
+        } else if (start != null && !start.isEmpty() && (end == null || end.isEmpty())) {
+            LocalDateTime startDate = LocalDateTime.parse(start);
+            LocalDateTime endDate = LocalDateTime.MAX;
+            List<CheckDto> allChecks = checkService.getByEmplSurname(employee_surname);
+            checks = checkService.selectByDate(allChecks, startDate, endDate);
+        } else {
+            checks = checkService.getByEmplSurname(employee_surname);
+        }
+
+        model.addAttribute("checks", checks);
+        model.addAttribute("start", start);
+        model.addAttribute("end", end);
         return "check/checks";
     }
 
     @GetMapping("/date-range")
-    public String getChecksByDateRange(@RequestParam("start") String start,
-                                       @RequestParam("end") String end,
+    public String getChecksByDateRange(@RequestParam(value = "start", required = false) String start,
+                                       @RequestParam(value = "end", required = false) String end,
                                        Model model) {
-        LocalDateTime startDate = LocalDateTime.parse(start);
-        LocalDateTime endDate = LocalDateTime.parse(end);
+        LocalDateTime startDate = (start != null && !start.isEmpty()) ? LocalDateTime.parse(start) : LocalDateTime.MIN;
+        LocalDateTime endDate = (end != null && !end.isEmpty()) ? LocalDateTime.parse(end) : LocalDateTime.MAX;
+
         List<CheckDto> allChecks = checkService.getAll();
         List<CheckDto> checks = checkService.selectByDate(allChecks, startDate, endDate);
+
         model.addAttribute("checks", checks);
+        model.addAttribute("start", start);
+        model.addAttribute("end", end);
         return "check/checks";
     }
 }
