@@ -16,4 +16,7 @@ public interface EmployeeService extends GenericService<EmployeeDto, String> {
     List<Employee.Role> getEmployeeRoles();
 
     Optional<EmployeeDto> findByUsername(String username);
+  
+    List<EmployeeDto> getAllCashiersServedAllCustomers();
+
 }

@@ -85,6 +85,7 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
     @Override
+
     public List<Employee.Role> getEmployeeRoles() {
         return List.of(Employee.Role.values());
     }
@@ -149,16 +150,18 @@ public class EmployeeServiceImpl implements EmployeeService {
         return oldEmployee;
     }*/
 
-    /*@Override
+    @Override
     public Employee getCurrent() {
         EmployeeDetails employeeDetails = (EmployeeDetails) SecurityContextHolder.getContext().getAuthentication()
                 .getPrincipal();
         Employee employee = employeeDetails.getEmployee();
         return employee;
+
+    public List<EmployeeDto> getAllCashiersServedAllCustomers() {
+        return employeeDao.getAllCashiersServedAllCustomers().stream()
+                .map(employeeConverter::mapToEmployeeDto)
+                .toList();
+
     }
 
-    @Override
-    public List<EmployeeStatisticDTO> getEmployeeStats() {
-        return employeeDAO.getEmployeeStats();
-    }*/
 }

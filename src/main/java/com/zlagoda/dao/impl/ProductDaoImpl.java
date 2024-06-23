@@ -69,6 +69,28 @@ public class ProductDaoImpl implements ProductDao {
             "WHERE sp.id_product = p.id_product" +
             ")";
 
+    private static final String FIND_PRODUCTS_SOLD_FROM_CERTAIN_CITY = """
+    SELECT DISTINCT Product.*, Category.*
+     FROM Product
+     INNER JOIN Store_Product ON Product.id_product = Store_Product.id_product
+     INNER JOIN Sale ON Store_Product.UPC = Sale.UPC
+     INNER JOIN `Check` ON Sale.check_number = `Check`.check_number
+     INNER JOIN Employee ON `Check`.id_employee = Employee.id_employee
+     INNER JOIN Category ON Product.category_number = Category.category_number
+     WHERE Product.id_product NOT IN (
+         SELECT Product.id_product
+         FROM Product
+         INNER JOIN Store_Product ON Product.id_product = Store_Product.id_product
+         INNER JOIN Sale ON Store_Product.UPC = Sale.UPC
+         INNER JOIN `Check` ON Sale.check_number = `Check`.check_number
+         INNER JOIN Employee ON `Check`.id_employee = Employee.id_employee
+         WHERE Employee.id_employee NOT IN (
+             SELECT id_employee
+             FROM Employee
+             WHERE city = ?
+         )
+     );
+    """;
     @Override
     public List<Product> getAll() {
         return jdbcTemplate.query(FIND_ALL_PRODUCTS, new ProductRowMapper());
@@ -112,7 +134,7 @@ public class ProductDaoImpl implements ProductDao {
         return jdbcTemplate.query(FIND_PRODUCTS_BY_NAME, new Object[]{query}, new ProductRowMapper());
     }
 
-    @Override
+
     public Optional<Integer> findTotalSalesByNameInDateRange(String productName, LocalDateTime startDate, LocalDateTime endDate) {
         List<Integer> l = jdbcTemplate.query(FIND_SUM_OF_PRODUCT_SALES_BY_NAME_AND_DATES,
                 new Object[]{productName, startDate, endDate},
@@ -126,5 +148,8 @@ public class ProductDaoImpl implements ProductDao {
 
     public List<Product> findNotInStoreNeverSoldProducts() {
         return jdbcTemplate.query(FIND_NOT_IN_STOCK_AND_NEVER_SOLD, new ProductRowMapper());
+
+    public List<Product> findBySoldFromCertainCity(String city) {
+        return jdbcTemplate.query(FIND_PRODUCTS_SOLD_FROM_CERTAIN_CITY, new ProductRowMapper(), city);
     }
 }

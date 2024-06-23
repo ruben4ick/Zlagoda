@@ -14,4 +14,7 @@ public interface ProductDao extends GenericDao<Product, Long>{
 
     Optional<Integer> findTotalSalesByNameInDateRange(String productName, LocalDateTime startDate, LocalDateTime endDate);
     List<Product> findNotInStoreNeverSoldProducts();
+
+    List<Product> findBySoldFromCertainCity(String name);
+
 }

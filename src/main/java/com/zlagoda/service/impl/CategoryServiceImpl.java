@@ -2,6 +2,7 @@ package com.zlagoda.service.impl;
 
 import com.zlagoda.dao.CategoryDao;
 import com.zlagoda.dto.CategoryDto;
+import com.zlagoda.dto.CategorySalesDto;
 import com.zlagoda.entity.Category;
 import com.zlagoda.service.CategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -58,6 +59,9 @@ public class CategoryServiceImpl implements CategoryService {
         return categoryDao.findWithTotalProductsMoreThan(quantity).stream()
                 .map(this::mapToCategoryDto)
                 .collect(Collectors.toList());
+
+    public List<CategorySalesDto> findTotalSalesByCategory() {
+        return categoryDao.findTotalSalesByCategory();
     }
 
     private Category mapToCategory(CategoryDto categoryDto) {

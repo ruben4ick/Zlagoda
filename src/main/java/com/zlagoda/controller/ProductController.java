@@ -52,6 +52,13 @@ public class ProductController {
         return "product/products";
     }
 
+    @GetMapping("/sold-from-certain-city")
+    public String findBySoldFromCertainCity(@RequestParam(value = "city") String city, Model model) {
+        List<ProductDto> products = productService.findBySoldFromCertainCity(city);
+        model.addAttribute("products", products);
+        return "product/products";
+    }
+
     @GetMapping("/add")
     public String productAdd(Model model) {
         List<CategoryDto> categories = categoryService.getAll();
@@ -104,6 +111,7 @@ public class ProductController {
         return "redirect:/products";
     }
 
+
     @GetMapping("/totalSales")
     public String getProductSalesByDateRange(@RequestParam(value = "productName", required = false) String productName,
                                              @RequestParam(value = "start", required = false) String start,
@@ -127,4 +135,5 @@ public class ProductController {
         model.addAttribute("products", products);
         return "/product/products";
     }
+
 }
