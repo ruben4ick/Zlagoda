@@ -55,11 +55,15 @@ public class StoreProductDaoImpl implements StoreProductDao {
                     "LEFT JOIN Store_Product sp_upc ON sp.upc_prom = sp_upc.upc " +
                     "WHERE sp.promotional_product = false AND sp.upc_prom IS NULL";
 
-    private static final String SUBTRACT_AMOUNT = """
-                UPDATE store_product
-                SET products_number = products_number - ?
-                WHERE upc = ?
-                """;
+    private static final String UPDATE_QUANTITY = "UPDATE Store_Product SET products_number = products_number - ? WHERE upc = ?";
+
+    private static final String FIND_BY_PROM_UPC =
+            "SELECT sp.*, p.id_product, p.product_name, p.characteristics, " +
+                    "sp_upc.upc AS upc_prom, sp_upc.selling_price AS prom_price, sp_upc.products_number AS prom_quantity, sp_upc.promotional_product AS prom_isPromotional " +
+                    "FROM Store_Product sp " +
+                    "INNER JOIN Product p ON sp.id_product = p.id_product " +
+                    "LEFT JOIN Store_Product sp_upc ON sp.upc_prom = sp_upc.upc " +
+                    "WHERE sp.upc_prom = ?";
 
     @Override
     public List<StoreProduct> getAll() {
@@ -70,6 +74,11 @@ public class StoreProductDaoImpl implements StoreProductDao {
     public Optional<StoreProduct> getById(String upc) {
         List<StoreProduct> products = jdbcTemplate.query(FIND_BY_ID, new Object[]{upc}, new StoreProductRowMapper());
         return products.stream().findFirst();
+    }
+
+    @Override
+    public Optional<StoreProduct> findByUpcProm(String upc_prom){
+        return jdbcTemplate.query(FIND_BY_PROM_UPC, new StoreProductRowMapper(), upc_prom).stream().findFirst();
     }
 
     @Override
@@ -115,8 +124,7 @@ public class StoreProductDaoImpl implements StoreProductDao {
     }
 
     @Override
-    public void subtractAmountByUpc(String upc, int delta) {
-
-        jdbcTemplate.update(SUBTRACT_AMOUNT, delta, upc);
+    public void updateProductQuantity(String upc, int quantity) {
+        jdbcTemplate.update(UPDATE_QUANTITY, quantity, upc);
     }
 }

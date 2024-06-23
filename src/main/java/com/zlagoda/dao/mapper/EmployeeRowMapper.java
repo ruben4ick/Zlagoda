@@ -12,7 +12,6 @@ public class EmployeeRowMapper implements RowMapper<Employee> {
     private static final String ID_EMPLOYEE = "id_employee";
     private static final String SURNAME = "empl_surname";
     private static final String NAME = "empl_name";
-    private static final String PASSWORD = "password";
     private static final String ROLE = "empl_role";
     private static final String PATRONYMIC = "empl_patronymic";
     private static final String SALARY = "salary";
@@ -22,6 +21,8 @@ public class EmployeeRowMapper implements RowMapper<Employee> {
     private static final String CITY = "city";
     private static final String STREET = "street";
     private static final String ZIP_CODE = "zip_code";
+    private static final String USERNAME = "username";
+    private static final String PASSWORD = "password";
 
     @Override
     public Employee mapRow(ResultSet rs, int rowNum) throws SQLException {
@@ -39,7 +40,8 @@ public class EmployeeRowMapper implements RowMapper<Employee> {
         employee.setCity(rs.getString(CITY));
         employee.setStreet(rs.getString(STREET));
         employee.setZipCode(rs.getString(ZIP_CODE));
-
+        employee.setUsername(rs.getString(USERNAME));
+        employee.setPassword(rs.getString(PASSWORD));
         return employee;
     }
 }

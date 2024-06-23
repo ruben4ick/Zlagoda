@@ -7,7 +7,8 @@ import com.zlagoda.entity.Employee;
 import java.util.List;
 
 public interface CategoryDao extends GenericDao<Category, Long> {
-
+    List<Category> findWithTotalProductsMoreThan(int quantity);
+    
     List<CategorySalesDto> findTotalSalesByCategory();
 
 }

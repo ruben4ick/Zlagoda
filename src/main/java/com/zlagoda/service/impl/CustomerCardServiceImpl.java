@@ -27,18 +27,21 @@ public class CustomerCardServiceImpl implements CustomerCardService {
 
     @Override
     public Optional<CustomerCardDto> getById(String cardNumber) {
+        cardNumber = cardNumber.trim();
         return customerCardDao.getById(cardNumber)
                 .map(customerCardConverter::convertToDto);
     }
 
     @Override
     public void create(CustomerCardDto customerCardDto) {
+        customerCardDto.normalize();
         CustomerCard customerCard = customerCardConverter.convertToEntity(customerCardDto);
         customerCardDao.create(customerCard);
     }
 
     @Override
     public void update(CustomerCardDto customerCardDto) {
+        customerCardDto.normalize();
         CustomerCard customerCard = customerCardConverter.convertToEntity(customerCardDto);
         customerCardDao.update(customerCard);
     }
@@ -58,6 +61,7 @@ public class CustomerCardServiceImpl implements CustomerCardService {
 
     @Override
     public List<CustomerCardDto> findBySurname(String surname) {
+        surname = surname.trim();
         List<CustomerCard> customerCards = customerCardDao.findBySurname(surname);
         return customerCards.stream()
                 .map(customerCardConverter::convertToDto)

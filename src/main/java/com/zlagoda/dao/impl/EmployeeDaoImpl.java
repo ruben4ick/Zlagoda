@@ -17,8 +17,6 @@ public class EmployeeDaoImpl implements EmployeeDao {
 
     @Autowired
     private JdbcTemplate jdbcTemplate;
-
-    private static final String FIND_BY_NAME = "SELECT * FROM `Employee` WHERE empl_name = ?";
     private static final String FIND_BY_ID = "SELECT * FROM `Employee` WHERE id_employee = ?";
     private static final String FIND_ALL_EMPLOYEES = "SELECT * FROM `Employee` ORDER BY empl_surname";
     private static final String FIND_ALL_CASHIERS = "SELECT * FROM Employee WHERE empl_role = 'CASHIER' ORDER BY empl_surname";
@@ -52,16 +50,20 @@ public class EmployeeDaoImpl implements EmployeeDao {
             "phone_number = ?,\n" +
             "city = ?,\n" +
             "street = ?,\n" +
-            "zip_code = ?\n" +
+            "zip_code = ?,\n" +
+            "username = ?,\n" +
+            "password = ?\n" +
             "WHERE id_employee = ?";
 
     private static final String INSERT_EMPLOYEE = "INSERT INTO Employee (id_employee, empl_surname, empl_name, empl_patronymic, empl_role, salary, date_of_birth, " +
-            "date_of_start, phone_number, city, street, zip_code) " +
-            "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+            "date_of_start, phone_number, city, street, zip_code, username, password) " +
+            "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
     private static final String DELETE_EMPLOYEE = "DELETE FROM Employee WHERE id_employee = ?";
 
+    private static final String FIND_BY_USERNAME = "SELECT * FROM Employee WHERE username = ?";
     private static final String FIND_CONTACT_DETAILS_BY_SURNAME = "SELECT empl_surname, empl_name, empl_patronymic, phone_number, city, street, zip_code FROM Employee WHERE empl_surname = ?";
+    private static final String FIND_BY_SURNAME = "SELECT * FROM Employee WHERE empl_surname = ?";
 
     @Override
     public List<Employee> getAll() {
@@ -71,6 +73,11 @@ public class EmployeeDaoImpl implements EmployeeDao {
     @Override
     public List<Employee> getAllCashiers() {
         return jdbcTemplate.query(FIND_ALL_CASHIERS, new EmployeeRowMapper());
+    }
+
+    @Override
+    public List<Employee> getBySurname(String surname) {
+        return jdbcTemplate.query(FIND_BY_SURNAME, new EmployeeRowMapper(), surname);
     }
 
     @Override
@@ -107,6 +114,8 @@ public class EmployeeDaoImpl implements EmployeeDao {
                 employee.getCity(),
                 employee.getStreet(),
                 employee.getZipCode(),
+                employee.getUsername(),
+                employee.getPassword()
         };
         jdbcTemplate.update(INSERT_EMPLOYEE, params);
     }
@@ -131,8 +140,16 @@ public class EmployeeDaoImpl implements EmployeeDao {
                 employee.getCity(),
                 employee.getStreet(),
                 employee.getZipCode(),
+                employee.getUsername(),
+                employee.getPassword(),
                 employee.getId()
         };
         jdbcTemplate.update(UPDATE, params);
+    }
+
+    @Override
+    public Optional<Employee> findByUsername(String username) {
+        List<Employee> employee = jdbcTemplate.query(FIND_BY_USERNAME, new Object[] {username}, new EmployeeRowMapper());
+        return employee.stream().findFirst();
     }
 }

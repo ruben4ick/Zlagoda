@@ -5,8 +5,10 @@ import com.zlagoda.dao.mapper.ProductRowMapper;
 import com.zlagoda.entity.Product;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -41,6 +43,31 @@ public class ProductDaoImpl implements ProductDao {
                     "INNER JOIN Category c ON p.category_number = c.category_number " +
                     "WHERE p.category_number = ? " +
                     "ORDER BY p.product_name;";
+    private static final String FIND_SUM_OF_PRODUCT_SALES_BY_NAME_AND_DATES = "SELECT " +
+            "SUM(s.product_number) AS total_sales " +
+            "FROM sale s " +
+            "INNER JOIN store_product sp ON s.UPC = sp.UPC " +
+            "INNER JOIN product p ON sp.id_product = p.id_product " +
+            "INNER JOIN `check` c ON s.check_number = c.check_number " +
+            "WHERE p.product_name = ? " +
+            "AND c.print_date BETWEEN ? AND ? " +
+            "GROUP BY p.product_name";
+
+    private static final String FIND_NOT_IN_STOCK_AND_NEVER_SOLD = "SELECT " +
+            "p.id_product, p.category_number, p.product_name, p.characteristics, c.category_name" +
+            " FROM product p " +
+            "INNER JOIN Category c ON p.category_number = c.category_number " +
+            "WHERE NOT EXISTS (" +
+            "SELECT sp.id_product " +
+            "FROM Store_Product sp " +
+            "WHERE sp.id_product = p.id_product" +
+            ") " +
+            "AND NOT EXISTS (" +
+            "SELECT sp.UPC " +
+            "FROM sale s " +
+            "INNER JOIN Store_Product sp ON s.UPC = sp.UPC " +
+            "WHERE sp.id_product = p.id_product" +
+            ")";
 
     private static final String FIND_PRODUCTS_SOLD_FROM_CERTAIN_CITY = """
     SELECT DISTINCT Product.*, Category.*
@@ -107,7 +134,21 @@ public class ProductDaoImpl implements ProductDao {
         return jdbcTemplate.query(FIND_PRODUCTS_BY_NAME, new Object[]{query}, new ProductRowMapper());
     }
 
-    @Override
+
+    public Optional<Integer> findTotalSalesByNameInDateRange(String productName, LocalDateTime startDate, LocalDateTime endDate) {
+        List<Integer> l = jdbcTemplate.query(FIND_SUM_OF_PRODUCT_SALES_BY_NAME_AND_DATES,
+                new Object[]{productName, startDate, endDate},
+                (rs, row) -> {
+                    return rs.getInt(1);
+                });
+        if (l.isEmpty())
+            return Optional.empty();
+        return Optional.of(l.getFirst());
+    }
+
+    public List<Product> findNotInStoreNeverSoldProducts() {
+        return jdbcTemplate.query(FIND_NOT_IN_STOCK_AND_NEVER_SOLD, new ProductRowMapper());
+
     public List<Product> findBySoldFromCertainCity(String city) {
         return jdbcTemplate.query(FIND_PRODUCTS_SOLD_FROM_CERTAIN_CITY, new ProductRowMapper(), city);
     }

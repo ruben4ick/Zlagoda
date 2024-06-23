@@ -26,6 +26,8 @@ public class EmployeeConverter {
                 .city(employeeDto.getCity())
                 .street(employeeDto.getStreet())
                 .zipCode(employeeDto.getZipCode())
+                .username(employeeDto.getUsername())
+                .password(employeeDto.getPassword())
                 .build();
     }
 
@@ -43,6 +45,8 @@ public class EmployeeConverter {
                 .city(employee.getCity())
                 .street(employee.getStreet())
                 .zipCode(employee.getZipCode())
+                .username(employee.getUsername())
+                .password(employee.getPassword())
                 .build();
     }
 }

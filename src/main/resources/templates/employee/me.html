@@ -11,9 +11,9 @@
   <div class="container">
     <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
       <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0 align-items-center">
-        <li><a href="/" class="nav-link px-3 text-secondary"><i class="bi bi-house"></i> Home</a></li>
+        <li><a href="/" class="nav-link px-3 text-white"><i class="bi bi-house"></i> Home</a></li>
         <li><a href="/checks" class="nav-link px-3 text-white"><i class="bi bi-piggy-bank"></i> Checks</a></li>
-        <li sec:authorize="hasAnyAuthority('MANAGER')"><a href="/employees" class="nav-link px-3 text-white"><i class="bi bi-person"></i> Employees</a></li>
+        <li><a href="/employees" class="nav-link px-3 text-white"><i class="bi bi-person"></i> Employees</a></li>
         <li><a href="/customers" class="nav-link px-3 text-white"><i class="bi bi-people"></i> Customers</a></li>
         <li class="nav-item dropdown">
           <a class="nav-link px-3 text-white dropdown-toggle" id="productsDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -27,7 +27,7 @@
         </li>
       </ul>
       <div class="text-end d-flex align-items-center justify-content-end">
-        <a href="/employees/me" class="nav-link px-3 text-white"><i class="bi bi-person-circle"></i> Profile</a>
+        <a href="/employees/me" class="nav-link px-3 text-secondary"><i class="bi bi-person-circle"></i> Profile</a>
         <form th:action="@{/logout}" method="post" class="ms-2">
           <input type="submit" value="Sign Out" class="btn btn-outline-light me-2"/>
         </form>
@@ -35,8 +35,41 @@
     </div>
   </div>
 </header>
-<div class="container text-center"><h1 th:text="'Hello ' + ${logged_name}"></h1></div>
-<div class="container text-center"><img src="https://media.tenor.com/HApzlOkcrYIAAAAM/fr-ong.gif" width="800" height="400" alt=""></div>
+<div class="container"><h1>Your profile</h1></div>
+<div class="container">
+  <table class="table table-hover">
+    <thead class="table-dark">
+    <tr>
+      <th>ID</th>
+      <th>Surname</th>
+      <th>Name</th>
+      <th>Patronymic</th>
+      <th>Role</th>
+      <th>Salary</th>
+      <th>Start Date</th>
+      <th>Birth Date</th>
+      <th>Phone Number</th>
+      <th>City</th>
+      <th>Street</th>
+      <th>Zip Code</th>
+    </tr>
+    </thead>
+    <tbody>
+      <th scope="row" th:text="${me.id}"></th>
+      <td th:text="${me.surname}"></td>
+      <td th:text="${me.name}"></td>
+      <td th:text="${me.patronymic}"></td>
+      <td th:text="${me.role}"></td>
+      <td th:text="${me.salary}"></td>
+      <td th:text="${#dates.format(me.startDate, 'yyyy-MM-dd')}"></td>
+      <td th:text="${#dates.format(me.birthDate, 'yyyy-MM-dd')}"></td>
+      <td th:text="${me.phoneNumber}"></td>
+      <td th:text="${me.city}"></td>
+      <td th:text="${me.street}"></td>
+      <td th:text="${me.zipCode}"></td>
+    </tbody>
+  </table>
+</div>
 <script th:src="@{/webjars/bootstrap/5.3.3/js/bootstrap.bundle.min.js}"></script>
 </body>
 </html>

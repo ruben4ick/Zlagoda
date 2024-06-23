@@ -40,10 +40,26 @@
 </head>
 <body>
 <div class="container text-center">
-<h1>Add New Employee</h1>
+    <h1>Add New Employee</h1>
 </div>
 
-<form th:action="@{/employees/add}" th:object="${employee}" method="post">
+<form id="employeeForm" th:action="@{/employees/add}" th:object="${employee}" method="post">
+    <div class="form-group">
+        <label for="username">Username:</label>
+        <input type="text" id="username" th:field="*{username}" required />
+        <div th:if="${#fields.hasErrors('username')}" class="error">
+            <p th:errors="*{username}"></p>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label for="password">Password:</label>
+        <input type="text" id="password" th:field="*{password}" required />
+        <div th:if="${#fields.hasErrors('password')}" class="error">
+            <p th:errors="*{password}"></p>
+        </div>
+    </div>
+
     <div class="form-group">
         <label for="surname">Surname:</label>
         <input type="text" id="surname" th:field="*{surname}" required />
@@ -104,7 +120,7 @@
 
     <div class="form-group">
         <label for="phoneNumber">Phone Number:</label>
-        <input type="text" id="phoneNumber" th:field="*{phoneNumber}" required />
+        <input type="text" pattern="\+?380\d{9}" id="phoneNumber" th:field="*{phoneNumber}" required />
         <div th:if="${#fields.hasErrors('phoneNumber')}" class="error">
             <p th:errors="*{phoneNumber}"></p>
         </div>
@@ -128,7 +144,7 @@
 
     <div class="form-group">
         <label for="zipCode">Zip Code:</label>
-        <input type="text" id="zipCode" th:field="*{zipCode}" required />
+        <input type="text" pattern="\d{5}" id="zipCode" th:field="*{zipCode}" required />
         <div th:if="${#fields.hasErrors('zipCode')}" class="error">
             <p th:errors="*{zipCode}"></p>
         </div>
@@ -136,15 +152,45 @@
 
     <div class="container text-center">
         <div class="row">
-        <div class="col text-start">
-            <a href="/employees" class="btn btn-secondary">Cansel</a>
-        </div>
-        <div class="col text-end">
-            <button  type="submit" class="btn btn-success">Submit</button>
-        </div>
+            <div class="col text-start">
+                <a href="/employees" class="btn btn-secondary">Cancel</a>
+            </div>
+            <div class="col text-end">
+                <button type="submit" class="btn btn-success">Submit</button>
+            </div>
         </div>
     </div>
 </form>
 <script th:src="@{/webjars/bootstrap/5.3.3/js/bootstrap.bundle.min.js}"></script>
+<script>
+    document.getElementById('employeeForm').addEventListener('submit', function(event) {
+        const birthDate = document.getElementById('birthDate').value;
+        const startDate = document.getElementById('startDate').value;
+        if (!isValidAge(birthDate)) {
+            event.preventDefault(); // Зупиняємо відправку форми
+            alert('Employee must be at least 18 years old.');
+        } else if (!isValidStartDate(birthDate, startDate)) {
+            event.preventDefault(); // Зупиняємо відправку форми
+            alert('Start date cannot be earlier than birth date.');
+        }
+    });
+
+    function isValidAge(birthDate) {
+        const birth = new Date(birthDate);
+        const today = new Date();
+        let age = today.getFullYear() - birth.getFullYear();
+        const m = today.getMonth() - birth.getMonth();
+        if (m < 0 || (m === 0 && today.getDate() < birth.getDate())) {
+            age--;
+        }
+        return age >= 18;
+    }
+
+    function isValidStartDate(birthDate, startDate) {
+        const birth = new Date(birthDate);
+        const start = new Date(startDate);
+        return start >= birth;
+    }
+</script>
 </body>
 </html>

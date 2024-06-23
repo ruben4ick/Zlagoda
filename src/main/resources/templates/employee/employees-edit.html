@@ -132,6 +132,8 @@
         <div th:if="${#fields.hasErrors('zipCode')}" class="error">
             <p th:errors="*{zipCode}"></p>
         </div>
+        <input type="hidden" th:field="*{password}" th:value="${employee.password}">
+        <input type="hidden" th:field="*{username}" th:value="${employee.username}">
     </div>
 
     <div class="container text-center">

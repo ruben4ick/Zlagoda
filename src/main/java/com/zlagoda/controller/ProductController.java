@@ -12,6 +12,7 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -36,16 +37,17 @@ public class ProductController {
     public String productsByCategory(@RequestParam(value = "category_number", required = false, defaultValue = "-1" ) Long categoryNumber, Model model) {
         if (categoryNumber == -1) {
             model.addAttribute("categories", categoryService.getAll());
-            return "product/category-search";
+            return "product/products";
         }
         model.addAttribute("products", productService.findByCategory(categoryNumber));
+        model.addAttribute("categories", categoryService.getAll());
         return "product/products";
     }
 
     @GetMapping("/name-search")
     public String searchProductsByName(@RequestParam(value = "name", required = false, defaultValue = "null") String name, Model model) {
         if (name.equals("null"))
-            return "product/name-search";
+            return "product/products";
         model.addAttribute("products", productService.findByName(name));
         return "product/products";
     }
@@ -91,7 +93,7 @@ public class ProductController {
     }
 
     @PostMapping("/edit/{productId}")
-    public String editProduct(@PathVariable("productId") Long productId, @ModelAttribute("product") ProductDto product, BindingResult result, Model model) {
+    public String editProduct(@PathVariable("productId") Long productId, @Valid @ModelAttribute("product") ProductDto product, BindingResult result, Model model) {
         if (result.hasErrors()) {
             List<CategoryDto> categories = categoryService.getAll();
             model.addAttribute("product", product);
@@ -107,6 +109,31 @@ public class ProductController {
     public String deleteProduct(@PathVariable("productId") Long productId) {
         productService.delete(productId);
         return "redirect:/products";
+    }
+
+
+    @GetMapping("/totalSales")
+    public String getProductSalesByDateRange(@RequestParam(value = "productName", required = false) String productName,
+                                             @RequestParam(value = "start", required = false) String start,
+                                             @RequestParam(value = "end", required = false) String end,
+                                             Model model) {
+        LocalDateTime startDate = (start != null && !start.isEmpty()) ? LocalDateTime.parse(start) : LocalDateTime.MIN;
+        LocalDateTime endDate = (end != null && !end.isEmpty()) ? LocalDateTime.parse(end) : LocalDateTime.MAX;
+
+        Optional<Integer> sum = productService.findTotalSalesByNameInDateRange(productName, startDate, endDate);
+        if (sum.isPresent()){
+        model.addAttribute("productName", productName);
+        model.addAttribute("salesSum", sum.get());
+        return "/product/quantofsale";
+        }
+        return "redirect:/products";
+    }
+
+    @GetMapping("/neverSold")
+    public String findNotInStoreNeverSoldProducts(Model model) {
+        List<ProductDto> products = productService.findNotInStoreNeverSoldProducts();
+        model.addAttribute("products", products);
+        return "/product/products";
     }
 
 }

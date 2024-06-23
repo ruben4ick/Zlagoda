@@ -15,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -51,19 +52,28 @@ public class StoreProductServiceImpl implements StoreProductService {
 
     @Override
     public Optional<StoreProductDto> getById(String upc) {
+        upc = upc.trim();
         return storeProductDao.getById(upc)
                 .map(converter::convertToDto);
     }
 
     @Override
+    public Optional<StoreProductDto> findByUpcProm(String prom_upc){
+        return storeProductDao.findByUpcProm(prom_upc)
+                .map(converter::convertToDto);
+    }
+
+    @Override
     public void create(StoreProductDto storeProductDto) {
+        storeProductDto.normalize();
         StoreProduct storeProduct = converter.convertToEntity(storeProductDto);
-        storeProduct.setIsPromotional(false);
+//        storeProduct.setIsPromotional(false);
         storeProductDao.create(storeProduct);
     }
 
     @Override
     public void update(StoreProductDto storeProductDto) {
+        storeProductDto.normalize();
         StoreProduct storeProduct = converter.convertToEntity(storeProductDto);
         storeProductDao.update(storeProduct);
     }
@@ -135,6 +145,7 @@ public class StoreProductServiceImpl implements StoreProductService {
 
     @Override
     public void addPromotionStoreProduct(String upc){
+        upc = upc.trim();
         StoreProduct storeProductOriginal = storeProductDao.getById(upc).orElseThrow();
 
         if (storeProductOriginal.getUpcProm() != null) {
@@ -157,6 +168,7 @@ public class StoreProductServiceImpl implements StoreProductService {
 
     @Override
     public void removePromotionStoreProduct(String upc){
+        upc = upc.trim();
         StoreProduct storeProductOriginal = storeProductDao.getById(upc).orElseThrow();
 
         if (storeProductOriginal.getUpcProm() == null) {
@@ -169,6 +181,12 @@ public class StoreProductServiceImpl implements StoreProductService {
         storeProductDao.delete(storeProductOriginal.getUpcProm().getUpc());
         storeProductOriginal.setUpcProm(null);
         storeProductDao.update(storeProductOriginal);
+    }
+
+    @Override
+    public void updateProductQuantity(String upc, int quantity) {
+        upc = upc.trim();
+        storeProductDao.updateProductQuantity(upc, quantity);
     }
 
     // цю штуку треба буде кудись перенести мабуть

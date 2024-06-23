@@ -1,8 +1,8 @@
 <!DOCTYPE html>
-<html xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6" xmlns:th="http://www.thymeleaf.org" lang="en">
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Zlagoda</title>
+  <title>Checks List</title>
   <link rel="stylesheet" th:href="@{/css/style.css}">
   <link rel="stylesheet" th:href="@{/webjars/bootstrap/5.3.3/css/bootstrap.min.css}">
 </head>
@@ -11,9 +11,9 @@
   <div class="container">
     <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
       <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0 align-items-center">
-        <li><a href="/" class="nav-link px-3 text-secondary"><i class="bi bi-house"></i> Home</a></li>
-        <li><a href="/checks" class="nav-link px-3 text-white"><i class="bi bi-piggy-bank"></i> Checks</a></li>
-        <li sec:authorize="hasAnyAuthority('MANAGER')"><a href="/employees" class="nav-link px-3 text-white"><i class="bi bi-person"></i> Employees</a></li>
+        <li><a href="/" class="nav-link px-3 text-white"><i class="bi bi-house"></i> Home</a></li>
+        <li><a href="/checks" class="nav-link px-3 text-secondary"><i class="bi bi-piggy-bank"></i> Checks</a></li>
+        <li><a href="/employees" class="nav-link px-3 text-white"><i class="bi bi-person"></i> Employees</a></li>
         <li><a href="/customers" class="nav-link px-3 text-white"><i class="bi bi-people"></i> Customers</a></li>
         <li class="nav-item dropdown">
           <a class="nav-link px-3 text-white dropdown-toggle" id="productsDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -35,8 +35,32 @@
     </div>
   </div>
 </header>
-<div class="container text-center"><h1 th:text="'Hello ' + ${logged_name}"></h1></div>
-<div class="container text-center"><img src="https://media.tenor.com/HApzlOkcrYIAAAAM/fr-ong.gif" width="800" height="400" alt=""></div>
+
+<div class="container text-end">
+  <button class="btn btn-dark" id="print-button"><i class="bi bi-printer-fill"></i></button>
+  <a href="/checks" class="btn btn-success">Back</a>
+</div>
+<div class="container">
+  <table class="table table-hover">
+    <thead class="table-dark">
+    <tr>
+      <th>UPC</th>
+      <th>Product name</th>
+      <th>Quantity</th>
+      <th>Price</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="i : ${#numbers.sequence(0, size - 1)}">
+      <th scope="row" th:text="${sales[i].storeProduct.upc}"></th>
+      <td th:text="${product_names[i]}"></td>
+      <td th:text="${sales[i].productNumber}"></td>
+      <td th:text="${sales[i].sellingPrice}"></td>
+    </tr>
+    </tbody>
+  </table>
+</div>
 <script th:src="@{/webjars/bootstrap/5.3.3/js/bootstrap.bundle.min.js}"></script>
+<script th:src="@{/js/script.js}"></script>
 </body>
 </html>

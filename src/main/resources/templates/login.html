@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Zlagoda</title>
+  <link rel="stylesheet" th:href="@{/css/style.css}">
+  <link rel="stylesheet" th:href="@{/webjars/bootstrap/5.3.3/css/bootstrap.min.css}">
+</head>
+<body>
+<div class="container text-center" id="log-in-container">
+  <h1 class="h3 mb-3 fw-normal text-center" id="body-head-h1-label">Please sign in</h1>
+  <form th:action="@{/login}" method="post">
+    <div class="mb-3">
+      <label class="form-label">Login</label>
+      <input type="text" class="form-control" name="username" id="username" aria-describedby="emailHelp">
+    </div>
+    <div class="mb-3">
+      <label class="form-label">Password</label>
+      <input type="password" class="form-control" name="password" id="password">
+    </div>
+    <button class="btn btn-primary w-100 py-2" type="submit">Sign in</button>
+  </form>
+  <div th:if="${param.error}" class="alert alert-danger">
+    Invalid username and password.
+  </div>
+  <div th:if="${param.logout}" class="alert">
+    You have been logged out.
+  </div>
+</div>
+<script th:src="@{/webjars/bootstrap/5.3.3/js/bootstrap.bundle.min.js}"></script>
+</body>
+</html>

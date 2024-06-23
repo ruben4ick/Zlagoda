@@ -1,0 +1,27 @@
+@import url("https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css");
+
+@media print {
+    @page {
+        margin: 0;
+    }
+    body {
+        margin: 1cm;
+    }
+}
+
+header {
+    margin-bottom: 20px;
+}
+
+table {
+    margin-top: 20px;
+}
+
+#body-head-h1-label {
+    margin-top: 20px;
+}
+
+#log-in-container{
+    margin-top: 10%;
+    width: 40%;
+}

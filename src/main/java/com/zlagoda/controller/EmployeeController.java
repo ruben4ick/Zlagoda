@@ -5,6 +5,8 @@ import com.zlagoda.entity.Employee;
 import com.zlagoda.service.EmployeeService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -15,8 +17,6 @@ import java.util.Optional;
 
 @Controller
 public class EmployeeController {
-
-
     private final EmployeeService employeeService;
 
     @Autowired
@@ -33,7 +33,7 @@ public class EmployeeController {
 
     @GetMapping("/cashiers")
     public String cashiers(Model model) {
-        List<Employee> cashiers = employeeService.getAllCashiers();
+        List<EmployeeDto> cashiers = employeeService.getAllCashiers();
         model.addAttribute("employees", cashiers);
         return "employee/cashiers";
     }
@@ -90,7 +90,7 @@ public class EmployeeController {
         }
     }
     @PostMapping("/employees/edit/{employeeId}")
-    public String editEmployee(@PathVariable("employeeId") String employeeId, @ModelAttribute("employee") EmployeeDto employee, BindingResult result, Model model) {
+    public String editEmployee(@PathVariable("employeeId") String employeeId, @Valid @ModelAttribute("employee") EmployeeDto employee, BindingResult result, Model model) {
         if(result.hasErrors()) {
             model.addAttribute("employee", employee);
             model.addAttribute("roles", Employee.Role.values());
@@ -101,9 +101,25 @@ public class EmployeeController {
         return "redirect:/employees";
     }
 
-    @GetMapping("/employees/search")
-    public String showSearchForm() {
-        return "employee/employees-search";
+    @GetMapping("/employees/me")
+    public String getMeInformationPage(Model model) {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        Optional<EmployeeDto> employeeDto = employeeService.findByUsername(auth.getName());
+        if (employeeDto.isPresent()) {
+            model.addAttribute("me", employeeDto.get());
+        } else {
+            return "redirect:/home";
+        }
+        return "/employee/me";
     }
 
+    @GetMapping("/login")
+    public String loginPage() {
+        return "login";
+    }
+
+    @PostMapping("/login")
+    public String loggedIn() {
+        return "redirect:/home";
+    }
 }

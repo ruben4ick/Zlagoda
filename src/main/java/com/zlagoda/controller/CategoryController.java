@@ -60,7 +60,7 @@ public class CategoryController {
     }
 
     @PostMapping("/edit/{categoryNumber}")
-    public String editCategory(@PathVariable("categoryNumber") Long categoryNumber, @ModelAttribute("category") CategoryDto category, BindingResult result, Model model) {
+    public String editCategory(@PathVariable("categoryNumber") Long categoryNumber, @Valid @ModelAttribute("category") CategoryDto category, BindingResult result, Model model) {
         if (result.hasErrors()) {
             model.addAttribute("category", category);
             return "category/categories-edit";
@@ -76,10 +76,18 @@ public class CategoryController {
         return "redirect:/categories";
     }
 
+
+    @GetMapping("/moreThan")
+    public String moreThan(@RequestParam(value = "prodQuantity") int quantity, Model model) {
+        List<CategoryDto> categories = categoryService.findWithTotalProductsMoreThan(quantity);
+        model.addAttribute("categories", categories);
+        return "category/categories";
+
     @GetMapping("/category-sales")
     public String getCategorySales(Model model) {
         List<CategorySalesDto> categorySalesList = categoryService.findTotalSalesByCategory();
         model.addAttribute("categorySales", categorySalesList);
         return "category/category-sales";
+
     }
 }

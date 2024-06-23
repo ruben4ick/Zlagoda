@@ -6,6 +6,7 @@ import com.zlagoda.service.StoreProductService;
 import com.zlagoda.service.ProductService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.Max;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -78,7 +79,7 @@ public class StoreProductController {
     }
 
     @PostMapping("/edit/{upc}")
-    public String editStoreProduct(@PathVariable("upc") String upc, @ModelAttribute("storeProduct") StoreProductDto storeProduct, BindingResult result, Model model) {
+    public String editStoreProduct(@PathVariable("upc") String upc, @Valid @ModelAttribute("storeProduct") StoreProductDto storeProduct, BindingResult result, Model model) {
         if (result.hasErrors()) {
             model.addAttribute("storeProduct", storeProduct);
             return "store-product/store-products-edit";
@@ -88,10 +89,21 @@ public class StoreProductController {
         return "redirect:/store-products";
     }
 
+
     @GetMapping("/delete/{upc}")
     public String deleteStoreProduct(@PathVariable("upc") String upc) {
         storeProductService.delete(upc);
         return "redirect:/store-products";
+    }
+
+    // 14
+    @GetMapping("/{upc}")
+    public String findStoreProductByUpc(@PathVariable("upc") String upc, Model model) {
+        Optional<StoreProductDto> storeProduct = storeProductService.getById(upc);
+        if (storeProduct.isPresent()) {
+            model.addAttribute("storeProduct", storeProduct.get());
+        }
+        return "store-product/store-products-edit";
     }
 
     @GetMapping("/add/prom/{upc}")
@@ -106,4 +118,21 @@ public class StoreProductController {
         storeProductService.removePromotionStoreProduct(upc);
         return "redirect:/store-products";
     }
+
+    @GetMapping("/upc")
+    public String getStoreProductByUPC(@RequestParam(value = "upc_search", required = false, defaultValue = "null")
+                                       String upc_search, Model model){
+        if (upc_search.equals("null"))
+            return "store-product/upc_search";
+
+        Optional<StoreProductDto> storeProductOpt = storeProductService.getById(upc_search);
+        if (storeProductOpt.isPresent()) {
+            StoreProductDto storeProduct = storeProductOpt.get();
+            model.addAttribute("storeProducts", List.of(storeProduct));
+        } else {
+            model.addAttribute("storeProducts", List.of());
+        }
+        return "store-product/store-products";
+    }
+
 }

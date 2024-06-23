@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class CategoryServiceImpl implements CategoryService {
@@ -36,12 +37,14 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     public void create(final CategoryDto categoryDto) {
+        categoryDto.normalize();
         Category category = mapToCategory(categoryDto);
         categoryDao.create(category);
     }
 
     @Override
     public void update(final CategoryDto categoryDto) {
+        categoryDto.normalize();
         Category category = mapToCategory(categoryDto);
         categoryDao.update(category);
     }
@@ -50,6 +53,12 @@ public class CategoryServiceImpl implements CategoryService {
     public void delete(Long categoryId) {
         categoryDao.delete(categoryId);
     }
+
+    @Override
+    public List<CategoryDto> findWithTotalProductsMoreThan(int quantity) {
+        return categoryDao.findWithTotalProductsMoreThan(quantity).stream()
+                .map(this::mapToCategoryDto)
+                .collect(Collectors.toList());
 
     public List<CategorySalesDto> findTotalSalesByCategory() {
         return categoryDao.findTotalSalesByCategory();

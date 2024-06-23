@@ -12,6 +12,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -38,12 +39,14 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public void create(ProductDto productDto) {
+        productDto.normalize();
         Product product = productConverter.convertToEntity(productDto);
         productDao.create(product);
     }
 
     @Override
     public void update(ProductDto productDto) {
+        productDto.normalize();
         Product product = productConverter.convertToEntity(productDto);
         productDao.update(product);
     }
@@ -60,13 +63,25 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
+    public Optional<Integer> findTotalSalesByNameInDateRange(String productName, LocalDateTime startDate, LocalDateTime endDate) {
+        return productDao.findTotalSalesByNameInDateRange(productName.trim().toLowerCase(), startDate, endDate);
+    }
+
+    @Override
     public List<ProductDto> findByName(String name) {
+        name = name.trim();
         return productDao.findByName(name).stream()
                 .map(productConverter::convertToDto)
                 .toList();
     }
 
     @Override
+    public List<ProductDto> findNotInStoreNeverSoldProducts() {
+        return productDao.findNotInStoreNeverSoldProducts().stream()
+                .map(productConverter::convertToDto)
+                .collect(Collectors.toList());
+    }
+
     public List<ProductDto> findBySoldFromCertainCity(String city) {
         return productDao.findBySoldFromCertainCity(city).stream()
                 .map(productConverter::convertToDto)

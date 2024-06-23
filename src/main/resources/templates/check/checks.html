@@ -1,61 +1,23 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6" lang="en">
 <head>
     <meta charset="UTF-8">
     <title>Checks List</title>
     <link rel="stylesheet" th:href="@{/css/style.css}">
     <link rel="stylesheet" th:href="@{/webjars/bootstrap/5.3.3/css/bootstrap.min.css}">
-    <style>
-        .button-container {
-            text-align: center;
-            margin-bottom: 20px;
-        }
-
-        .button {
-            padding: 10px 20px;
-            font-size: 16px;
-            background-color: #4CAF50;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            text-decoration: none;
-        }
-
-        .button:hover {
-            background-color: #45a049;
-        }
-
-        .delete-button {
-            background-color: #f44336;
-            color: white;
-            border: none;
-            padding: 5px 10px;
-            text-decoration: none;
-            border-radius: 5px;
-            cursor: pointer;
-        }
-
-        .delete-button:hover {
-            background-color: #d32f2f;
-        }
-    </style>
 </head>
 <body>
 <header class="p-3 bg-dark text-white">
     <div class="container">
         <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
-            <a href="/" class="d-flex align-items-center mb-2 mb-lg-0 text-white text-decoration-none">
-                <svg class="bi me-2" width="40" height="32" role="img" aria-label="Bootstrap"><use xlink:href="#bootstrap"/></svg>
-            </a>
             <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0 align-items-center">
-                <li><a href="/" class="nav-link px-3 text-white">Home</a></li>
-                <li><a href="/employees" class="nav-link px-3 text-white">Employees</a></li>
-                <li><a href="/checks" class="nav-link px-3 text-secondary">Checks</a></li>
-                <li><a href="/customers" class="nav-link px-3 text-white">Customers</a></li>
+                <li><a href="/" class="nav-link px-3 text-white"><i class="bi bi-house"></i> Home</a></li>
+                <li><a href="/checks" class="nav-link px-3 text-secondary"><i class="bi bi-piggy-bank"></i> Checks</a></li>
+                <li sec:authorize="hasAnyAuthority('MANAGER')"><a href="/employees" class="nav-link px-3 text-white"><i class="bi bi-person"></i> Employees</a></li>
+                <li><a href="/customers" class="nav-link px-3 text-white"><i class="bi bi-people"></i> Customers</a></li>
                 <li class="nav-item dropdown">
                     <a class="nav-link px-3 text-white dropdown-toggle" id="productsDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                        Products
+                        <i class="bi bi-handbag"></i> Products
                     </a>
                     <ul class="dropdown-menu gap-1 p-2 rounded-3 mx-0 border-0 shadow w-220px" aria-labelledby="productsDropdown" data-bs-theme="dark">
                         <li><a class="dropdown-item rounded-2" href="/products">Products</a></li>
@@ -64,16 +26,45 @@
                     </ul>
                 </li>
             </ul>
-            <div class="text-end">
-                <button type="button" class="btn btn-outline-light me-2">Sign-out</button>
+            <div class="text-end d-flex align-items-center justify-content-end">
+                <a href="/employees/me" class="nav-link px-3 text-white"><i class="bi bi-person-circle"></i> Profile</a>
+                <form th:action="@{/logout}" method="post" class="ms-2">
+                    <input type="submit" value="Sign Out" class="btn btn-outline-light me-2"/>
+                </form>
             </div>
         </div>
     </div>
 </header>
-
-<div class="container text-end">
-    <a href="/checks/add" class="btn btn-success">Add Check</a>
+<div class="container"><h2 th:text="'Total income: ' + ${sum_of_checks}"></h2></div>
+<div class="container text-center">
+    <div class="d-flex justify-content-between align-items-center">
+        <div class="d-flex align-items-center g-2">
+            <form class="input-group me-2" th:action="@{/checks/check-id}" method="get">
+                <input class="form-control" type="text" name="check_number" placeholder="Check number" required>
+                <button type="submit" class="btn btn-outline-dark">Search</button>
+            </form>
+            <form class="input-group me-2" th:action="@{/checks/empl-id}" method="get">
+                <input class="form-control" type="text" name="employee_surname" placeholder="Employee" required>
+                <input type="hidden" th:value="${start}" name="start"/>
+                <input type="hidden" th:value="${end}" name="end"/>
+                <button type="submit" class="btn btn-outline-dark">Search</button>
+            </form>
+            <form class="input-group me-2" th:action="@{/checks/date-range}" method="get">
+                <input class="form-control me-2" type="datetime-local" name="start" placeholder="Start Date" required>
+                <input class="form-control me-2" type="datetime-local" name="end" placeholder="End Date" required>
+                <button type="submit" class="btn btn-outline-dark">Filter</button>
+            </form>
+            <a href="/checks" class="btn btn-dark me-2">Reset</a>
+        </div>
+        <div class="d-flex align-items-center g-2">
+            <button class="btn btn-dark me-2" id="print-button" sec:authorize="hasAnyAuthority('MANAGER')"><i class="bi bi-printer-fill"></i></button>
+            <a href="/checks/add" class="btn btn-success" sec:authorize="hasAnyAuthority('CASHIER')">Add Check</a>
+        </div>
+    </div>
 </div>
+
+
+
 <div class="container">
 <table class="table table-hover">
     <thead class="table-dark">
@@ -96,12 +87,14 @@
         <td th:text="${check.totalSum}"></td>
         <td th:text="${check.vat}"></td>
         <td>
-            <a th:href="@{'/checks/delete/' + ${check.checkNumber}}" class="delete-button">Delete</a>
+            <a th:href="@{'/checks/check-id?check_number=' + ${check.checkNumber}}" class="btn btn-dark"><i class="bi bi-eye"></i></a>
+            <a th:href="@{'/checks/delete/' + ${check.checkNumber}}" class="btn btn-danger" sec:authorize="hasAnyAuthority('MANAGER')"><i class="bi bi-trash-fill"></i></a>
         </td>
     </tr>
     </tbody>
 </table>
 </div>
 <script th:src="@{/webjars/bootstrap/5.3.3/js/bootstrap.bundle.min.js}"></script>
+<script th:src="@{/js/script.js}"></script>
 </body>
 </html>

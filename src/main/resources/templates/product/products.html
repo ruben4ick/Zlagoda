@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6" lang="en">
 <head>
     <meta charset="UTF-8">
     <title>Products List</title>
@@ -10,28 +10,27 @@
 <header class="p-3 bg-dark text-white">
     <div class="container">
         <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
-            <a href="/" class="d-flex align-items-center mb-2 mb-lg-0 text-white text-decoration-none">
-                <svg class="bi me-2" width="40" height="32" role="img" aria-label="Bootstrap"><use xlink:href="#bootstrap"/></svg>
-            </a>
-
             <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0 align-items-center">
-                <li><a href="/" class="nav-link px-3 text-white">Home</a></li>
-                <li><a href="/employees" class="nav-link px-3 text-white">Employees</a></li>
-                <li><a href="/checks" class="nav-link px-3 text-white">Checks</a></li>
-                <li><a href="/customers" class="nav-link px-3 text-white">Customers</a></li>
+                <li><a href="/" class="nav-link px-3 text-white"><i class="bi bi-house"></i> Home</a></li>
+                <li><a href="/checks" class="nav-link px-3 text-white"><i class="bi bi-piggy-bank"></i> Checks</a></li>
+                <li sec:authorize="hasAnyAuthority('MANAGER')"><a href="/employees" class="nav-link px-3 text-white"><i class="bi bi-person"></i> Employees</a></li>
+                <li><a href="/customers" class="nav-link px-3 text-white"><i class="bi bi-people"></i> Customers</a></li>
                 <li class="nav-item dropdown">
                     <a class="nav-link px-3 text-secondary dropdown-toggle" id="productsDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                        Products
+                        <i class="bi bi-handbag"></i> Products
                     </a>
                     <ul class="dropdown-menu gap-1 p-2 rounded-3 mx-0 border-0 shadow w-220px" aria-labelledby="productsDropdown" data-bs-theme="dark">
-                        <li><a class="dropdown-item rounded-2 active" href="/products">Products</a></li>
+                        <li><a class="dropdown-item rounded-2" href="/products">Products</a></li>
                         <li><a class="dropdown-item rounded-2" href="/store-products">Store products</a></li>
                         <li><a class="dropdown-item rounded-2" href="/categories">Categories</a></li>
                     </ul>
                 </li>
             </ul>
-            <div class="text-end">
-                <button type="button" class="btn btn-outline-light me-2">Sign-out</button>
+            <div class="text-end d-flex align-items-center justify-content-end">
+                <a href="/employees/me" class="nav-link px-3 text-white"><i class="bi bi-person-circle"></i> Profile</a>
+                <form th:action="@{/logout}" method="post" class="ms-2">
+                    <input type="submit" value="Sign Out" class="btn btn-outline-light me-2"/>
+                </form>
             </div>
         </div>
     </div>
@@ -41,68 +40,75 @@
 </div>
 <div class="container text-center">
     <div class="row">
-        <div class="col-6 text-start">
-            <div class="row">
-                <div class="col text-start">
-                    <form class="input-group mb-3" th:action="@{products/name-search}" method="get">
-                        <input class="form-control" placeholder="name" type="text" id="name" name="name" required>
-                        <button type="submit" class="btn btn-outline-dark">Search</button>
-                    </form>
-                </div>
-                <div class="dropdown col text-center">
+
+        <div class="col-md-8 text-start">
+            <div class="d-flex align-items-center">
+                <form class="input-group me-2" th:action="@{/products/name-search}" method="get">
+                    <input class="form-control" placeholder="name" type="text" id="name" name="name" required>
+                    <button type="submit" class="btn btn-outline-dark">Search</button>
+                </form>
+                <div class="dropdown me-2">
+
                     <button class="btn btn-dark dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
                         Category
                     </button>
                     <ul class="dropdown-menu dropdown-menu-dark">
-                        <li><a class="dropdown-item"
-                               th:each="category : ${categories}"
-                               th:href="@{'/products/category-search?category_number=' +
-                               ${category.number}}"
+                        <li th:each="category : ${categories}">
+                            <a class="dropdown-item"
+                               th:href="@{'/products/category-search?category_number=' + ${category.number}}"
                                th:text="${category.name}">
-                        </a></li>
+                            </a>
+                        </li>
                     </ul>
                 </div>
-                <div class="col-4 text-start">
-                    <a href="/products" class="btn btn-dark">Reset</a>
+
+                <form class="input-group me-2" th:action="@{/products/totalSales}" method="get">
+                    <input class="form-control" type="text" name="productName" placeholder="Product" required>
+                    <input class="form-control me-2" type="datetime-local" name="start" placeholder="Start Date" required>
+                    <input class="form-control me-2" type="datetime-local" name="end" placeholder="End Date" required>
+                    <button type="submit" class="btn btn-outline-dark">Search</button>
+                </form>
+                <a href="/products" class="btn btn-dark">Reset</a>
+                <div class="col-6 text-start">
+                    <a href="/products/neverSold" class="btn btn-dark">Unused products</a>
                 </div>
             </div>
         </div>
-        <div class="col-4 text-end">
-            <form class="input-group mb-3" th:action="@{products/sold-from-certain-city}" method="get">
-                <input class="form-control" placeholder="city where product sold only" type="text" id="city" name="city" required>
-                <button type="submit" class="btn btn-outline-dark">Search City</button>
-            </form>
-        </div>
-        <div class="col-2 text-end">
+        <div class="col-md-4 text-end" sec:authorize="hasAnyAuthority('MANAGER')">
+            <button class="btn btn-dark" id="print-button" sec:authorize="hasAnyAuthority('MANAGER')"><i class="bi bi-printer-fill"></i></button>
+
             <a href="/products/add" class="btn btn-success">Add Product</a>
         </div>
     </div>
 </div>
 <div class="container">
-    <table class="table table-hover">
-        <thead class="table-dark">
-        <tr>
-            <th>ID</th>
-            <th>Category Name</th>
-            <th>Product Name</th>
-            <th>Characteristics</th>
-            <th>Actions</th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr th:each="product : ${products}">
-            <th scope="row" th:text="${product.id}"></th>
-            <td th:text="${product.category.name}"></td>
-            <td th:text="${product.name}"></td>
-            <td th:text="${product.characteristics}"></td>
-            <td>
-                <a th:href="@{'/products/edit/' + ${product.id}}" class="btn btn-info">Edit</a>
-                <a th:href="@{'/products/delete/' + ${product.id}}" class="btn btn-danger">Delete</a>
-            </td>
-        </tr>
-        </tbody>
-    </table>
+
+<table class="table table-hover">
+    <thead class="table-dark">
+    <tr>
+        <th>ID</th>
+        <th>Category Name</th>
+        <th>Product Name</th>
+        <th>Characteristics</th>
+        <th sec:authorize="hasAnyAuthority('MANAGER')">Actions</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="product : ${products}">
+        <th scope="row" th:text="${product.id}"></th>
+        <td th:text="${product.category.name}"></td>
+        <td th:text="${product.name}"></td>
+        <td th:text="${product.characteristics}"></td>
+        <td sec:authorize="hasAnyAuthority('MANAGER')">
+            <a th:href="@{'/products/edit/' + ${product.id}}" class="btn btn-info"><i class="bi bi-pencil-fill"></i></a>
+            <a th:href="@{'/products/delete/' + ${product.id}}" class="btn btn-danger"><i class="bi bi-trash-fill"></i></a>
+        </td>
+    </tr>
+    </tbody>
+</table>
+
 </div>
 <script th:src="@{/webjars/bootstrap/5.3.3/js/bootstrap.bundle.min.js}"></script>
+<script th:src="@{/js/script.js}"></script>
 </body>
 </html>

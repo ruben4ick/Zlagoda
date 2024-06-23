@@ -3,6 +3,7 @@ package com.zlagoda.dto;
 import com.zlagoda.entity.CustomerCard;
 import com.zlagoda.entity.Employee;
 import com.zlagoda.entity.Sale;
+import jakarta.validation.constraints.Digits;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -21,9 +22,9 @@ public class CheckDto {
 
     private String checkNumber;
 
-    private Employee employee;
+    private EmployeeDto employee;
 
-    private CustomerCard customerCard;
+    private CustomerCardDto customerCard;
 
     private LocalDateTime printDate;
 
@@ -32,4 +33,13 @@ public class CheckDto {
     private BigDecimal vat;
 
     private List<SaleDto> sales;
+
+    public void normalize() {
+        if (checkNumber != null)
+            checkNumber = checkNumber.trim();
+        if (employee != null)
+            employee.normalize();
+        if (customerCard != null)
+            customerCard.normalize();
+    }
 }

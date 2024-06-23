@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6" lang="en">
 <head>
   <meta charset="UTF-8">
   <title>Store Products List</title>
@@ -10,28 +10,27 @@
 <header class="p-3 bg-dark text-white">
   <div class="container">
     <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
-      <a href="/" class="d-flex align-items-center mb-2 mb-lg-0 text-white text-decoration-none">
-        <svg class="bi me-2" width="40" height="32" role="img" aria-label="Bootstrap"><use xlink:href="#bootstrap"/></svg>
-      </a>
-
       <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0 align-items-center">
-        <li><a href="/" class="nav-link px-3 text-white">Home</a></li>
-        <li><a href="/employees" class="nav-link px-3 text-white">Employees</a></li>
-        <li><a href="/checks" class="nav-link px-3 text-white">Checks</a></li>
-        <li><a href="/customers" class="nav-link px-3 text-white">Customers</a></li>
+        <li><a href="/" class="nav-link px-3 text-white"><i class="bi bi-house"></i> Home</a></li>
+        <li><a href="/checks" class="nav-link px-3 text-white"><i class="bi bi-piggy-bank"></i> Checks</a></li>
+        <li sec:authorize="hasAnyAuthority('MANAGER')"><a href="/employees" class="nav-link px-3 text-white"><i class="bi bi-person"></i> Employees</a></li>
+        <li><a href="/customers" class="nav-link px-3 text-white"><i class="bi bi-people"></i> Customers</a></li>
         <li class="nav-item dropdown">
           <a class="nav-link px-3 text-secondary dropdown-toggle" id="productsDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-            Products
+            <i class="bi bi-handbag"></i> Products
           </a>
           <ul class="dropdown-menu gap-1 p-2 rounded-3 mx-0 border-0 shadow w-220px" aria-labelledby="productsDropdown" data-bs-theme="dark">
             <li><a class="dropdown-item rounded-2" href="/products">Products</a></li>
-            <li><a class="dropdown-item rounded-2 active" href="/store-products">Store products</a></li>
+            <li><a class="dropdown-item rounded-2" href="/store-products">Store products</a></li>
             <li><a class="dropdown-item rounded-2" href="/categories">Categories</a></li>
           </ul>
         </li>
       </ul>
-      <div class="text-end">
-        <button type="button" class="btn btn-outline-light me-2">Sign-out</button>
+      <div class="text-end d-flex align-items-center justify-content-end">
+        <a href="/employees/me" class="nav-link px-3 text-white"><i class="bi bi-person-circle"></i> Profile</a>
+        <form th:action="@{/logout}" method="post" class="ms-2">
+          <input type="submit" value="Sign Out" class="btn btn-outline-light me-2"/>
+        </form>
       </div>
     </div>
   </div>
@@ -41,20 +40,28 @@
 </div>
 
 <div class="container text-center">
-  <div class="row">
-    <div class="col-5 text-start">
-      <div class="dropdown col text-start">
-        <button class="btn btn-dark dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-          Standard products
-        </button>
-        <ul class="dropdown-menu dropdown-menu-dark">
-          <li><a class="dropdown-item" href="/store-products">All products</a></li>
-          <li><a class="dropdown-item" href="/store-products/promoted">Promoted products</a></li>
-          <li><a class="dropdown-item" href="/store-products/standard">Standard products</a></li>
-        </ul>
+  <div class="row align-items-center">
+    <div class="col-md-8 text-start">
+      <div class="d-flex align-items-center">
+        <div class="dropdown me-2">
+          <button class="btn btn-dark dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+            Standard products
+          </button>
+          <ul class="dropdown-menu dropdown-menu-dark">
+            <li><a class="dropdown-item" href="/store-products">All products</a></li>
+            <li><a class="dropdown-item" href="/store-products/promoted">Promoted products</a></li>
+            <li><a class="dropdown-item" href="/store-products/standard">Standard products</a></li>
+          </ul>
+        </div>
+        <form class="input-group me-2" th:action="@{/store-products/upc}" method="get">
+          <input class="form-control" type="text" name="upc_search" placeholder="UPC" required>
+          <button type="submit" class="btn btn-outline-dark">Search</button>
+        </form>
+        <a href="/store-products" class="btn btn-dark">Reset</a>
       </div>
     </div>
-    <div class="col text-end">
+    <div class="col-md-4 text-end" sec:authorize="hasAnyAuthority('MANAGER')">
+      <button class="btn btn-dark" id="print-button" sec:authorize="hasAnyAuthority('MANAGER')"><i class="bi bi-printer-fill"></i></button>
       <a href="/store-products/add" class="btn btn-success">Add product</a>
     </div>
   </div>
@@ -65,41 +72,47 @@
     <tr>
       <th>UPC</th>
       <th>Product</th>
-      <th>Price</th>
       <th>Quantity</th>
+      <th>Price</th>
       <th>Promotion</th>
-      <th>Actions</th>
+      <th sec:authorize="hasAnyAuthority('MANAGER')">Actions</th>
     </tr>
     </thead>
     <tbody>
     <tr th:each="storeProduct : ${storeProducts}">
       <th scope="row" th:text="${storeProduct.upc}"></th>
       <td th:text="${storeProduct.product.name}"></td>
-      <td th:text="${storeProduct.price}"></td>
       <td th:text="${storeProduct.quantity}"></td>
-      <td class="not-printable">
+      <td th:text="${storeProduct.price}"></td>
+      <td class="not-printable" sec:authorize="hasAnyAuthority('MANAGER')">
         <a class="btn btn-success disabled"
            disabled
-           href="#" th:if="${storeProduct.isPromotional}">Promoted</a>
+           href="#" th:if="${storeProduct.isPromotional}"><i class="bi bi-tags-fill"></i></a>
         <a class="btn btn-success"
            th:href="@{/store-products/add/prom/{upc}(upc=${storeProduct.upc})}"
-           th:if="${storeProduct.upcProm == null && !storeProduct.isPromotional}">Add</a>
+           th:if="${storeProduct.upcProm == null && !storeProduct.isPromotional}"><i class="bi bi-tag-fill"></i></a>
         <a class="btn btn-warning"
            th:href="@{/store-products/remove/prom/{upc}(upc=${storeProduct.upc})}"
-           th:if="${storeProduct.upcProm != null && !storeProduct.isPromotional}">Remove</a>
+           th:if="${storeProduct.upcProm != null && !storeProduct.isPromotional}"><i class="bi bi-dash-square-fill"></i></a>
       </td>
-      <td>
+      <td class="not-printable" sec:authorize="hasAnyAuthority('CASHIER')">
+        <span th:if="${storeProduct.isPromotional}">Promotional</span>
+        <span th:if="${storeProduct.upcProm == null && !storeProduct.isPromotional}">Not promoted</span>
+        <span th:if="${storeProduct.upcProm != null && !storeProduct.isPromotional}">Promoted</span>
+      </td>
+      <td sec:authorize="hasAnyAuthority('MANAGER')">
         <a th:href="@{'/store-products/edit/' + ${storeProduct.upc}}"
            class="btn btn-info" th:classappend="${((storeProduct.upcProm != null && !storeProduct.isPromotional) || storeProduct.isPromotional) ? 'disabled' : ''}"
-           th:attr="disabled=${((storeProduct.upcProm != null && !storeProduct.isPromotional) || storeProduct.isPromotional)}">Edit</a>
+           th:attr="disabled=${((storeProduct.upcProm != null && !storeProduct.isPromotional) || storeProduct.isPromotional)}"><i class="bi bi-pencil-fill"></i></a>
         <a th:href="@{'/store-products/delete/' + ${storeProduct.upc}}"
            class="btn btn-danger" th:classappend="${((storeProduct.upcProm != null && !storeProduct.isPromotional) || storeProduct.isPromotional) ? 'disabled' : ''}"
-           th:attr="disabled=${((storeProduct.upcProm != null && !storeProduct.isPromotional) || storeProduct.isPromotional)}">Delete</a>
+           th:attr="disabled=${((storeProduct.upcProm != null && !storeProduct.isPromotional) || storeProduct.isPromotional)}"><i class="bi bi-trash-fill"></i></a>
       </td>
     </tr>
     </tbody>
   </table>
 </div>
 <script th:src="@{/webjars/bootstrap/5.3.3/js/bootstrap.bundle.min.js}"></script>
+<script th:src="@{/js/storeproductprint.js}"></script>
 </body>
 </html>

@@ -45,7 +45,7 @@ public class EmployeeDto {
 
     @NotNull(message = "Salary cannot be null")
     @DecimalMin(value = "0.0", inclusive = false, message = "Salary must be greater than 0")
-    @Digits(integer = 10, fraction = 4, message = "Salary must have at most 10 integer digits and 4 decimal places")
+    @Digits(integer = 13, fraction = 2, message = "Salary must have at most 10 integer digits and 4 decimal places")
     private BigDecimal salary;
 
     @NotNull(message = "Birth date cannot be null")
@@ -71,4 +71,29 @@ public class EmployeeDto {
     @NotNull(message = "Zip code cannot be null")
     @Size(min = 1, max = 9, message = "Zip code must be between 1 and 9 characters")
     private String zipCode;
+
+    @NotNull(message = "Username cannot be null")
+    private String username;
+
+    @NotNull(message = "Password cannot be null")
+    private String password;
+
+    public void normalize() {
+        if (id != null)
+            id = id.trim();
+        if (surname != null)
+            surname = surname.trim();
+        if (name != null)
+            name = name.trim();
+        if (patronymic != null)
+            patronymic = patronymic.trim();
+        if (phoneNumber != null)
+            phoneNumber = phoneNumber.trim();
+        if (city != null)
+            city = city.trim();
+        if (street != null)
+            street = street.trim();
+        if (zipCode != null)
+            zipCode = zipCode.trim();
+    }
 }

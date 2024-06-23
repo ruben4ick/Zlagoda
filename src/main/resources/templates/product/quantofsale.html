@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Product sale amount</title>
+  <link rel="stylesheet" th:href="@{/css/style.css}">
+  <link rel="stylesheet" th:href="@{/webjars/bootstrap/5.3.3/css/bootstrap.min.css}">
+</head>
+<body>
+<div class="container">
+  <h1 th:text="'Product: ' + ${productName}"></h1>
+  <h1 th:text="'Sales amount: ' + ${salesSum}"></h1>
+  <div class="container text-end">
+  <a class="btn btn-dark" href="/products">Back</a>
+  </div>
+</div>
+</body>
+</html>

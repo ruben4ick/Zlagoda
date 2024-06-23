@@ -23,6 +23,14 @@ public class StoreProductDto {
 
     private Integer quantity;
 
-    @Nullable
     private Boolean isPromotional;
+
+    public void normalize() {
+        if (upc != null)
+            upc = upc.trim();
+        if (upcProm != null)
+            upcProm.normalize();
+        if (product != null)
+            product.normalize();
+    }
 }

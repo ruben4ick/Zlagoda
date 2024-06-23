@@ -1,6 +1,7 @@
 package com.zlagoda.dto;
 
 import jakarta.annotation.Nullable;
+import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
@@ -45,5 +46,25 @@ public class CustomerCardDto {
     private String zipCode;
 
     @NotNull(message = "percent can not be null")
+    @Min(value = 0, message = "discount can't be less than 0")
     private int percent;
+
+    public void normalize() {
+        if (cardNumber != null)
+            cardNumber = cardNumber.trim();
+        if (surname != null)
+            surname = surname.trim();
+        if (name != null)
+            name = name.trim();
+        if (patronymic != null)
+            patronymic = patronymic.trim();
+        if (phoneNumber != null)
+            phoneNumber = phoneNumber.trim();
+        if (city != null)
+            city = city.trim();
+        if (street != null)
+            street = street.trim();
+        if (zipCode != null)
+            zipCode = zipCode.trim();
+    }
 }
