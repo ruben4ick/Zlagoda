@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', function () {
-    document.getElementById('print-button').addEventListener('click', print_report);
+    document.getElementById('sp-print-button').addEventListener('click', print_report);
     function print_report() {
         const tables = document.querySelectorAll('table');
         const currentDate = new Date().toLocaleDateString();
@@ -14,10 +14,23 @@ document.addEventListener('DOMContentLoaded', function () {
 
             const printContent = table.cloneNode(true);
             const actionsColumnIndex = printContent.querySelector('thead tr').children.length - 1;
+            const promotionColumnIndex = actionsColumnIndex - 1;
             printContent.querySelector('thead tr').children[actionsColumnIndex].remove();
 
             printContent.querySelectorAll('tbody tr').forEach(row => {
+                let promotionCell = row.children[promotionColumnIndex]
+                let promotionStatus = ''
 
+                if (promotionCell.querySelector(".btn-success.disabled")) {
+                    promotionStatus = 'Promotional'
+                } else if (promotionCell.querySelector('.btn-success')) {
+                    promotionStatus = ''
+                } else if (promotionCell.querySelector('.btn-warning')) {
+                    promotionStatus = 'Promoted'
+                }
+
+                promotionCell.textContent = promotionStatus;
+                row.insertBefore(promotionCell, row.children[row.children.length - 1]);
                 row.children[actionsColumnIndex].remove();
             });
             printWindow.document.write(printContent.outerHTML);

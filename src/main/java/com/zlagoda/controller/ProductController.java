@@ -12,6 +12,7 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -101,5 +102,18 @@ public class ProductController {
     public String deleteProduct(@PathVariable("productId") Long productId) {
         productService.delete(productId);
         return "redirect:/products";
+    }
+
+    @GetMapping("/totalSales/{productName}")
+    public String getProductSalesByDateRange(@PathVariable("productName") String productName,
+                                             @RequestParam(value = "start", required = false) String start,
+                                             @RequestParam(value = "end", required = false) String end,
+                                             Model model) {
+        LocalDateTime startDate = (start != null && !start.isEmpty()) ? LocalDateTime.parse(start) : LocalDateTime.MIN;
+        LocalDateTime endDate = (end != null && !end.isEmpty()) ? LocalDateTime.parse(end) : LocalDateTime.MAX;
+
+        Optional<Integer> sum = productService.findTotalSalesByNameInDateRange(productName, startDate, endDate);
+        model.addAttribute("salesSum", sum.get());
+        return "/product/ZHIZa";
     }
 }

@@ -12,6 +12,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -59,6 +60,11 @@ public class ProductServiceImpl implements ProductService {
         return productDao.findByCategory(categoryId).stream()
                 .map(productConverter::convertToDto)
                 .toList();
+    }
+
+    @Override
+    public Optional<Integer> findTotalSalesByNameInDateRange(String productName, LocalDateTime startDate, LocalDateTime endDate) {
+        return productDao.findTotalSalesByNameInDateRange(productName.trim().toLowerCase(), startDate, endDate);
     }
 
     @Override
