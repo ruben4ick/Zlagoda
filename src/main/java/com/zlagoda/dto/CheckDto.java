@@ -3,6 +3,7 @@ package com.zlagoda.dto;
 import com.zlagoda.entity.CustomerCard;
 import com.zlagoda.entity.Employee;
 import com.zlagoda.entity.Sale;
+import jakarta.validation.constraints.Digits;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
