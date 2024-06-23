@@ -104,7 +104,6 @@ public class EmployeeDaoImpl implements EmployeeDao {
                 employee.getId(),
                 employee.getSurname(),
                 employee.getName(),
-                // passwordEncoder.encode(employee.getPassword()),
                 employee.getPatronymic(),
                 employee.getRole().name(),
                 employee.getSalary(),
@@ -130,7 +129,6 @@ public class EmployeeDaoImpl implements EmployeeDao {
         Object[] params = {
                 employee.getSurname(),
                 employee.getName(),
-                // employee.getPassword().charAt(0) == '$' ? employee.getPassword() : passwordEncoder.encode(employee.getPassword()),
                 employee.getPatronymic(),
                 employee.getRole().name(),
                 employee.getSalary(),

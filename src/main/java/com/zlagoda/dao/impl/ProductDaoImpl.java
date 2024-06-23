@@ -139,7 +139,7 @@ public class ProductDaoImpl implements ProductDao {
 
     @Override
     public List<Product> findByName(String name) {
-        String query = name + "%"; // Пошук часткового збігу
+        String query = name + "%";
         return jdbcTemplate.query(FIND_PRODUCTS_BY_NAME, new Object[]{query}, new ProductRowMapper());
     }
 

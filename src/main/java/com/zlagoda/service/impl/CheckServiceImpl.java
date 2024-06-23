@@ -113,7 +113,6 @@ public class CheckServiceImpl implements CheckService {
         Check check = checkConverter.convertToEntity(checkDto);
         checkDao.create(check);
 
-        // Зберігаємо всі продажі
         for (SaleDto saleDto : checkDto.getSales()) {
             storeProductService.updateProductQuantity(saleDto.getStoreProduct().getUpc(), saleDto.getProductNumber());
 
@@ -121,7 +120,7 @@ public class CheckServiceImpl implements CheckService {
                 saleDto.setStoreProduct(storeProductService.findByUpcProm(saleDto.getStoreProduct().getUpc()).get());
             }
             Sale sale = saleConverter.convertToEntity(saleDto);
-            sale.setCheckNumber(check.getCheckNumber()); // Встановлюємо номер чека для кожного продажу
+            sale.setCheckNumber(check.getCheckNumber());
             saleDao.create(sale);
         }
     }
@@ -135,49 +134,4 @@ public class CheckServiceImpl implements CheckService {
     public void delete(String checkNumber) {
         checkDao.delete(checkNumber);
     }
-
-    /*public BigDecimal countSum(CheckDto checkDto) {
-        return checkDto.getSales().stream()
-                .map(sale -> storeProductService.getPriceByUpc(sale.getStoreProductUpc())
-                        .multiply(BigDecimal.valueOf(sale.getProductNumber()))
-                ).reduce(BigDecimal.ZERO, BigDecimal::add).setScale(4, RoundingMode.HALF_UP);
-    }*/
-
-    /*private Check mapToCheck(CheckDto checkDto) {
-        return Check.builder()
-                .checkNumber(checkDto.getCheckNumber())
-                .employee(Employee.builder()
-                        .id(checkDto.getEmployee().getId())
-                        .surname(checkDto.getEmployee().getSurname())
-                        .name(checkDto.getEmployee().getName())
-                        .build())
-                .customerCard(checkDto.getCustomerCard() != null ? CustomerCard.builder()
-                        .cardNumber(checkDto.getCustomerCard().getCardNumber())
-                        .surname(checkDto.getCustomerCard().getSurname())
-                        .name(checkDto.getCustomerCard().getName())
-                        .build() : null)
-                .printDate(checkDto.getPrintDate())
-                .totalSum(checkDto.getTotalSum())
-                .vat(checkDto.getVat())
-                .build();
-    }
-
-    private CheckDto mapToCheckDto(Check check) {
-        return CheckDto.builder()
-                .checkNumber(check.getCheckNumber())
-                .employee(EmployeeDto.builder()
-                        .id(check.getEmployee().getId())
-                        .surname(check.getEmployee().getSurname())
-                        .name(check.getEmployee().getName())
-                        .build())
-                .customerCard(check.getCustomerCard() != null ? CustomerCardDto.builder()
-                        .cardNumber(check.getCustomerCard().getCardNumber())
-                        .surname(check.getCustomerCard().getSurname())
-                        .name(check.getCustomerCard().getName())
-                        .build() : null)
-                .printDate(check.getPrintDate())
-                .totalSum(check.getTotalSum())
-                .vat(check.getVat())
-                .build();
-    }*/
 }

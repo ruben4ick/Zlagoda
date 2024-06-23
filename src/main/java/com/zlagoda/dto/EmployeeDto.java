@@ -32,10 +32,6 @@ public class EmployeeDto {
     @Size(min = 1, max = 50, message = "Name must be between 1 and 50 characters")
     private String name;
 
-    // @NotNull(message = "Password cannot be null")
-    // @Size(min = 8, max = 100, message = "Password must be between 8 and 100 characters")
-    // private String password;
-
     @Nullable
     @Size(max = 50, message = "Patronymic must be maximum 50 characters")
     private String patronymic;

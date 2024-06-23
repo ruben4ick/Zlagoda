@@ -18,7 +18,7 @@ public class ProductRowMapper implements RowMapper<Product> {
 
         return Product.builder()
                 .id(rs.getLong("id_product"))
-                .category(category) // Замість categoryNumber
+                .category(category)
                 .name(rs.getString("product_name"))
                 .characteristics(rs.getString("characteristics"))
                 .build();

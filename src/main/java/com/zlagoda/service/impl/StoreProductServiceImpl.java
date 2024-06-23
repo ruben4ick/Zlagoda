@@ -67,7 +67,6 @@ public class StoreProductServiceImpl implements StoreProductService {
     public void create(StoreProductDto storeProductDto) {
         storeProductDto.normalize();
         StoreProduct storeProduct = converter.convertToEntity(storeProductDto);
-//        storeProduct.setIsPromotional(false);
         storeProductDao.create(storeProduct);
     }
 
@@ -82,11 +81,6 @@ public class StoreProductServiceImpl implements StoreProductService {
     public void delete(String upc) {
         storeProductDao.delete(upc);
     }
-
-   /* @Override
-    public BigDecimal getPriceByUpc(String upc) {
-        return storeProductDao.findPriceById(upc);
-    }*/
 
     private StoreProduct mapToStoreProduct(StoreProductDto storeProductDto) {
         return StoreProduct.builder()
@@ -149,7 +143,6 @@ public class StoreProductServiceImpl implements StoreProductService {
         StoreProduct storeProductOriginal = storeProductDao.getById(upc).orElseThrow();
 
         if (storeProductOriginal.getUpcProm() != null) {
-            //    trow new Exception("Already promoted:" + storeProductOriginal.getUpcProm()); // щось треба буде зробити з цим ексепшином
         }
         String newUPS = randomUPC();
         StoreProduct storeProductPromote = new StoreProduct(
@@ -172,7 +165,6 @@ public class StoreProductServiceImpl implements StoreProductService {
         StoreProduct storeProductOriginal = storeProductDao.getById(upc).orElseThrow();
 
         if (storeProductOriginal.getUpcProm() == null) {
-            //    trow new Exception("No promotion."); // щось треба буде зробити з цим ексепшином
         }
 
         int productsQuantity = storeProductOriginal.getUpcProm().getQuantity();
@@ -189,7 +181,6 @@ public class StoreProductServiceImpl implements StoreProductService {
         storeProductDao.updateProductQuantity(upc, quantity);
     }
 
-    // цю штуку треба буде кудись перенести мабуть
     public static String randomUPC() {
         Random random = new Random();
         StringBuilder upc = new StringBuilder();

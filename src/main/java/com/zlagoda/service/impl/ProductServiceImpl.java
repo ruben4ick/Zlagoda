@@ -100,36 +100,4 @@ public class ProductServiceImpl implements ProductService {
                 .toList();
     }
 
-    /*private Product mapToProduct(ProductDto productDto) {
-        return Product.builder()
-                .id(productDto.getId())
-                .category(mapToCategory(productDto.getCategory())) // Перетворюємо CategoryDto на Category
-                .name(productDto.getName())
-                .characteristics(productDto.getCharacteristics())
-                .build();
-    }
-
-    private ProductDto mapToProductDto(Product product) {
-        return ProductDto.builder()
-                .id(product.getId())
-                .category(mapToCategoryDto(product.getCategory())) // Перетворюємо Category на CategoryDto
-                .name(product.getName())
-                .characteristics(product.getCharacteristics())
-                .build();
-    }
-
-
-    private Category mapToCategory(CategoryDto categoryDto) {
-        return Category.builder()
-                .number(categoryDto.getNumber())
-                .name(categoryDto.getName())
-                .build();
-    }
-
-    private CategoryDto mapToCategoryDto(Category category) {
-        return CategoryDto.builder()
-                .number(category.getNumber())
-                .name(category.getName())
-                .build();
-    }*/
 }

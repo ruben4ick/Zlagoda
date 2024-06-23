@@ -11,12 +11,5 @@ public class SaleConverter extends Converter<Sale, SaleDto> {
     public SaleConverter() {
         super(new ModelMapper(), Sale.class, SaleDto.class);
     }
-    /*public SaleDto mapToSaleDto(Sale sale){
-        return SaleDto.builder()
-                .storeProductUpc(sale.getStoreProduct().getUpc())
-                .productNumber(sale.getProductNumber())
-                .sellingPrice(sale.getSellingPrice())
-                .build();
-    }*/
 
 }
