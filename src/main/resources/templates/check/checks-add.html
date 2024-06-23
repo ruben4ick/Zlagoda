@@ -198,13 +198,17 @@
             </tr>
             </thead>
             <tbody>
-            <tr th:each="storeProduct : ${storeProducts}">
+            <tr th:each="storeProduct : ${storeProducts}" th:if="${storeProduct.quantity > 0}">
                 <td th:text="${storeProduct.upc}"></td>
                 <td th:text="${storeProduct.product.name}"></td>
                 <td th:text="${storeProduct.product.characteristics}"></td>
                 <td th:text="${storeProduct.quantity}"></td>
                 <td>
-                    <button type="button" th:data-upc="${storeProduct.upc}" th:data-price="${storeProduct.price}" th:data-name="${storeProduct.product.name}" onclick="selectProduct(this)">Select</button>
+                    <button type="button" th:data-upc="${storeProduct.upc}"
+                            th:data-price="${storeProduct.price}"
+                            th:data-name="${storeProduct.product.name}"
+                            th:data-quantity="${storeProduct.quantity}"
+                            onclick="selectProduct(this)">Select</button>
                 </td>
             </tr>
             </tbody>
@@ -230,6 +234,7 @@
     const salesContainer = document.getElementById('sales-container');
     const saleForm = document.getElementById('saleForm');
     let selectedProduct = null;
+    let maxQuantity = 0;
 
     addSaleButton.onclick = function() {
         saleModal.style.display = 'block';
@@ -251,6 +256,7 @@
             price: button.getAttribute('data-price'),
             name: button.getAttribute('data-name')
         };
+        maxQuantity = parseInt(button.getAttribute('data-quantity'), 10);
         document.getElementById('selectedProduct').value = selectedProduct.name;
     }
 
@@ -260,9 +266,14 @@
             return;
         }
 
-        const quantity = document.getElementById('quantity').value;
-        if (!quantity) {
-            alert("Please enter a quantity.");
+        const quantity = parseInt(document.getElementById('quantity').value, 10);
+        if (isNaN(quantity) || quantity <= 0) {
+            alert("Please enter a valid quantity.");
+            return;
+        }
+
+        if (quantity > maxQuantity) {
+            alert("Entered quantity exceeds available stock.");
             return;
         }
 
