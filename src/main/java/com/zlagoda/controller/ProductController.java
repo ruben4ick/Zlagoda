@@ -84,7 +84,7 @@ public class ProductController {
     }
 
     @PostMapping("/edit/{productId}")
-    public String editProduct(@PathVariable("productId") Long productId, @ModelAttribute("product") ProductDto product, BindingResult result, Model model) {
+    public String editProduct(@PathVariable("productId") Long productId, @Valid @ModelAttribute("product") ProductDto product, BindingResult result, Model model) {
         if (result.hasErrors()) {
             List<CategoryDto> categories = categoryService.getAll();
             model.addAttribute("product", product);

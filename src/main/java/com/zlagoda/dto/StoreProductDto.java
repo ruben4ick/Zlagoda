@@ -30,6 +30,7 @@ public class StoreProductDto {
             upc = upc.trim();
         if (upcProm != null)
             upcProm.normalize();
-        product.normalize();
+        if (product != null)
+            product.normalize();
     }
 }

@@ -29,7 +29,9 @@ public class ProductDto {
     public void normalize() {
         if (category != null)
             category.normalize();
-        name = name.trim();
-        characteristics = characteristics.trim();
+        if (name != null)
+            name = name.trim();
+        if (characteristics != null)
+            characteristics = characteristics.trim();
     }
 }

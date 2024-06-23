@@ -79,10 +79,14 @@ public class CheckController {
             return "check/sale-info";
 
         List<SaleDto> sales = saleService.getByCheck(check_number);
+
+        if (sales.isEmpty())
+            return "check/checks";
+
         List<String> product_names = new ArrayList<>();
         for(SaleDto sale : sales){
-            Optional<StoreProductDto> storeProduct = storeProductService.getById(sale.getStoreProduct().getUpc());
-            product_names.add(storeProduct.get().getProduct().getName());
+            Optional<StoreProductDto> storeProduct = storeProductService.getById(sale.getStoreProductUpc());
+            storeProduct.ifPresent(storeProductDto -> product_names.add(storeProductDto.getProduct().getName()));
         }
         model.addAttribute("sales", sales);
         model.addAttribute("product_names", product_names);

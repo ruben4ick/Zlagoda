@@ -60,7 +60,7 @@ public class CustomerCardController {
     }
 
     @PostMapping("/edit/{cardNumber}")
-    public String editCustomerCard(@PathVariable("cardNumber") String cardNumber, @ModelAttribute("customerCard") CustomerCardDto customerCard, BindingResult result, Model model) {
+    public String editCustomerCard(@PathVariable("cardNumber") String cardNumber, @Valid @ModelAttribute("customerCard") CustomerCardDto customerCard, BindingResult result, Model model) {
         if (result.hasErrors()) {
             model.addAttribute("customerCard", customerCard);
             return "customer-card/customer-cards-edit";
