@@ -84,9 +84,9 @@ public class EmployeeDto {
         name = name.trim();
         if (patronymic != null)
             patronymic = patronymic.trim();
+        phoneNumber = phoneNumber.trim();
         city = city.trim();
         street = street.trim();
         zipCode = zipCode.trim();
-        username = username.trim();
     }
 }

@@ -44,7 +44,9 @@ public class EmployeeDaoImpl implements EmployeeDao {
             "phone_number = ?,\n" +
             "city = ?,\n" +
             "street = ?,\n" +
-            "zip_code = ?\n" +
+            "zip_code = ?,\n" +
+            "username = ?,\n" +
+            "password = ?\n" +
             "WHERE id_employee = ?";
 
     private static final String INSERT_EMPLOYEE = "INSERT INTO Employee (id_employee, empl_surname, empl_name, empl_patronymic, empl_role, salary, date_of_birth, " +
@@ -127,9 +129,9 @@ public class EmployeeDaoImpl implements EmployeeDao {
                 employee.getCity(),
                 employee.getStreet(),
                 employee.getZipCode(),
-                employee.getId(),
                 employee.getUsername(),
-                employee.getPassword()
+                employee.getPassword(),
+                employee.getId()
         };
         jdbcTemplate.update(UPDATE, params);
     }
