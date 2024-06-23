@@ -335,7 +335,7 @@
     function updateTotalSum(amount) {
         currentTotal += amount;
         const discountedTotal = currentTotal * (1 - currentDiscount / 100);
-        totalSum.innerText = '€' + discountedTotal.toFixed(2);
+        totalSum.innerText = '₴' + discountedTotal.toFixed(2);
     }
 
     function updateDiscount() {
