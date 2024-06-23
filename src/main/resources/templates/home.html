@@ -43,8 +43,15 @@
 <h1 sec:authorize="hasAnyAuthority('MANAGER')">MANAGER JAHSDAKFJNSDAKJNFNSDFLNS</h1>
 <h2 sec:authorize="hasAnyAuthority('CASHIER')">HAHAYAYYAYAHSAKDASJ </h2>
 <a th:href="@{/employees/me}">BALSLS</a>
-<div class="container text-center"><h1 id="aboba">Hello World!</h1></div>
+<!--<div class="container text-center"><h1 id="aboba">Hello World!</h1></div>-->
 <div class="container text-center"><img src="https://media.tenor.com/HApzlOkcrYIAAAAM/fr-ong.gif" width="800" height="400" alt=""></div>
+
+<form class="input-group me-2" th:action="@{/products/totalSales/banana}" method="get">
+  <input class="form-control me-2" type="datetime-local" name="start" placeholder="Start Date" required>
+  <input class="form-control me-2" type="datetime-local" name="end" placeholder="End Date" required>
+  <button type="submit" class="btn btn-outline-dark">Filter</button>
+</form>
+
 <script th:src="@{/webjars/bootstrap/5.3.3/js/bootstrap.bundle.min.js}"></script>
 </body>
 </html>
