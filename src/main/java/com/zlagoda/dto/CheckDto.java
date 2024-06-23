@@ -21,9 +21,9 @@ public class CheckDto {
 
     private String checkNumber;
 
-    private Employee employee;
+    private EmployeeDto employee;
 
-    private CustomerCard customerCard;
+    private CustomerCardDto customerCard;
 
     private LocalDateTime printDate;
 
