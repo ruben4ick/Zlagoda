@@ -70,12 +70,13 @@ public class CheckServiceImpl implements CheckService {
 
     @Override
     public List<CheckDto> selectByDate(List<CheckDto> checks, LocalDateTime start, LocalDateTime end){
-        LocalDateTime startOfDay = start.withHour(0).withMinute(0).withSecond(0).withNano(0);
-        LocalDateTime endOfDay = end.withHour(23).withMinute(59).withSecond(59).withNano(999999999);
+        // rounding time for convenience
+//        LocalDateTime startOfDay = start.withHour(0).withMinute(0).withSecond(0).withNano(0);
+//        LocalDateTime endOfDay = end.withHour(23).withMinute(59).withSecond(59).withNano(999999999);
         List<CheckDto> selectedChecks = new ArrayList<>();
         for (CheckDto check : checks){
-            if ((check.getPrintDate().isAfter(startOfDay) && check.getPrintDate().isBefore(endOfDay))
-                    || check.getPrintDate().isEqual(startOfDay) || check.getPrintDate().isEqual(endOfDay)){
+            if ((check.getPrintDate().isAfter(start) && check.getPrintDate().isBefore(end))
+                    || check.getPrintDate().isEqual(start) || check.getPrintDate().isEqual(end)){
                 selectedChecks.add(check);
             }
         }
