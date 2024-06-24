@@ -73,37 +73,45 @@
     </div>
 </div>
 <div class="container">
-<table class="table table-hover">
-    <thead class="table-dark">
-    <tr>
-        <th>ID</th>
-        <th>Category Name</th>
-        <th>Product Name</th>
-        <th>Characteristics</th>
-        <th sec:authorize="hasAnyAuthority('MANAGER')">Actions</th>
-    </tr>
-    </thead>
-    <tbody>
-    <tr th:each="product : ${products}">
-        <th scope="row" th:text="${product.id}"></th>
-        <td th:text="${product.category.name}"></td>
-        <td th:text="${product.name}"></td>
-        <td th:text="${product.characteristics}"></td>
-        <td sec:authorize="hasAnyAuthority('MANAGER')">
-            <a th:href="@{'/products/edit/' + ${product.id}}" class="btn btn-info"><i class="bi bi-pencil-fill"></i></a>
-            <a th:href="@{'/products/delete/' + ${product.id}}" class="btn btn-danger"><i class="bi bi-trash-fill"></i></a>
-        </td>
-    </tr>
-    </tbody>
-</table>
+    <table class="table table-hover">
+        <thead class="table-dark">
+        <tr>
+            <th>ID</th>
+            <th>Category Name</th>
+            <th>Product Name</th>
+            <th>Characteristics</th>
+            <th sec:authorize="hasAnyAuthority('MANAGER')">Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="product : ${products}">
+            <th scope="row" th:text="${product.id}"></th>
+            <td th:text="${product.category.name}"></td>
+            <td th:text="${product.name}"></td>
+            <td th:text="${product.characteristics}"></td>
+            <td sec:authorize="hasAnyAuthority('MANAGER')">
+                <a th:href="@{'/products/edit/' + ${product.id}}" class="btn btn-info"><i class="bi bi-pencil-fill"></i></a>
+                <a th:href="@{'/products/delete/' + ${product.id}}" class="btn btn-danger"><i class="bi bi-trash-fill"></i></a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
 </div>
 <div class="container">
     <div class="row">
         <div class="col">
-    <a href="/products/neverSold" class="btn btn-dark">Unused products</a>
+            <a href="/products/neverSold" class="btn btn-dark">Unused products</a>
         </div>
         <div class="col">
             <a href="/products/classic-view" class="btn btn-dark">Classic view</a>
+        </div>
+        <div class="col">
+            <form th:action="@{/products/sold-from-certain-city}" method="get">
+                <div class="input-group">
+                    <input class="form-control" type="text" name="city" placeholder="City only sold" required>
+                    <button type="submit" class="btn btn-dark">Search</button>
+                </div>
+            </form>
         </div>
     </div>
 </div>

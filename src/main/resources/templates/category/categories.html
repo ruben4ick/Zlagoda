@@ -44,25 +44,25 @@
     <a href="/categories/add" class="btn btn-success">Add Category</a>
 </div>
 <div class="container">
-<table class="table table-hover">
-    <thead class="table-dark">
-    <tr>
-        <th>Category Number</th>
-        <th>Category Name</th>
-        <th sec:authorize="hasAnyAuthority('MANAGER')">Actions</th>
-    </tr>
-    </thead>
-    <tbody>
-    <tr th:each="category : ${categories}">
-        <th scope="row" th:text="${category.number}"></th>
-        <td th:text="${category.name}"></td>
-        <td sec:authorize="hasAnyAuthority('MANAGER')">
-            <a th:href="@{'/categories/edit/' + ${category.number}}" class="btn btn-info"><i class="bi bi-pencil-fill"></i></a>
-            <a th:href="@{'/categories/delete/' + ${category.number}}" class="btn btn-danger"><i class="bi bi-trash-fill"></i></a>
-        </td>
-    </tr>
-    </tbody>
-</table>
+    <table class="table table-hover">
+        <thead class="table-dark">
+        <tr>
+            <th>Category Number</th>
+            <th>Category Name</th>
+            <th sec:authorize="hasAnyAuthority('MANAGER')">Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="category : ${categories}">
+            <th scope="row" th:text="${category.number}"></th>
+            <td th:text="${category.name}"></td>
+            <td sec:authorize="hasAnyAuthority('MANAGER')">
+                <a th:href="@{'/categories/edit/' + ${category.number}}" class="btn btn-info"><i class="bi bi-pencil-fill"></i></a>
+                <a th:href="@{'/categories/delete/' + ${category.number}}" class="btn btn-danger"><i class="bi bi-trash-fill"></i></a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
     <div class="container mb-3">
         <div class="row align-items-center">
             <div class="col-md-4">
@@ -73,6 +73,7 @@
                 </form>
             </div>
             <div class="col-md-8 text-end">
+                <a href="/categories/category-sales" class="btn btn-outline-dark">Total Sales</a>
                 <a href="/categories" class="btn btn-dark">Reset</a>
             </div>
         </div>
