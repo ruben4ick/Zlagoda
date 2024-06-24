@@ -60,7 +60,7 @@
       <td th:text="${me.name}"></td>
       <td th:text="${me.patronymic}"></td>
       <td th:text="${me.role}"></td>
-      <td th:text="${me.salary}"></td>
+      <td th:text="${#numbers.formatDecimal(me.salary, 2, 2)}"></td>
       <td th:text="${#dates.format(me.startDate, 'yyyy-MM-dd')}"></td>
       <td th:text="${#dates.format(me.birthDate, 'yyyy-MM-dd')}"></td>
       <td th:text="${me.phoneNumber}"></td>

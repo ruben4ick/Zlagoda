@@ -87,7 +87,7 @@
         <td th:text="${employee.name}"></td>
         <td th:text="${employee.patronymic}"></td>
         <td th:text="${employee.role}"></td>
-        <td th:text="${employee.salary}"></td>
+        <td th:text="${#numbers.formatDecimal(employee.salary, 2, 2)}"></td>
         <td th:text="${#dates.format(employee.startDate, 'yyyy-MM-dd')}"></td>
         <td th:text="${#dates.format(employee.birthDate, 'yyyy-MM-dd')}"></td>
         <td th:text="${employee.phoneNumber}"></td>
