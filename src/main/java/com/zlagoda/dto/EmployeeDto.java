@@ -41,7 +41,7 @@ public class EmployeeDto {
 
     @NotNull(message = "Salary cannot be null")
     @DecimalMin(value = "0.0", inclusive = false, message = "Salary must be greater than 0")
-    @Digits(integer = 13, fraction = 2, message = "Salary must have at most 10 integer digits and 4 decimal places")
+    @Digits(integer = 13, fraction = 4, message = "Salary must have at most 10 integer digits and 4 decimal places")
     private BigDecimal salary;
 
     @NotNull(message = "Birth date cannot be null")
