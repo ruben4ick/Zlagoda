@@ -40,13 +40,13 @@
 </head>
 <body>
 <div class="container text-center">
-<h1>Add Store Product</h1>
+    <h1>Add Store Product</h1>
 </div>
 
 <form th:action="@{/store-products/add}" th:object="${storeProduct}" method="post">
     <div class="form-group">
         <label for="upc">UPC:</label>
-        <input type="text" id="upc" th:field="*{upc}" required />
+        <input type="text" id="upc" th:field="*{upc}" pattern="\d{12}" maxlength="12" oninput="this.value = this.value.slice(0, this.maxLength);" required />
     </div>
 
     <div class="form-group">
@@ -69,25 +69,21 @@
         <input type="text" id="quantity" th:field="*{quantity}" required />
     </div>
 
-<<<<<<< HEAD
-    <div class="form-group">
-        <label for="isPromotional">Is Promotional:</label>
-        <input type="checkbox" id="isPromotional" th:field="*{isPromotional}" />
-    </div>
-    <button type="submit">Add Store Product</button>
-=======
+    <!-- Додаємо приховане поле з значенням false для isPromotional -->
+    <input type="hidden" id="isPromotional" th:field="*{isPromotional}" value="false" />
+
     <div class="container text-center">
         <div class="row">
             <div class="col text-start">
-                <a href="/store-products" class="btn btn-secondary">Cansel</a>
+                <a href="/store-products" class="btn btn-secondary">Cancel</a>
             </div>
             <div class="col text-end">
-                <button  type="submit" class="btn btn-success">Submit</button>
+                <button type="submit" class="btn btn-success">Submit</button>
             </div>
         </div>
     </div>
->>>>>>> origin/beegdo
 </form>
+
 <script th:src="@{/webjars/bootstrap/5.3.3/js/bootstrap.bundle.min.js}"></script>
 </body>
 </html>

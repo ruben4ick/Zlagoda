@@ -62,6 +62,7 @@ public class StoreProductController {
             model.addAttribute("storeProduct", storeProductDto);
             return "store-product/store-products-add";
         }
+        storeProductDto.setIsPromotional(false);
         storeProductService.create(storeProductDto);
         return "redirect:/store-products";
     }

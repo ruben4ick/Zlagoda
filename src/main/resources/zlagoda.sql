@@ -27,7 +27,7 @@ CREATE TABLE `category` (
   `category_name` varchar(50) NOT NULL,
   PRIMARY KEY (`category_number`),
   UNIQUE KEY `category_name` (`category_name`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -36,7 +36,7 @@ CREATE TABLE `category` (
 
 LOCK TABLES `category` WRITE;
 /*!40000 ALTER TABLE `category` DISABLE KEYS */;
-INSERT INTO `category` VALUES (3,'Cereal'),(4,'Huynya');
+INSERT INTO `category` VALUES (4,'Bakery'),(5,'Dairy'),(3,'Seafood');
 /*!40000 ALTER TABLE `category` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -57,7 +57,7 @@ CREATE TABLE `check` (
   PRIMARY KEY (`check_number`),
   KEY `fk_check_employee` (`id_employee`),
   KEY `fk_check_card` (`card_number`),
-  CONSTRAINT `fk_check_card` FOREIGN KEY (`card_number`) REFERENCES `customer_card` (`card_number`) ON UPDATE CASCADE,
+  CONSTRAINT `fk_check_card` FOREIGN KEY (`card_number`) REFERENCES `customer_card` (`card_number`) ON DELETE SET NULL ON UPDATE CASCADE,
   CONSTRAINT `fk_check_employee` FOREIGN KEY (`id_employee`) REFERENCES `employee` (`id_employee`) ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -68,7 +68,6 @@ CREATE TABLE `check` (
 
 LOCK TABLES `check` WRITE;
 /*!40000 ALTER TABLE `check` DISABLE KEYS */;
-INSERT INTO `check` VALUES ('0315052443','1c36d91d66','9d4744b273494','2024-06-07 23:11:00',213123.0000,121.0000),('2350bb4433','1c36d91d66','9d4744b273494','2024-06-01 22:41:00',12321.0000,2.0000),('9b5233a76f','1c36d91d66','9d4744b273494','2024-06-12 22:53:00',213.0000,1.0000);
 /*!40000 ALTER TABLE `check` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -123,6 +122,8 @@ CREATE TABLE `employee` (
   `city` varchar(50) NOT NULL,
   `street` varchar(50) NOT NULL,
   `zip_code` varchar(9) NOT NULL,
+  `username` varchar(50) NOT NULL,
+  `password` varchar(255) NOT NULL,
   PRIMARY KEY (`id_employee`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -133,7 +134,7 @@ CREATE TABLE `employee` (
 
 LOCK TABLES `employee` WRITE;
 /*!40000 ALTER TABLE `employee` DISABLE KEYS */;
-INSERT INTO `employee` VALUES ('1c36d91d66','Boyko','Andrii','Petrovich','CASHIER',22222.0000,'2024-06-01','2024-06-02','0662222222','Kyiv','sss','10000'),('6c2f866158','dasdsa','dasdsa','dasasd','CASHIER',22222.0000,'2024-06-05','2024-06-07','12321321','dasdas','dasads','123112'),('71b0354253','fdsfds','gfdgdfg','','CASHIER',213213.0000,'2024-06-04','2024-06-06','2132132','grgdf','ffsd','3213123'),('c6c5cb5817','GGGGG','BBB','CCC','MANAGER',11111.0000,'2024-06-03','2024-06-06','0501111111','ttt','sasas','41222');
+INSERT INTO `employee` VALUES ('24ba03ebc0','Admin','Admin','Adminovych','MANAGER',7777777.0000,'1970-01-01','2001-12-12','380777777777','Kyiv','Streer','77777','admin','$2a$10$bRV9UdzLuIvZDByzE5fFheLTpC6tz7CV3a/CL6yX.o7TcZg.93ojS'),('aa3944ebfb','Cashier','Cashier','Cashierovych','CASHIER',777.0000,'1980-01-01','2012-12-12','380111111111','Berdychyv','Street','101010','cashier','$2a$10$XXkLVjNwI6aNx79EKJ6ee.rnTIR4EH6hjJOJSQUp0PCI/hkAyqzBm');
 /*!40000 ALTER TABLE `employee` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -152,7 +153,7 @@ CREATE TABLE `product` (
   PRIMARY KEY (`id_product`),
   KEY `category_number` (`category_number`),
   CONSTRAINT `product_ibfk_1` FOREIGN KEY (`category_number`) REFERENCES `category` (`category_number`) ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -161,7 +162,7 @@ CREATE TABLE `product` (
 
 LOCK TABLES `product` WRITE;
 /*!40000 ALTER TABLE `product` DISABLE KEYS */;
-INSERT INTO `product` VALUES (3,4,'DSAD','hz'),(4,3,'FDASS','івфв'),(5,3,'dsadsa','dss'),(6,4,'AAA','ffffff'),(7,4,'ddddd','jjjjjj');
+INSERT INTO `product` VALUES (3,4,'Pampushka','ukrainian'),(4,3,'Shrimp','from black sea'),(5,3,'Carp','alive'),(6,4,'Bread','dark'),(7,4,'Cake \"Khreshchatyk\"','new'),(8,5,'Milk','good'),(9,4,'Cookie','with jam'),(10,4,'Cake \"Sumska palyanycya\"','from sumy bakery ');
 /*!40000 ALTER TABLE `product` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -221,7 +222,7 @@ CREATE TABLE `store_product` (
 
 LOCK TABLES `store_product` WRITE;
 /*!40000 ALTER TABLE `store_product` DISABLE KEYS */;
-INSERT INTO `store_product` VALUES ('123123312',NULL,6,12.0000,1,0),('321312312',NULL,6,1.0000,12,0);
+INSERT INTO `store_product` VALUES ('123456789111',NULL,6,12.0000,1,0);
 /*!40000 ALTER TABLE `store_product` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -234,4 +235,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2024-06-18  2:07:58
+-- Dump completed on 2024-06-24  3:32:49

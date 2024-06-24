@@ -55,7 +55,7 @@
       <th scope="row" th:text="${sales[i].storeProduct.upc}"></th>
       <td th:text="${product_names[i]}"></td>
       <td th:text="${sales[i].productNumber}"></td>
-      <td th:text="${sales[i].sellingPrice}"></td>
+      <td th:text="${#numbers.formatDecimal(sales[i].sellingPrice, 2, 2)}"></td>
     </tr>
     </tbody>
   </table>
