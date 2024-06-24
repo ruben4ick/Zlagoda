@@ -35,7 +35,7 @@
         </div>
     </div>
 </header>
-<div class="container"><h2 th:text="'Total income: ' + ${sum_of_checks}"></h2></div>
+<div class="container"><h2 th:text="'Total income: ' + ${#numbers.formatDecimal(sum_of_checks, 2, 2)}"></h2></div>
 <div class="container text-center">
     <div class="d-flex justify-content-between align-items-center">
         <div class="d-flex align-items-center g-2">
@@ -84,8 +84,8 @@
         <td th:text="${check.employee.surname + ' ' + check.employee.name}"></td>
         <td th:text="${check.customerCard != null ? check.customerCard.surname : 'N/A'}"></td>
         <td th:text="${#temporals.format(check.printDate, 'dd-MM-yyyy HH:mm:ss')}"></td>
-        <td th:text="${check.totalSum}"></td>
-        <td th:text="${check.vat}"></td>
+        <td th:text="${#numbers.formatDecimal(check.totalSum, 2, 2)}"></td>
+        <td th:text="${#numbers.formatDecimal(check.vat, 2, 2)}"></td>
         <td>
             <a th:href="@{'/checks/check-id?check_number=' + ${check.checkNumber}}" class="btn btn-dark"><i class="bi bi-eye"></i></a>
             <a th:href="@{'/checks/delete/' + ${check.checkNumber}}" class="btn btn-danger" sec:authorize="hasAnyAuthority('MANAGER')"><i class="bi bi-trash-fill"></i></a>
